@@ -16,15 +16,11 @@ public class Technology {
 		if (name.trim().isEmpty()) {
 			throw new EmptyFieldException(DomConstants.Field.NAME.toString());
         }
-        if (description.trim().isEmpty()) {
-			throw new EmptyFieldException(DomConstants.Field.DESCRIPTION.toString());
-        }
 		if(name.length() > DomConstants.NAME_SIZE) {
 			throw new CharLimitSurpassedException(DomConstants.Field.NAME.toString());
 		}
-		if(description.length() > DomConstants.DESCRIPTION_SIZE) {
-			throw new CharLimitSurpassedException(DomConstants.Field.DESCRIPTION.toString());
-		}
+		validateDescription(description);
+
 		this.id = id;
 		this.name = requireNonNull(name, DomConstants.FIELD_NAME_NULL_MESSAGE);
         this.description = requireNonNull(description, DomConstants.FIELD_NAME_NULL_MESSAGE);
@@ -39,6 +35,16 @@ public class Technology {
 		return description;
 	}
 	public void setDescription(String description) {
+		validateDescription(description);
 		this.description = description;
+	}
+
+	public void validateDescription(String description) {
+		if (description.trim().isEmpty()) {
+			throw new EmptyFieldException(DomConstants.Field.DESCRIPTION.toString());
+		}
+		if(description.length() > DomConstants.DESCRIPTION_SIZE) {
+			throw new CharLimitSurpassedException(DomConstants.Field.DESCRIPTION.toString());
+		}
 	}
 }

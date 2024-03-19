@@ -6,6 +6,7 @@ import com.pragma.bootcamp.adapters.driving.http.dto.request.UpdateTechnologyReq
 import com.pragma.bootcamp.adapters.driving.http.dto.response.TechnologyResponse;
 import com.pragma.bootcamp.adapters.driving.http.mapper.ITechnologyRequestMapper;
 import com.pragma.bootcamp.adapters.driving.http.mapper.ITechnologyResponseMapper;
+import com.pragma.bootcamp.domain.model.Technology;
 import com.pragma.bootcamp.domain.primaryport.ITechnologyServicePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,7 +48,7 @@ public class TechnologyControllerAdapter {
     public ResponseEntity<TechnologyResponse> updateTechnology(@RequestBody UpdateTechnologyRequest request) {
 //        Technology tec = technologyRequestMapper.updateRequestToTechnology(request);
 //        Technology tecUpdated = technologyServicePort.updateTechnology(tec);
-//        TechnologyResponse tecResponse = technologyResponseMapper.toTechnologyresponse(tecUpdated);
+//        TechnologyResponse tecResponse = technologyResponseMapper.toTechnologyResponse(tecUpdated);
 //        return ResponseEntity.ok(tecResponse);
 
         return ResponseEntity.ok(technologyResponseMapper.toTechnologyResponse(
