@@ -31,7 +31,7 @@ public class TechnologyAdapter implements ITechnologyPersistencePort {
 
     @Override
     public Technology getTechnology(String name) {
-        TechnologyEntity technology = technologyRepository.findByNameContaining(name).orElseThrow(ElementNotFoundException::new);
+        TechnologyEntity technology = technologyRepository.findByName(name).orElseThrow(ElementNotFoundException::new);
         return technologyEntityMapper.toModel(technology);
     }
 

@@ -1,4 +1,4 @@
-package com.pragma.bootcamp.adapters.driving.http.dto.response;
+package com.pragma.bootcamp.adapters.driving.http.rest.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

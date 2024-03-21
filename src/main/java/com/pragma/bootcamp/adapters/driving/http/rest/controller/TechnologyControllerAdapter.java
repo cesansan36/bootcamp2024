@@ -1,11 +1,11 @@
-package com.pragma.bootcamp.adapters.driving.http.controller;
+package com.pragma.bootcamp.adapters.driving.http.rest.controller;
 
-import com.pragma.bootcamp.adapters.driving.http.dto.request.AddTechnologyRequest;
-import com.pragma.bootcamp.adapters.driving.http.dto.request.PracticeReadTechnologyRequest;
-import com.pragma.bootcamp.adapters.driving.http.dto.request.UpdateTechnologyRequest;
-import com.pragma.bootcamp.adapters.driving.http.dto.response.TechnologyResponse;
-import com.pragma.bootcamp.adapters.driving.http.mapper.ITechnologyRequestMapper;
-import com.pragma.bootcamp.adapters.driving.http.mapper.ITechnologyResponseMapper;
+import com.pragma.bootcamp.adapters.driving.http.rest.dto.request.AddTechnologyRequest;
+import com.pragma.bootcamp.adapters.driving.http.rest.dto.request.PracticeReadTechnologyRequest;
+import com.pragma.bootcamp.adapters.driving.http.rest.dto.request.UpdateTechnologyRequest;
+import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.TechnologyResponse;
+import com.pragma.bootcamp.adapters.driving.http.rest.mapper.ITechnologyRequestMapper;
+import com.pragma.bootcamp.adapters.driving.http.rest.mapper.ITechnologyResponseMapper;
 import com.pragma.bootcamp.domain.primaryport.ITechnologyServicePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
