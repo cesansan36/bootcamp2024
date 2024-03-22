@@ -1,6 +1,5 @@
 package com.pragma.bootcamp.adapters.driven.jpa.mysql.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +23,5 @@ public class TechnologyEntity {
     private String description;
 
     @ManyToMany(mappedBy = "technologies")
-//    @JsonIgnore
     private List<CapacityEntity> capacities;
 }

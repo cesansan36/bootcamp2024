@@ -25,7 +25,7 @@ public class CapacityUseCase implements ICapacityServicePort {
     }
 
     @Override
-    public List<Capacity> getAllTechnologies(Integer page, Integer size, boolean isAscending) {
-        return capacityPersistencePort.getAllCapacities(page, size, isAscending);
+    public List<Capacity> getAllTechnologies(Integer page, Integer size, boolean isAscending, boolean isSortByTechnologiesAmount) {
+        return capacityPersistencePort.getAllCapacities(page, size, isAscending, isSortByTechnologiesAmount);
     }
 }

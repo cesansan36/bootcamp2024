@@ -6,6 +6,7 @@ import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.NoDataFoundExcept
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.TechnologyAlreadyExistException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.ITechnologyEntityMapper;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ITechnologyRepository;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.util.AdapterConstants;
 import com.pragma.bootcamp.domain.model.Technology;
 import com.pragma.bootcamp.domain.secondaryport.ITechnologyPersistencePort;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,7 @@ public class TechnologyAdapter implements ITechnologyPersistencePort {
 
     @Override
     public List<Technology> getAllTechnologies(Integer page, Integer size, boolean isAscending) {
-        Sort sort = isAscending ? Sort.by("name").ascending() : Sort.by("name").descending();
+        Sort sort = isAscending ? Sort.by(AdapterConstants.FIELD_NAME_FOR_SORTING_TECHNOLOGIES).ascending() : Sort.by(AdapterConstants.FIELD_NAME_FOR_SORTING_TECHNOLOGIES).descending();
         Pageable pagination = PageRequest.of(page, size, sort);
         List<TechnologyEntity> technologies = technologyRepository.findAll(pagination).getContent();
         if (technologies.isEmpty()) {

@@ -1,13 +1,12 @@
 package com.pragma.bootcamp.adapters.driven.jpa.mysql.adapter;
 
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.CapacityEntity;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.TechnologyEntity;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.NoDataFoundException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.ICapacityEntityMapper;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ICapacityRepository;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.util.AdapterConstants;
 import com.pragma.bootcamp.domain.model.Capacity;
-import com.pragma.bootcamp.domain.model.Technology;
 import com.pragma.bootcamp.domain.secondaryport.ICapacityPersistencePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -38,9 +37,9 @@ public class CapacityAdapter implements ICapacityPersistencePort {
     }
 
     @Override
-    public List<Capacity> getAllCapacities(Integer page, Integer size, boolean isAscending) {
-        // TODO should be able to sort by either name or number of technologies
-        Sort sort = isAscending ? Sort.by("name").ascending() : Sort.by("name").descending();
+    public List<Capacity> getAllCapacities(Integer page, Integer size, boolean isAscending, boolean isSortByTechnologiesAmount) {
+        String sortingField = isSortByTechnologiesAmount ? AdapterConstants.FIELD_NAME_OF_SORT_BY_TECHNOLOGIES : AdapterConstants.FIELD_NAME_OF_SORT_BY_NAME;
+        Sort sort = isAscending ? Sort.by(sortingField).ascending() : Sort.by(sortingField).descending();
         Pageable pagination = PageRequest.of(page, size, sort);
         List<CapacityEntity> capacities = capacityRepository.findAll(pagination).getContent();
         if (capacities.isEmpty()) {

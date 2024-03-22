@@ -8,5 +8,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ICapacityRequestMapper {
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "technologies", ignore = true)
     Capacity addRequestToCapacity(AddCapacityRequest addCapacityRequest);
 }

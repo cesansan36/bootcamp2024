@@ -33,7 +33,7 @@ public class CapacityControllerAdapter {
     @PostMapping("/add")
     public ResponseEntity<Void> addCapacity(@RequestBody AddCapacityRequest request) {
 
-        List<Technology> tecs = new ArrayList<Technology>();
+        List<Technology> tecs = new ArrayList<>();
 
         request.getTechnologiesNames().forEach(technologyName -> {
             Technology found = technologyServicePort.getTechnology(technologyName);
@@ -56,7 +56,7 @@ public class CapacityControllerAdapter {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<CapacityResponse>> getAllTechnologies(@RequestParam Integer page, @RequestParam Integer size, @RequestParam boolean isAscending) {
-        return ResponseEntity.ok(capacityResponseMapper.toCapacityResponseList(capacityServicePort.getAllTechnologies(page, size, isAscending)));
+    public ResponseEntity<List<CapacityResponse>> getAllTechnologies(@RequestParam Integer page, @RequestParam Integer size, @RequestParam boolean isAscending, boolean isSortByTechnologiesAmount) {
+        return ResponseEntity.ok(capacityResponseMapper.toCapacityResponseList(capacityServicePort.getAllTechnologies(page, size, isAscending, isSortByTechnologiesAmount)));
     }
 }

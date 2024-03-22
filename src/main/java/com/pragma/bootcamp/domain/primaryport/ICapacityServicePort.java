@@ -9,5 +9,5 @@ public interface ICapacityServicePort {
     void saveCapacity(Capacity capacity);
     Capacity getCapacity(String name);
 
-    List<Capacity> getAllTechnologies(Integer page, Integer size, boolean isAscending);
+    List<Capacity> getAllTechnologies(Integer page, Integer size, boolean isAscending, boolean isSortByTechnologiesAmount);
 }
