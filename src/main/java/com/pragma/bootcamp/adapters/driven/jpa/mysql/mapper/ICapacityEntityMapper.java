@@ -30,5 +30,6 @@ public interface ICapacityEntityMapper {
     }
 
     @Mapping(target = "capacities", ignore = true)
+    @Mapping(target = "description", ignore = true)
     TechnologyEntity toEntity(Technology technology);
 }

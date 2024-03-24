@@ -1,7 +1,6 @@
 package com.pragma.bootcamp.adapters.driving.http.rest.controller;
 
 import com.pragma.bootcamp.adapters.driving.http.rest.dto.request.AddTechnologyRequest;
-import com.pragma.bootcamp.adapters.driving.http.rest.dto.request.PracticeReadTechnologyRequest;
 import com.pragma.bootcamp.adapters.driving.http.rest.dto.request.UpdateTechnologyRequest;
 import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.TechnologyResponse;
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.ITechnologyRequestMapper;
@@ -28,11 +27,6 @@ public class TechnologyControllerAdapter {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/practice")
-    public ResponseEntity<TechnologyResponse> getTechnology(@RequestBody PracticeReadTechnologyRequest request) {
-        return ResponseEntity.ok(technologyResponseMapper.toTechnologyResponse((technologyServicePort.getTechnology(request.getName()))));
-    }
-
     @GetMapping("/search/{technologyName}")
     public ResponseEntity<TechnologyResponse> getTechnology(@PathVariable String technologyName) {
         return ResponseEntity.ok(technologyResponseMapper.toTechnologyResponse((technologyServicePort.getTechnology(technologyName))));
@@ -45,13 +39,11 @@ public class TechnologyControllerAdapter {
 
     @PutMapping("/")
     public ResponseEntity<TechnologyResponse> updateTechnology(@RequestBody UpdateTechnologyRequest request) {
-//        Technology tec = technologyRequestMapper.updateRequestToTechnology(request);
-//        Technology tecUpdated = technologyServicePort.updateTechnology(tec);
-//        TechnologyResponse tecResponse = technologyResponseMapper.toTechnologyresponse(tecUpdated);
-//        return ResponseEntity.ok(tecResponse);
 
-        return ResponseEntity.ok(technologyResponseMapper.toTechnologyResponse(
-                technologyServicePort.updateTechnology((technologyRequestMapper.updateRequestToTechnology(request)))
+        return ResponseEntity.ok(
+                technologyResponseMapper.toTechnologyResponse(
+                    technologyServicePort.updateTechnology((
+                            technologyRequestMapper.updateRequestToTechnology(request)))
         ));
     }
 

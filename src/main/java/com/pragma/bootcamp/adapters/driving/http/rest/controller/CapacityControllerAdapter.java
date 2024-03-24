@@ -44,7 +44,7 @@ public class CapacityControllerAdapter {
                 .collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparingLong(Technology::getId))), ArrayList::new));
 
         Capacity capacity = capacityRequestMapper.addRequestToCapacity(request);
-        capacity.setTechnologies(unique);
+        capacity.validateAndSetTechnologies(unique);
 
         capacityServicePort.saveCapacity(capacity);
         return ResponseEntity.status(HttpStatus.CREATED).build();

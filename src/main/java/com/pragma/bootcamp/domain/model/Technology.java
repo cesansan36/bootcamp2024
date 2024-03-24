@@ -15,20 +15,20 @@ public class Technology {
 
 	public Technology(Long id, String name, String description) {
 		if (name.trim().isEmpty()) {
-			throw new EmptyFieldException(DomConstants.Field.NAME.toString());
+			throw new EmptyFieldException(String.format(DomConstants.FIELD_EMPTY_MESSAGE, DomConstants.Field.NAME));
         }
         if (description.trim().isEmpty()) {
-			throw new EmptyFieldException(DomConstants.Field.DESCRIPTION.toString());
+			throw new EmptyFieldException(String.format(DomConstants.FIELD_EMPTY_MESSAGE, DomConstants.Field.DESCRIPTION));
         }
-		if(name.length() > DomConstants.NAME_SIZE) {
-			throw new CharLimitSurpassedException(DomConstants.Field.NAME.toString());
+		if(name.length() > DomConstants.MAX_TECHNOLOGY_NAME_SIZE) {
+			throw new CharLimitSurpassedException(String.format(DomConstants.FIELD_MAX_SIZE_SURPASSED_MESSAGE, DomConstants.Field.NAME, DomConstants.MAX_TECHNOLOGY_NAME_SIZE));
 		}
-		if(description.length() > DomConstants.DESCRIPTION_SIZE) {
-			throw new CharLimitSurpassedException(DomConstants.Field.DESCRIPTION.toString());
+		if(description.length() > DomConstants.MAX_TECHNOLOGY_DESCRIPTION_SIZE) {
+			throw new CharLimitSurpassedException(String.format(DomConstants.FIELD_MAX_SIZE_SURPASSED_MESSAGE, DomConstants.Field.DESCRIPTION, DomConstants.MAX_TECHNOLOGY_DESCRIPTION_SIZE));
 		}
 		this.id = id;
-		this.name = requireNonNull(name, DomConstants.FIELD_NAME_NULL_MESSAGE);
-        this.description = requireNonNull(description, DomConstants.FIELD_DESCRIPTION_NULL_MESSAGE);
+		this.name = requireNonNull(name, String.format(DomConstants.FIELD_NULL_MESSAGE, DomConstants.Field.NAME));
+        this.description = requireNonNull(description, String.format(DomConstants.FIELD_NULL_MESSAGE, DomConstants.Field.DESCRIPTION));
 	}
 	public Long getId() {
 		return id;
