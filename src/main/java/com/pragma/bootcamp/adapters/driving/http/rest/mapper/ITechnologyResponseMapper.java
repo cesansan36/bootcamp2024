@@ -1,6 +1,6 @@
-package com.pragma.bootcamp.adapters.driving.http.mapper;
+package com.pragma.bootcamp.adapters.driving.http.rest.mapper;
 
-import com.pragma.bootcamp.adapters.driving.http.dto.response.TechnologyResponse;
+import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.TechnologyResponse;
 import com.pragma.bootcamp.domain.model.Technology;
 import org.mapstruct.Mapper;
 

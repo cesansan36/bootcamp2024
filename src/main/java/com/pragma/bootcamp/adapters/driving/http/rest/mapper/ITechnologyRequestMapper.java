@@ -1,7 +1,7 @@
-package com.pragma.bootcamp.adapters.driving.http.mapper;
+package com.pragma.bootcamp.adapters.driving.http.rest.mapper;
 
-import com.pragma.bootcamp.adapters.driving.http.dto.request.AddTechnologyRequest;
-import com.pragma.bootcamp.adapters.driving.http.dto.request.UpdateTechnologyRequest;
+import com.pragma.bootcamp.adapters.driving.http.rest.dto.request.AddTechnologyRequest;
+import com.pragma.bootcamp.adapters.driving.http.rest.dto.request.UpdateTechnologyRequest;
 import com.pragma.bootcamp.domain.model.Technology;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

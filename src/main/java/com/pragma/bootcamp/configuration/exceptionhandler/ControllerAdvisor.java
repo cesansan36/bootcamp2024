@@ -6,6 +6,8 @@ import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.TechnologyAlready
 import com.pragma.bootcamp.configuration.Constants;
 import com.pragma.bootcamp.domain.exception.CharLimitSurpassedException;
 import com.pragma.bootcamp.domain.exception.EmptyFieldException;
+import com.pragma.bootcamp.domain.exception.QuantityAboveRequiredException;
+import com.pragma.bootcamp.domain.exception.QuantityBelowRequiredException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,12 +40,23 @@ public class ControllerAdvisor {
     @ExceptionHandler(EmptyFieldException.class)
     public ResponseEntity<ExceptionResponse> handleEmptyFieldException(EmptyFieldException exception) {
         return ResponseEntity.badRequest().body(new ExceptionResponse(
-                String.format(Constants.EMPTY_FIELD_EXCEPTION_MESSAGE, exception.getMessage()), HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+                exception.getMessage(), HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }
 
     @ExceptionHandler(CharLimitSurpassedException.class)
     public ResponseEntity<ExceptionResponse> handleCharLimitSurpassedException(CharLimitSurpassedException exception) {
         return ResponseEntity.badRequest().body(new ExceptionResponse(
-                String.format(Constants.CHAR_LIMIT_SURPASSED_EXCEPTION_MESSAGE, exception.getMessage()), HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+                exception.getMessage(), HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(QuantityBelowRequiredException.class)
+    public ResponseEntity<ExceptionResponse> handleQuantityBelowRequiredException(QuantityBelowRequiredException exception) {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(
+                exception.getMessage(), HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+    @ExceptionHandler(QuantityAboveRequiredException.class)
+    public ResponseEntity<ExceptionResponse> handleQuantityAboveRequiredException(QuantityAboveRequiredException exception) {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(
+                exception.getMessage(), HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }
 }

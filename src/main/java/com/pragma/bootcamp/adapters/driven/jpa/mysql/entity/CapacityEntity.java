@@ -1,5 +1,6 @@
 package com.pragma.bootcamp.adapters.driven.jpa.mysql.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,12 +10,12 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
-@Table(name = "technology")
+@Table(name = "capacity")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class TechnologyEntity {
+public class CapacityEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +23,12 @@ public class TechnologyEntity {
     private String name;
     private String description;
 
-    @ManyToMany(mappedBy = "technologies")
-    private List<CapacityEntity> capacities;
+    @ManyToMany
+    @JoinTable(
+            name = "capacity_technology",
+            joinColumns = @JoinColumn(name = "ID_CAPACITY"),
+            inverseJoinColumns = @JoinColumn(name = "ID_TECHNOLOGY")
+    )
+    @JsonIgnore
+    private List<TechnologyEntity> technologies;
 }

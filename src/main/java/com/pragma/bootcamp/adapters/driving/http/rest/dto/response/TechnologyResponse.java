@@ -1,11 +1,13 @@
-package com.pragma.bootcamp.adapters.driving.http.dto.request;
+package com.pragma.bootcamp.adapters.driving.http.rest.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class AddTechnologyRequest {
+public class TechnologyResponse {
+
+    private final Long id;
     private final String name;
     private final String description;
 }
