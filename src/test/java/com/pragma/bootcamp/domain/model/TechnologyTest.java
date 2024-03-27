@@ -80,11 +80,4 @@ class TechnologyTest {
 
         assertEquals("DESCRIPTION", exception.getMessage());
     }
-//    @Test
-//    @DisplayName("Should fail on null name")
-//    void nullNameException() {
-//        NullPointerException exception = assertThrows(NullPointerException.class, () -> new Technology(0L, null, "this one"));
-//
-//        assertEquals(" field 'name' can not be empty", exception.getMessage());
-//    }
 }
