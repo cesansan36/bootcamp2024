@@ -1,11 +1,12 @@
 package com.pragma.bootcamp.adapters.driving.http.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pragma.bootcamp.adapters.driving.http.dto.request.AddTechnologyRequest;
-import com.pragma.bootcamp.adapters.driving.http.dto.request.UpdateTechnologyRequest;
-import com.pragma.bootcamp.adapters.driving.http.dto.response.TechnologyResponse;
-import com.pragma.bootcamp.adapters.driving.http.mapper.ITechnologyRequestMapper;
-import com.pragma.bootcamp.adapters.driving.http.mapper.ITechnologyResponseMapper;
+import com.pragma.bootcamp.adapters.driving.http.rest.controller.TechnologyControllerAdapter;
+import com.pragma.bootcamp.adapters.driving.http.rest.dto.request.AddTechnologyRequest;
+import com.pragma.bootcamp.adapters.driving.http.rest.dto.request.UpdateTechnologyRequest;
+import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.TechnologyResponse;
+import com.pragma.bootcamp.adapters.driving.http.rest.mapper.ITechnologyRequestMapper;
+import com.pragma.bootcamp.adapters.driving.http.rest.mapper.ITechnologyResponseMapper;
 import com.pragma.bootcamp.domain.model.Technology;
 import com.pragma.bootcamp.domain.primaryport.ITechnologyServicePort;
 import org.junit.jupiter.api.BeforeEach;

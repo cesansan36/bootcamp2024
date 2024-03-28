@@ -10,12 +10,12 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
-@Table(name = "capacity")
+@Table(name = "bootcamp")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class CapacityEntity {
+public class BootcampEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,13 +25,10 @@ public class CapacityEntity {
 
     @ManyToMany
     @JoinTable(
-            name = "capacity_technology",
-            joinColumns = @JoinColumn(name = "ID_CAPACITY"),
-            inverseJoinColumns = @JoinColumn(name = "ID_TECHNOLOGY")
+            name = "capacity_bootcamp",
+            joinColumns = @JoinColumn(name = "ID_BOOTCAMP"),
+            inverseJoinColumns = @JoinColumn(name = "ID_CAPACITY")
     )
     @JsonIgnore
-    private List<TechnologyEntity> technologies;
-
-    @ManyToMany(mappedBy = "capacities")
-    private List<BootcampEntity> bootcamps;
+    private List<CapacityEntity> capacities;
 }

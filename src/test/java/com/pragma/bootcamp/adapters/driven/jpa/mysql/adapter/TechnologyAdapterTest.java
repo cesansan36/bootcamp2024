@@ -66,7 +66,7 @@ class TechnologyAdapterTest {
     void getTechnologySuccess() {
         TechnologyEntity technologyEntity = TestData.getTestTechnologyEntity1();
 
-        when(technologyRepository.findByNameContaining(TestData.TECHNOLOGY_NAME_1)).thenReturn(Optional.of(technologyEntity));
+        when(technologyRepository.findByName(TestData.TECHNOLOGY_NAME_1)).thenReturn(Optional.of(technologyEntity));
         when(technologyEntityMapper.toModel(technologyEntity)).thenReturn(TestData.getTestTechnology1());
 
         Technology found = technologyAdapter.getTechnology(TestData.TECHNOLOGY_NAME_1);

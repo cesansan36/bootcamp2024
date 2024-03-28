@@ -1,7 +1,11 @@
 package com.pragma.bootcamp.testdata;
 
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.CapacityEntity;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.TechnologyEntity;
 import com.pragma.bootcamp.domain.model.Technology;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestData {
     private TestData () {throw new IllegalStateException("Utility class");}
@@ -23,10 +27,10 @@ public class TestData {
     }
     public static TechnologyEntity getTestTechnologyEntity1 ()
     {
-        return new TechnologyEntity(TECHNOLOGY_ID_1, TECHNOLOGY_NAME_1, TECHNOLOGY_DESCRIPTION_1);
+        return new TechnologyEntity(TECHNOLOGY_ID_1, TECHNOLOGY_NAME_1, TECHNOLOGY_DESCRIPTION_1, new ArrayList <CapacityEntity>());
     }
     public static TechnologyEntity getTestTechnologyEntity2 ()
     {
-        return new TechnologyEntity(TECHNOLOGY_ID_2, TECHNOLOGY_NAME_2, TECHNOLOGY_DESCRIPTION_2);
+        return new TechnologyEntity(TECHNOLOGY_ID_2, TECHNOLOGY_NAME_2, TECHNOLOGY_DESCRIPTION_2, new ArrayList<CapacityEntity>());
     }
 }

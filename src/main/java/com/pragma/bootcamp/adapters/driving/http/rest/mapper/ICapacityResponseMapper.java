@@ -14,20 +14,6 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ICapacityResponseMapper {
 
-//    @Mapping(target = "technologies", qualifiedByName = "mapTechnologies")
     CapacityResponse toCapacityResponse(Capacity capacity);
-    List<CapacityResponse> toCapacityResponseList(List<Capacity> technologies);
-
-//    @Named("mapTechnologies")
-//    default List<TechnologyResponse> mapTechnologies(List<Technology> technologies) {
-//        if (technologies == null) {
-//            return new ArrayList<>();
-//        }
-//        return technologies.stream()
-//                .map(this::toResponse)
-//                .toList();
-//    }
-//
-//    @Mapping(target = "description", ignore = true)
-//    TechnologyResponse toResponse(Technology technology);
+    List<CapacityResponse> toCapacityResponseList(List<Capacity> capacities);
 }

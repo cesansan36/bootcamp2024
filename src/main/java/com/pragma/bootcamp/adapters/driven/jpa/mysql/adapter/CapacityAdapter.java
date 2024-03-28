@@ -26,12 +26,12 @@ public class CapacityAdapter implements ICapacityPersistencePort {
 //        if (capacityRepository.findByName(capacity.getName()).isPresent()) {
 //            throw new CapacityAlreadyExistException();
 //        }
-        capacityRepository.save(capacityEntityMapper.toEntity(capacity));  // ESTA
+        capacityRepository.save(capacityEntityMapper.toEntity(capacity));
     }
 
     @Override
     public Capacity getCapacity(String name) {
-        CapacityEntity capacity = capacityRepository.findByNameContaining(name).orElseThrow(ElementNotFoundException::new);
+        CapacityEntity capacity = capacityRepository.findByName(name).orElseThrow(ElementNotFoundException::new);
 
         return capacityEntityMapper.toModel(capacity);
     }
@@ -39,9 +39,12 @@ public class CapacityAdapter implements ICapacityPersistencePort {
     @Override
     public List<Capacity> getAllCapacities(Integer page, Integer size, boolean isAscending, boolean isSortByTechnologiesAmount) {
         String sortingField = isSortByTechnologiesAmount ? AdapterConstants.FIELD_NAME_OF_SORT_BY_TECHNOLOGIES : AdapterConstants.FIELD_NAME_OF_SORT_BY_NAME;
+
         Sort sort = isAscending ? Sort.by(sortingField).ascending() : Sort.by(sortingField).descending();
+
         Pageable pagination = PageRequest.of(page, size, sort);
         List<CapacityEntity> capacities = capacityRepository.findAll(pagination).getContent();
+
         if (capacities.isEmpty()) {
             throw new NoDataFoundException();
         }

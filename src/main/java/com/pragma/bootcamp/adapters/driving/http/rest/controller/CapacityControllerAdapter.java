@@ -52,11 +52,11 @@ public class CapacityControllerAdapter {
 
     @GetMapping("/search/{capacityName}")
     public ResponseEntity<CapacityResponse> getCapacity(@PathVariable String capacityName) {
-        return ResponseEntity.ok(capacityResponseMapper.toCapacityResponse((capacityServicePort.getCapacity(capacityName))));
+        return ResponseEntity.ok(capacityResponseMapper.toCapacityResponse(capacityServicePort.getCapacity(capacityName)));
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<CapacityResponse>> getAllTechnologies(@RequestParam Integer page, @RequestParam Integer size, @RequestParam boolean isAscending, boolean isSortByTechnologiesAmount) {
-        return ResponseEntity.ok(capacityResponseMapper.toCapacityResponseList(capacityServicePort.getAllTechnologies(page, size, isAscending, isSortByTechnologiesAmount)));
+    public ResponseEntity<List<CapacityResponse>> getAllCapacities(@RequestParam Integer page, @RequestParam Integer size, @RequestParam boolean isAscending, boolean isSortByTechnologiesAmount) {
+        return ResponseEntity.ok(capacityResponseMapper.toCapacityResponseList(capacityServicePort.getAllCapacities(page, size, isAscending, isSortByTechnologiesAmount)));
     }
 }

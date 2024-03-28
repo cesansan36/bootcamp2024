@@ -17,7 +17,6 @@ public class Capacity {
     private final Long id;
     private final String name;
     private final String description;
-
     private List<Technology> technologies;
 
     public Capacity(Long id, String name, String description) {
@@ -43,7 +42,6 @@ public class Capacity {
     }
 
     public void setTechnologies(List<Technology> technologies) {
-
         this.technologies = technologies;
     }
 

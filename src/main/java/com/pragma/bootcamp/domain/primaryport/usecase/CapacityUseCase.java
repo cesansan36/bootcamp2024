@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CapacityUseCase implements ICapacityServicePort {
 
-    private ICapacityPersistencePort capacityPersistencePort;
+    private final ICapacityPersistencePort capacityPersistencePort;
 
     public CapacityUseCase(ICapacityPersistencePort capacityPersistencePort) {
         this.capacityPersistencePort = capacityPersistencePort;
@@ -25,7 +25,7 @@ public class CapacityUseCase implements ICapacityServicePort {
     }
 
     @Override
-    public List<Capacity> getAllTechnologies(Integer page, Integer size, boolean isAscending, boolean isSortByTechnologiesAmount) {
+    public List<Capacity> getAllCapacities(Integer page, Integer size, boolean isAscending, boolean isSortByTechnologiesAmount) {
         return capacityPersistencePort.getAllCapacities(page, size, isAscending, isSortByTechnologiesAmount);
     }
 }
