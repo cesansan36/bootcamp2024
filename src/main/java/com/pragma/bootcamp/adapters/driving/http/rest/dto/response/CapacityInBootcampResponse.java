@@ -10,5 +10,5 @@ import java.util.List;
 public class CapacityInBootcampResponse {
     private final Long id;
     private final String name;
-    private final List<TechnologyInCapacityResponse> capacities;
+    private final List<TechnologyInCapacityResponse> technologies;
 }

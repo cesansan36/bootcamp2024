@@ -3,6 +3,7 @@ package com.pragma.bootcamp.adapters.driven.jpa.mysql.adapter;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.BootcampEntity;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.NoDataFoundException;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.RegistryAlreadyExistsException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.IBootcampEntityMapper;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.IBootcampRepository;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.util.AdapterConstants;
@@ -23,6 +24,12 @@ public class BootcampAdapter implements IBootcampPersistencePort {
 
     @Override
     public void saveBootcamp(Bootcamp bootcamp) {
+        if (bootcampRepository.findByName(bootcamp.getName()).isPresent()) {
+            throw new RegistryAlreadyExistsException(
+                    String.format(
+                            AdapterConstants.REGISTRY_NAME_ALREADY_USED,
+                            AdapterConstants.Registry.BOOTCAMP));
+        }
         bootcampRepository.save(bootcampEntityMapper.toEntity(bootcamp));
     }
 

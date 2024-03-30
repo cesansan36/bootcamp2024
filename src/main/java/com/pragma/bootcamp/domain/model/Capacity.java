@@ -3,6 +3,7 @@ package com.pragma.bootcamp.domain.model;
 import com.pragma.bootcamp.domain.exception.QuantityAboveRequiredException;
 import com.pragma.bootcamp.domain.exception.QuantityBelowRequiredException;
 import com.pragma.bootcamp.domain.util.DomConstants;
+import com.pragma.bootcamp.domain.util.DomValidation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,8 @@ public class Capacity {
     private List<Technology> technologies;
 
     public Capacity(Long id, String name, String description) {
+        DomValidation.validateFields(name, description);
+
         this.id = id;
         this.name = name;
         this.description = description;

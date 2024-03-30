@@ -1,4 +1,4 @@
-package com.pragma.bootcamp.adapters.driving.http.controller;
+package com.pragma.bootcamp.adapters.driving.http.rest.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pragma.bootcamp.adapters.driving.http.rest.controller.TechnologyControllerAdapter;
@@ -67,7 +67,6 @@ class TechnologyControllerAdapterTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        //verify(technologyPersistencePort, times(1)).getAllTechnologies(anyInt(), anyInt(), anyBoolean())
         verify(technologyRequestMapper, times(1)).addRequestToTechnology(any(AddTechnologyRequest.class));
         verify(technologyServicePort, times(1)).saveTechnology(tech);
     }

@@ -2,7 +2,7 @@ package com.pragma.bootcamp.configuration.exceptionhandler;
 
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.NoDataFoundException;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.TechnologyAlreadyExistException;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.RegistryAlreadyExistsException;
 import com.pragma.bootcamp.configuration.Constants;
 import com.pragma.bootcamp.domain.exception.CharLimitSurpassedException;
 import com.pragma.bootcamp.domain.exception.EmptyFieldException;
@@ -26,9 +26,9 @@ public class ControllerAdvisor {
                 Constants.ELEMENT_NOT_FOUND_EXCEPTION_MESSAGE, HttpStatus.CONFLICT.toString(), LocalDateTime.now()
                 ));
     }
-    @ExceptionHandler(TechnologyAlreadyExistException.class)
-    public ResponseEntity<ExceptionResponse> handleTechnologyAlreadyExistException() {
-        return ResponseEntity.badRequest().body(new ExceptionResponse(Constants.TECHNOLOGY_ALREADY_EXISTS_EXCEPTION_MESSAGE,
+    @ExceptionHandler(RegistryAlreadyExistsException.class)
+    public ResponseEntity<ExceptionResponse> handleRegistryAlreadyExistsException(RegistryAlreadyExistsException exception) {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(exception.getMessage(),
                 HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }
     @ExceptionHandler(NoDataFoundException.class)

@@ -33,14 +33,14 @@ public class CapacityControllerAdapter {
     @PostMapping("/add")
     public ResponseEntity<Void> addCapacity(@RequestBody AddCapacityRequest request) {
 
-        List<Technology> tecs = new ArrayList<>();
+        List<Technology> techs = new ArrayList<>();
 
         request.getTechnologiesNames().forEach(technologyName -> {
             Technology found = technologyServicePort.getTechnology(technologyName);
-            tecs.add(found);
+            techs.add(found);
         });
 
-        List<Technology> unique = tecs.stream()
+        List<Technology> unique = techs.stream()
                 .collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparingLong(Technology::getId))), ArrayList::new));
 
         Capacity capacity = capacityRequestMapper.addRequestToCapacity(request);
@@ -52,11 +52,24 @@ public class CapacityControllerAdapter {
 
     @GetMapping("/search/{capacityName}")
     public ResponseEntity<CapacityResponse> getCapacity(@PathVariable String capacityName) {
-        return ResponseEntity.ok(capacityResponseMapper.toCapacityResponse(capacityServicePort.getCapacity(capacityName)));
+        return ResponseEntity.ok(
+                capacityResponseMapper.toCapacityResponse(
+                        capacityServicePort.getCapacity(capacityName)));
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<CapacityResponse>> getAllCapacities(@RequestParam Integer page, @RequestParam Integer size, @RequestParam boolean isAscending, boolean isSortByTechnologiesAmount) {
-        return ResponseEntity.ok(capacityResponseMapper.toCapacityResponseList(capacityServicePort.getAllCapacities(page, size, isAscending, isSortByTechnologiesAmount)));
+    public ResponseEntity<List<CapacityResponse>> getAllCapacities(@RequestParam(defaultValue = "0") Integer page,
+                                                                   @RequestParam(defaultValue = "3") Integer size,
+                                                                   @RequestParam(defaultValue = "true") boolean isAscending,
+                                                                   @RequestParam(defaultValue = "true") boolean isSortByTechnologiesAmount) {
+        if (page < 0) {
+            page = 0;
+        }
+        if (size < 1) {
+            size = 1;
+        }
+        return ResponseEntity.ok(
+                capacityResponseMapper.toCapacityResponseList(
+                        capacityServicePort.getAllCapacities(page, size, isAscending, isSortByTechnologiesAmount)));
     }
 }

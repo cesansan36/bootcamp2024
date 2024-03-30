@@ -8,6 +8,7 @@ import com.pragma.bootcamp.domain.model.Bootcamp;
 import com.pragma.bootcamp.domain.model.Capacity;
 import com.pragma.bootcamp.domain.primaryport.IBootcampServicePort;
 import com.pragma.bootcamp.domain.primaryport.ICapacityServicePort;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,7 @@ public class BootcampControllerAdapter {
     private final IBootcampRequestMapper bootcampRequestMapper;
     private final IBootcampResponseMapper bootcampResponseMapper;
 
+    @Operation(summary = "Add a Bootcamp if not exists")
     @PostMapping("/add")
     public ResponseEntity<Void> addBootcamp(@RequestBody AddBootcampRequest request) {
 
@@ -53,11 +55,24 @@ public class BootcampControllerAdapter {
 
     @GetMapping("/search/{bootcampName}")
     public ResponseEntity<BootcampResponse> getBootcamp(@PathVariable String bootcampName) {
-        return ResponseEntity.ok(bootcampResponseMapper.toBootcampResponse(bootcampServicePort.getBootcamp(bootcampName)));
+        return ResponseEntity.ok(
+                bootcampResponseMapper.toBootcampResponse(
+                        bootcampServicePort.getBootcamp(bootcampName)));
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<BootcampResponse>> getAllBootcamps(@RequestParam Integer page, @RequestParam Integer size, @RequestParam boolean isAscending, @RequestParam boolean isSortByCapacitiesAmount) {
-        return ResponseEntity.ok(bootcampResponseMapper.toBootcampResponseList(bootcampServicePort.getAllBootcamps(page, size, isAscending, isSortByCapacitiesAmount)));
+    public ResponseEntity<List<BootcampResponse>> getAllBootcamps(@RequestParam Integer page,
+                                                                  @RequestParam Integer size,
+                                                                  @RequestParam boolean isAscending,
+                                                                  @RequestParam boolean isSortByCapacitiesAmount) {
+        if (page < 0) {
+            page = 0;
+        }
+        if (size < 1) {
+            size = 1;
+        }
+        return ResponseEntity.ok(
+                bootcampResponseMapper.toBootcampResponseList(
+                        bootcampServicePort.getAllBootcamps(page, size, isAscending, isSortByCapacitiesAmount)));
     }
 }

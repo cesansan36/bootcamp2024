@@ -3,6 +3,7 @@ package com.pragma.bootcamp.adapters.driven.jpa.mysql.adapter;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.CapacityEntity;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.NoDataFoundException;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.RegistryAlreadyExistsException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.ICapacityEntityMapper;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ICapacityRepository;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.util.AdapterConstants;
@@ -22,10 +23,12 @@ public class CapacityAdapter implements ICapacityPersistencePort {
 
     @Override
     public void saveCapacity(Capacity capacity) {
-        // TODO prevent creation if already exists
-//        if (capacityRepository.findByName(capacity.getName()).isPresent()) {
-//            throw new CapacityAlreadyExistException();
-//        }
+        if (capacityRepository.findByName(capacity.getName()).isPresent()) {
+            throw new RegistryAlreadyExistsException(
+                    String.format(
+                            AdapterConstants.REGISTRY_NAME_ALREADY_USED,
+                            AdapterConstants.Registry.CAPACITY));
+        }
         capacityRepository.save(capacityEntityMapper.toEntity(capacity));
     }
 

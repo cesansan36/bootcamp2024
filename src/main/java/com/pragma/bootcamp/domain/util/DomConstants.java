@@ -11,8 +11,8 @@ public class DomConstants {
         DESCRIPTION
     }
 
-    public static final int MAX_TECHNOLOGY_NAME_SIZE = 50;
-    public static final int MAX_TECHNOLOGY_DESCRIPTION_SIZE = 90;
+    public static final int MAX_NAME_FIELD_SIZE = 50;
+    public static final int MAX_DESCRIPTION_FIELD_SIZE = 90;
     public static final int MIN_TECHNOLOGIES_IN_CAPACITY = 3;
     public static final int MAX_TECHNOLOGIES_IN_CAPACITY = 20;
     public static final int MIN_CAPACITIES_IN_BOOTCAMP = 1;

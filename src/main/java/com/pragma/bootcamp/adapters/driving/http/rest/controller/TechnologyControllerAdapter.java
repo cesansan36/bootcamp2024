@@ -6,7 +6,6 @@ import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.TechnologyRes
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.ITechnologyRequestMapper;
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.ITechnologyResponseMapper;
 import com.pragma.bootcamp.domain.primaryport.ITechnologyServicePort;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,12 +34,22 @@ public class TechnologyControllerAdapter {
 
     @GetMapping("/search/{technologyName}")
     public ResponseEntity<TechnologyResponse> getTechnology(@PathVariable String technologyName) {
-        return ResponseEntity.ok(technologyResponseMapper.toTechnologyResponse((technologyServicePort.getTechnology(technologyName))));
+        return ResponseEntity.ok(
+                technologyResponseMapper.toTechnologyResponse(
+                        technologyServicePort.getTechnology(technologyName)));
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<TechnologyResponse>> getAllTechnologies(@RequestParam Integer page, @RequestParam Integer size, @RequestParam boolean isAscending) {
-        return ResponseEntity.ok(technologyResponseMapper.toTechnologyResponseList(technologyServicePort.getAllTechnologies(page, size, isAscending)));
+    public ResponseEntity<List<TechnologyResponse>> getAllTechnologies(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "3") Integer size, @RequestParam(defaultValue = "true") boolean isAscending) {
+        if (page < 0) {
+            page = 0;
+        }
+        if (size < 1) {
+            size = 1;
+        }
+        return ResponseEntity.ok(
+                technologyResponseMapper.toTechnologyResponseList(
+                        technologyServicePort.getAllTechnologies(page, size, isAscending)));
     }
 
     @PutMapping("/")

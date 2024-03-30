@@ -3,18 +3,18 @@ package com.pragma.bootcamp.adapters.driven.jpa.mysql.adapter;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.TechnologyEntity;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.NoDataFoundException;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.TechnologyAlreadyExistException;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.RegistryAlreadyExistsException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.ITechnologyEntityMapper;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ITechnologyRepository;
 import com.pragma.bootcamp.domain.model.Technology;
-import com.pragma.bootcamp.testdata.TestData;
+import com.pragma.bootcamp.testdata.TestDataDomain;
+import com.pragma.bootcamp.testdata.TestDataDriven;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -39,14 +39,14 @@ class TechnologyAdapterTest {
     @Test
     @DisplayName("Should save technology correctly")
     void saveTechnologySuccess() {
-        Technology tech = TestData.getTestTechnology1();
+        Technology tech = TestDataDomain.getTechnology(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
 
-        when(technologyRepository.findByName("Java")).thenReturn(Optional.empty());
+        when(technologyRepository.findByName(anyString())).thenReturn(Optional.empty());
 
         technologyAdapter.saveTechnology(tech);
 
         assertAll(
-                () -> verify(technologyRepository, times(1)).findByName("Java"),
+                () -> verify(technologyRepository, times(1)).findByName(anyString()),
                 () -> verify(technologyEntityMapper, times(1)).toEntity(tech),
                 () -> verify(technologyRepository, times(1)).save(any())
         );
@@ -54,36 +54,43 @@ class TechnologyAdapterTest {
     @Test
     @DisplayName("Should throw exception because technology already exists")
     void saveTechnologyException() {
-        Technology tech = TestData.getTestTechnology1();
+        Technology tech = TestDataDomain.getTechnology(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
 
-        when(technologyRepository.findByName("Java")).thenReturn(Optional.of(new TechnologyEntity()));
+        when(technologyRepository.findByName(anyString())).thenReturn(Optional.of(new TechnologyEntity()));
 
-        assertThrows(TechnologyAlreadyExistException.class, () -> technologyAdapter.saveTechnology(tech));
+        assertThrows(RegistryAlreadyExistsException.class, () -> technologyAdapter.saveTechnology(tech));
     }
 
     @Test
     @DisplayName("Should get a technology correctly")
     void getTechnologySuccess() {
-        TechnologyEntity technologyEntity = TestData.getTestTechnologyEntity1();
+        Long techEntityId = 1L;
+        String techEntityName = TestDataDomain.getValidName(1);
+        String techEntityDescription = TestDataDomain.getValidDescription(1);
+        TechnologyEntity technologyEntity = new TechnologyEntity();
+        technologyEntity.setId(techEntityId);
+        technologyEntity.setName(techEntityName);
+        technologyEntity.setDescription(techEntityDescription);
+        Technology retrieved = TestDataDomain.getTechnology(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
 
-        when(technologyRepository.findByName(TestData.TECHNOLOGY_NAME_1)).thenReturn(Optional.of(technologyEntity));
-        when(technologyEntityMapper.toModel(technologyEntity)).thenReturn(TestData.getTestTechnology1());
+        when(technologyRepository.findByName(anyString())).thenReturn(Optional.of(technologyEntity));
+        when(technologyEntityMapper.toModel(technologyEntity)).thenReturn(retrieved);
 
-        Technology found = technologyAdapter.getTechnology(TestData.TECHNOLOGY_NAME_1);
+        Technology found = technologyAdapter.getTechnology(techEntityName);
 
         assertAll(
-                () -> assertEquals(TestData.TECHNOLOGY_ID_1, found.getId()),
-                () -> assertEquals(TestData.TECHNOLOGY_NAME_1, found.getName()),
-                () -> assertEquals(TestData.TECHNOLOGY_DESCRIPTION_1, found.getDescription())
+                () -> assertEquals(techEntityId, found.getId()),
+                () -> assertEquals(techEntityName, found.getName()),
+                () -> assertEquals(techEntityDescription, found.getDescription())
         );
     }
 
     @Test
     @DisplayName("Should throw exception since technology doesn't exists")
     void getTechnologyException() {
-        String techName = TestData.TECHNOLOGY_NAME_1;
+        String techName = "Java";
 
-        when(technologyRepository.findByNameContaining(techName)).thenReturn(Optional.empty());
+        when(technologyRepository.findByNameContaining(anyString())).thenReturn(Optional.empty());
 
         assertThrows(ElementNotFoundException.class, () -> technologyAdapter.getTechnology(techName));
     }
@@ -93,12 +100,8 @@ class TechnologyAdapterTest {
         int page = 0;
         int size = 10;
         boolean isAscending = true;
-        List<TechnologyEntity> technologyEntities = new ArrayList<>();
-        technologyEntities.add(TestData.getTestTechnologyEntity1());
-        technologyEntities.add(TestData.getTestTechnologyEntity2());
-        List<Technology> technologies = new ArrayList<>();
-        technologies.add(TestData.getTestTechnology1());
-        technologies.add(TestData.getTestTechnology2());
+        List<TechnologyEntity> technologyEntities = TestDataDriven.getListOfTechnologyEntity(2);
+        List<Technology> technologies = TestDataDomain.getListOfValidTechnologies(2);
 
         when(technologyRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(technologyEntities));
         when(technologyEntityMapper.toModelList(technologyEntities)).thenReturn(technologies);
@@ -130,8 +133,8 @@ class TechnologyAdapterTest {
 
     @Test
     void updateTechnologySuccess() {
-        Technology technology = TestData.getTestTechnology1();
-        TechnologyEntity technologyEntity = TestData.getTestTechnologyEntity1();
+        Technology technology = TestDataDomain.getTechnology(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
+        TechnologyEntity technologyEntity = TestDataDriven.getTechnologyEntity(1L);
 
         when(technologyRepository.findById(anyLong())).thenReturn(Optional.of(technologyEntity));
         when(technologyEntityMapper.toEntity(technology)).thenReturn(technologyEntity);
@@ -153,7 +156,7 @@ class TechnologyAdapterTest {
 
     @Test
     void updateTechnologyException() {
-        Technology technology = TestData.getTestTechnology1();
+        Technology technology = TestDataDomain.getTechnology(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
 
         when(technologyRepository.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -162,8 +165,8 @@ class TechnologyAdapterTest {
 
     @Test
     void deleteTechnologySuccess() {
-        Long idToDelete = TestData.TECHNOLOGY_ID_1;
-        TechnologyEntity technologyEntity = TestData.getTestTechnologyEntity1();
+        Long idToDelete = 1L;
+        TechnologyEntity technologyEntity = TestDataDriven.getTechnologyEntity(1L);
 
         when(technologyRepository.findById(anyLong())).thenReturn(Optional.of(technologyEntity));
 
@@ -174,7 +177,7 @@ class TechnologyAdapterTest {
 
     @Test
     void deleteTechnologyException() {
-        Long idToDelete = TestData.TECHNOLOGY_ID_1;
+        Long idToDelete = 1L;
 
         when(technologyRepository.findById(anyLong())).thenReturn(Optional.empty());
 

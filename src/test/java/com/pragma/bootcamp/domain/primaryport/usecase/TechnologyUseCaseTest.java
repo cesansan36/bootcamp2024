@@ -2,13 +2,13 @@ package com.pragma.bootcamp.domain.primaryport.usecase;
 
 import com.pragma.bootcamp.domain.model.Technology;
 import com.pragma.bootcamp.domain.secondaryport.ITechnologyPersistencePort;
+import com.pragma.bootcamp.testdata.TestDataDomain;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,7 +25,7 @@ class TechnologyUseCaseTest {
 
     @Test
     void saveTechnology() {
-        Technology tec = new Technology(7L, "C++", "between C and C#");
+        Technology tec = TestDataDomain.getTechnology(0L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
         technologyUseCase.saveTechnology(tec);
 
         verify(technologyPersistencePort, times(1)).saveTechnology(tec);
@@ -33,23 +33,21 @@ class TechnologyUseCaseTest {
 
     @Test
     void getTechnology() {
-        Technology tec = new Technology(7L, "C++", "between C and C#");
+        Technology tec = TestDataDomain.getTechnology(0L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
         when(technologyPersistencePort.getTechnology(anyString())).thenReturn(tec);
 
         Technology found = technologyUseCase.getTechnology("some name");
         assertAll(
-                () -> assertEquals(7L, found.getId()),
-                () -> assertEquals("C++", found.getName()),
-                () -> assertEquals("between C and C#", found.getDescription()),
+                () -> assertEquals(tec.getId(), found.getId()),
+                () -> assertEquals(tec.getName(), found.getName()),
+                () -> assertEquals(tec.getDescription(), found.getDescription()),
                 () -> verify(technologyPersistencePort, times(1)).getTechnology("some name")
         );
     }
 
     @Test
     void getAllTechnologies() {
-        Technology tec1 = new Technology(7L, "C++", "between C and C#");
-        Technology tec2 = new Technology(9L, "assembler", "bits");
-        List<Technology> techs = Arrays.asList(tec1, tec2);
+        List<Technology> techs = TestDataDomain.getListOfValidTechnologies(2);
 
         when(technologyPersistencePort.getAllTechnologies(anyInt(), anyInt(), anyBoolean())).thenReturn(techs);
 
@@ -69,15 +67,17 @@ class TechnologyUseCaseTest {
 
     @Test
     void updateTechnology() {
-        Technology tec = new Technology(7L, "C++", "between C and C#");
-        when(technologyPersistencePort.updateTechnology(tec)).thenReturn(tec);
+        Technology sendTech = TestDataDomain.getTechnology(0L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
+        Technology receivedTech = TestDataDomain.getTechnology(0L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
+        when(technologyPersistencePort.updateTechnology(sendTech)).thenReturn(receivedTech);
 
-        Technology found = technologyUseCase.updateTechnology(tec);
+        Technology found = technologyUseCase.updateTechnology(sendTech);
+
         assertAll(
-                () -> assertEquals(7L, found.getId()),
-                () -> assertEquals("C++", found.getName()),
-                () -> assertEquals("between C and C#", found.getDescription()),
-                () -> verify(technologyPersistencePort, times(1)).updateTechnology(tec)
+                () -> assertEquals(receivedTech.getId(), found.getId()),
+                () -> assertEquals(receivedTech.getName(), found.getName()),
+                () -> assertEquals(receivedTech.getDescription(), found.getDescription()),
+                () -> verify(technologyPersistencePort, times(1)).updateTechnology(sendTech)
         );
     }
 

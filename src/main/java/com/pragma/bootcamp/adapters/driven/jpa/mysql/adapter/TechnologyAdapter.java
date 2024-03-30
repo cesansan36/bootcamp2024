@@ -3,7 +3,7 @@ package com.pragma.bootcamp.adapters.driven.jpa.mysql.adapter;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.TechnologyEntity;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.NoDataFoundException;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.TechnologyAlreadyExistException;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.RegistryAlreadyExistsException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.ITechnologyEntityMapper;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ITechnologyRepository;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.util.AdapterConstants;
@@ -25,7 +25,10 @@ public class TechnologyAdapter implements ITechnologyPersistencePort {
     @Override
     public void saveTechnology(Technology technology) {
         if (technologyRepository.findByName(technology.getName()).isPresent()) {
-            throw new TechnologyAlreadyExistException();
+            throw new RegistryAlreadyExistsException(
+                    String.format(
+                            AdapterConstants.REGISTRY_NAME_ALREADY_USED,
+                            AdapterConstants.Registry.TECHNOLOGY));
         }
         technologyRepository.save(technologyEntityMapper.toEntity(technology));
     }
