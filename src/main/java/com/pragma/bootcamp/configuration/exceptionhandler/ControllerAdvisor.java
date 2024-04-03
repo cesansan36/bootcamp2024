@@ -5,6 +5,7 @@ import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.NoDataFoundExcept
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.RegistryAlreadyExistsException;
 import com.pragma.bootcamp.configuration.Constants;
 import com.pragma.bootcamp.domain.exception.CharLimitSurpassedException;
+import com.pragma.bootcamp.domain.exception.DatefinishBeforeStartException;
 import com.pragma.bootcamp.domain.exception.EmptyFieldException;
 import com.pragma.bootcamp.domain.exception.QuantityAboveRequiredException;
 import com.pragma.bootcamp.domain.exception.QuantityBelowRequiredException;
@@ -23,7 +24,7 @@ public class ControllerAdvisor {
     @ExceptionHandler(ElementNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleElementNotFoundException() {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(
-                Constants.ELEMENT_NOT_FOUND_EXCEPTION_MESSAGE, HttpStatus.CONFLICT.toString(), LocalDateTime.now()
+                Constants.ELEMENT_NOT_FOUND_EXCEPTION_MESSAGE, HttpStatus.NOT_FOUND.toString(), LocalDateTime.now()
                 ));
     }
     @ExceptionHandler(RegistryAlreadyExistsException.class)
@@ -56,6 +57,11 @@ public class ControllerAdvisor {
     }
     @ExceptionHandler(QuantityAboveRequiredException.class)
     public ResponseEntity<ExceptionResponse> handleQuantityAboveRequiredException(QuantityAboveRequiredException exception) {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(
+                exception.getMessage(), HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+    @ExceptionHandler(DatefinishBeforeStartException.class)
+    public ResponseEntity<ExceptionResponse> handleDatefinishBeforeStartException(DatefinishBeforeStartException exception) {
         return ResponseEntity.badRequest().body(new ExceptionResponse(
                 exception.getMessage(), HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }

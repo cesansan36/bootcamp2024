@@ -60,7 +60,6 @@ class TechnologyControllerAdapterTest {
 
         when(technologyRequestMapper.addRequestToTechnology(any(AddTechnologyRequest.class))).thenReturn(tech);
 
-        System.out.println(inputJson);
         MockHttpServletRequestBuilder request = post("/technology/add").contentType(MediaType.APPLICATION_JSON).content(inputJson);
 
         mockMvc.perform(request)

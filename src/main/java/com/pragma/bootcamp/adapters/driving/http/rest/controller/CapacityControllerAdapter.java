@@ -34,12 +34,10 @@ public class CapacityControllerAdapter {
     public ResponseEntity<Void> addCapacity(@RequestBody AddCapacityRequest request) {
 
         List<Technology> techs = new ArrayList<>();
-
         request.getTechnologiesNames().forEach(technologyName -> {
             Technology found = technologyServicePort.getTechnology(technologyName);
             techs.add(found);
         });
-
         List<Technology> unique = techs.stream()
                 .collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparingLong(Technology::getId))), ArrayList::new));
 

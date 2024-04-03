@@ -17,14 +17,18 @@ public class DomConstants {
     public static final int MAX_TECHNOLOGIES_IN_CAPACITY = 20;
     public static final int MIN_CAPACITIES_IN_BOOTCAMP = 1;
     public static final int MAX_CAPACITIES_IN_BOOTCAMP = 4;
+    public static final int MIN_PARTICIPANTS_IN_BOOTCAMP_VERSION = 1;
+    public static final int MAX_PARTICIPANTS_IN_BOOTCAMP_VERSION = 30;
     public static final String FIELD_MAX_SIZE_SURPASSED_MESSAGE = "Field %1$s can not have more than %2$s characters";
     public static final String FIELD_NULL_MESSAGE = "Field %s can not be null";
     public static final String FIELD_EMPTY_MESSAGE = "Field %s can not be empty";
     public static final String BELOW_MINIMUM_AMOUNT_OF_TECHNOLOGIES_MESSAGE = "The capacity needs at least %s, technologies";
     public static final String ABOVE_MINIMUM_AMOUNT_OF_TECHNOLOGIES_MESSAGE = "The capacity can not have more than %s, technologies";
-
     public static final String BELOW_MINIMUM_AMOUNT_OF_CAPACITIES_MESSAGE = "The bootcamp needs at least %s, capacities";
     public static final String ABOVE_MINIMUM_AMOUNT_OF_CAPACITIES_MESSAGE = "The bootcamp can not have more than %s, capacities";
+    public static final String BELOW_MINIMUM_AMOUNT_OF_PARTICIPANTS_MESSAGE = "The bootcamp version needs at least %s, participants";
+    public static final String ABOVE_MINIMUM_AMOUNT_OF_PARTICIPANTS_MESSAGE = "The bootcamp version can not have more than %s, participants";
+    public static final String DATE_FINISH_BEFORE_START_MESSAGE = "The start date can not be after the end date";
 
 
 }

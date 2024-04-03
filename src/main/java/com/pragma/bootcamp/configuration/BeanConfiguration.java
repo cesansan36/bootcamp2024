@@ -1,21 +1,27 @@
 package com.pragma.bootcamp.configuration;
 
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.adapter.BootcampAdapter;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.adapter.BootcampVersionAdapter;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.adapter.CapacityAdapter;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.adapter.TechnologyAdapter;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.IBootcampEntityMapper;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.IBootcampVersionEntityMapper;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.ICapacityEntityMapper;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.ITechnologyEntityMapper;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.IBootcampRepository;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.IBootcampVersionRepository;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ICapacityRepository;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ITechnologyRepository;
 import com.pragma.bootcamp.domain.primaryport.IBootcampServicePort;
+import com.pragma.bootcamp.domain.primaryport.IBootcampVersionServicePort;
 import com.pragma.bootcamp.domain.primaryport.ICapacityServicePort;
 import com.pragma.bootcamp.domain.primaryport.ITechnologyServicePort;
 import com.pragma.bootcamp.domain.primaryport.usecase.BootcampUseCase;
+import com.pragma.bootcamp.domain.primaryport.usecase.BootcampVersionUseCase;
 import com.pragma.bootcamp.domain.primaryport.usecase.CapacityUseCase;
 import com.pragma.bootcamp.domain.primaryport.usecase.TechnologyUseCase;
 import com.pragma.bootcamp.domain.secondaryport.IBootcampPersistencePort;
+import com.pragma.bootcamp.domain.secondaryport.IBootcampVersionPersistencePort;
 import com.pragma.bootcamp.domain.secondaryport.ICapacityPersistencePort;
 import com.pragma.bootcamp.domain.secondaryport.ITechnologyPersistencePort;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +37,8 @@ public class BeanConfiguration {
     private final ICapacityEntityMapper capacityEntityMapper;
     private final IBootcampRepository bootcampRepository;
     private final IBootcampEntityMapper bootcampEntityMapper;
+    private final IBootcampVersionRepository bootcampVersionRepository;
+    private final IBootcampVersionEntityMapper bootcampVersionEntityMapper;
 
     @Bean
     public ITechnologyPersistencePort technologyPersistencePort() {
@@ -61,5 +69,15 @@ public class BeanConfiguration {
     @Bean
     public IBootcampServicePort bootcampServicePort() {
         return new BootcampUseCase(bootcampPersistencePort());
+    }
+
+    @Bean
+    public IBootcampVersionPersistencePort bootcampVersionPersistencePort() {
+        return new BootcampVersionAdapter(bootcampVersionRepository, bootcampVersionEntityMapper);
+    }
+
+    @Bean
+    public IBootcampVersionServicePort bootcampVersionServicePort() {
+        return new BootcampVersionUseCase(bootcampVersionPersistencePort());
     }
 }
