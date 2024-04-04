@@ -2,6 +2,7 @@ package com.pragma.bootcamp.testdata;
 
 import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.*;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,8 @@ public class TestDataController {
     public enum Element {
         TECHNOLOGY,
         CAPACITY,
-        BOOTCAMP
+        BOOTCAMP,
+        BOOTCAMP_VERSION
     }
 
     public enum Fields {
@@ -74,7 +76,9 @@ public class TestDataController {
 
     public static BootcampResponse getBootcampResponse(Long id, Integer capacitiesAmount, Integer technologiesAmount) {
         List<CapacityInBootcampResponse> capsInBootcampResponse = getListOfCapacityInBootcampResponse(capacitiesAmount, technologiesAmount);
-        return new BootcampResponse(id, String.format(NAME, Element.BOOTCAMP, id), String.format(DESCRIPTION, Element.BOOTCAMP, id), capsInBootcampResponse);
+        return new BootcampResponse(id,
+                String.format(NAME, Element.BOOTCAMP, id),
+                capsInBootcampResponse);
     }
     public static List<BootcampResponse> getListOfBootcampResponse(Integer num, Integer capacitiesAmount, Integer technologiesAmount) {
         List<BootcampResponse> bootcampResponses = new ArrayList<>();
@@ -82,5 +86,21 @@ public class TestDataController {
             bootcampResponses.add(getBootcampResponse(i, capacitiesAmount, technologiesAmount));
         }
         return bootcampResponses;
+    }
+
+    public static BootcampVersionResponse getBootcampVersionResponse(Long id) throws ParseException {
+        return new BootcampVersionResponse(id,
+                String.format(NAME, Element.BOOTCAMP_VERSION, id),
+                4,
+                TestDataDomain.parseDate("2021-01-01"),
+                TestDataDomain.parseDate("2021-01-03"),
+                "b_a");
+    }
+    public static List<BootcampVersionResponse> getListOfBootcampVersionResponse(Integer num) throws ParseException {
+        List<BootcampVersionResponse> bootcampVersionResponses = new ArrayList<>();
+        for (Long i = 1L ; i <= num ; i++) {
+            bootcampVersionResponses.add(getBootcampVersionResponse(i));
+        }
+        return bootcampVersionResponses;
     }
 }

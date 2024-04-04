@@ -105,7 +105,6 @@ class BootcampControllerAdapterTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.name").value(TestDataController.fieldText(1L, TestDataController.Fields.NAME, TestDataController.Element.BOOTCAMP)))
-                .andExpect(jsonPath("$.description").value(TestDataController.fieldText(1L, TestDataController.Fields.DESCRIPTION, TestDataController.Element.BOOTCAMP)))
                 .andExpect(jsonPath("$.capacities.size()").value(2))
                 .andExpect(jsonPath("$.capacities[0].id").value(1L))
                 .andExpect(jsonPath("$.capacities.[0].name").value(TestDataController.fieldText(1L, TestDataController.Fields.NAME, TestDataController.Element.CAPACITY)))
@@ -115,38 +114,6 @@ class BootcampControllerAdapterTest {
 
         verify(bootcampServicePort, times(1)).getBootcamp(anyString());
         verify(bootcampResponseMapper, times(1)).toBootcampResponse(bootcamp);
-        /*
-        Bootcamp bootcamp = new Bootcamp(1L, "Bootcamp", "The bootcamp");
-
-        List<TechnologyInCapacityResponse> techs1 = Arrays.asList(new TechnologyInCapacityResponse(1L, "tec 1"), new TechnologyInCapacityResponse(2L, "tec 2"));
-        CapacityInBootcampResponse capacityInBootcampResponse1 = new CapacityInBootcampResponse(1L, "cap 1", techs1);
-        List<TechnologyInCapacityResponse> techs2 = Arrays.asList(new TechnologyInCapacityResponse(3L, "tec 3"), new TechnologyInCapacityResponse(4L, "tec 4"));
-        CapacityInBootcampResponse capacityInBootcampResponse2 = new CapacityInBootcampResponse(2L, "cap 2", techs2);
-        List<CapacityInBootcampResponse> capsInBootcamp = Arrays.asList(capacityInBootcampResponse1, capacityInBootcampResponse2);
-        BootcampResponse bootcampResponse = new BootcampResponse(1L, "Bootcamp", "The bootcamp", capsInBootcamp);
-
-        when(bootcampServicePort.getBootcamp(anyString())).thenReturn(bootcamp);
-        when(bootcampResponseMapper.toBootcampResponse(bootcamp)).thenReturn(bootcampResponse);
-
-        MockHttpServletRequestBuilder request = get("/bootcamp/search/Bootcamp");
-
-        mockMvc.perform(request)
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.name").value("Bootcamp"))
-                .andExpect(jsonPath("$.description").value("The bootcamp"))
-                .andExpect(jsonPath("$.capacities.size()").value(2))
-                .andExpect(jsonPath("$.capacities[0].id").value(1L))
-                .andExpect(jsonPath("$.capacities.[0].name").value("cap 1"))
-                .andExpect(jsonPath("$.capacities.[1].technologies.size()").value(2))
-                .andExpect(jsonPath("$.capacities.[1].technologies[1].name").value("tec 4"))
-        ;
-
-        verify(bootcampServicePort, times(1)).getBootcamp(anyString());
-        verify(bootcampResponseMapper, times(1)).toBootcampResponse(bootcamp);
-
-         */
     }
 
     @Test
@@ -164,10 +131,8 @@ class BootcampControllerAdapterTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].name").value(TestDataController.fieldText(1L, TestDataController.Fields.NAME, TestDataController.Element.BOOTCAMP)))
-                .andExpect(jsonPath("$[0].description").value(TestDataController.fieldText(1L, TestDataController.Fields.DESCRIPTION, TestDataController.Element.BOOTCAMP)))
                 .andExpect(jsonPath("$[1].id").value(2L))
                 .andExpect(jsonPath("$[1].name").value(TestDataController.fieldText(2L, TestDataController.Fields.NAME, TestDataController.Element.BOOTCAMP)))
-                .andExpect(jsonPath("$[1].description").value(TestDataController.fieldText(2L, TestDataController.Fields.DESCRIPTION, TestDataController.Element.BOOTCAMP)))
                 .andExpect(jsonPath("$[0].capacities.size()").value(2))
                 .andExpect(jsonPath("$[1].capacities[0].name").value(TestDataController.fieldText(1L, TestDataController.Fields.NAME, TestDataController.Element.CAPACITY)))
                 .andExpect(jsonPath("$[1].capacities[0].technologies.size()").value(2))

@@ -7,7 +7,6 @@ public class Constants {
 
     public enum SortingField {
         NAME,
-        BOOTCAMP_NAME,
         MAX_PARTICIPANTS,
         START_DATE
     }

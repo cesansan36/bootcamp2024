@@ -25,7 +25,8 @@ class BootcampUseCaseTest {
 
     @Test
     void saveBootcamp() {
-        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapacities(0L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
+        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapacities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
+
         bootcampUseCase.saveBootcamp(bootcamp);
 
         verify(bootcampPersistencePort, times(1)).saveBootcamp(bootcamp);
@@ -33,7 +34,7 @@ class BootcampUseCaseTest {
 
     @Test
     void getBootcamp() {
-        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapacities(0L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
+        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapacities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
         when(bootcampPersistencePort.getBootcamp(anyString())).thenReturn(bootcamp);
 
         Bootcamp found = bootcampUseCase.getBootcamp("some name");

@@ -1,6 +1,6 @@
 package com.pragma.bootcamp.domain.model;
 
-import com.pragma.bootcamp.domain.exception.DatefinishBeforeStartException;
+import com.pragma.bootcamp.domain.exception.DateFinishBeforeStartException;
 import com.pragma.bootcamp.domain.exception.QuantityAboveRequiredException;
 import com.pragma.bootcamp.domain.exception.QuantityBelowRequiredException;
 import com.pragma.bootcamp.domain.util.DomConstants;
@@ -64,7 +64,7 @@ public class BootcampVersion {
             throw new QuantityAboveRequiredException(String.format(DomConstants.ABOVE_MINIMUM_AMOUNT_OF_PARTICIPANTS_MESSAGE, DomConstants.MAX_PARTICIPANTS_IN_BOOTCAMP_VERSION));
         }
         if (!endDate.after(startDate)) {
-            throw new DatefinishBeforeStartException(DomConstants.DATE_FINISH_BEFORE_START_MESSAGE);
+            throw new DateFinishBeforeStartException(DomConstants.DATE_FINISH_BEFORE_START_MESSAGE);
         }
     }
 }

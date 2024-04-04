@@ -5,7 +5,7 @@ import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.NoDataFoundExcept
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.RegistryAlreadyExistsException;
 import com.pragma.bootcamp.configuration.Constants;
 import com.pragma.bootcamp.domain.exception.CharLimitSurpassedException;
-import com.pragma.bootcamp.domain.exception.DatefinishBeforeStartException;
+import com.pragma.bootcamp.domain.exception.DateFinishBeforeStartException;
 import com.pragma.bootcamp.domain.exception.EmptyFieldException;
 import com.pragma.bootcamp.domain.exception.QuantityAboveRequiredException;
 import com.pragma.bootcamp.domain.exception.QuantityBelowRequiredException;
@@ -60,8 +60,8 @@ public class ControllerAdvisor {
         return ResponseEntity.badRequest().body(new ExceptionResponse(
                 exception.getMessage(), HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }
-    @ExceptionHandler(DatefinishBeforeStartException.class)
-    public ResponseEntity<ExceptionResponse> handleDatefinishBeforeStartException(DatefinishBeforeStartException exception) {
+    @ExceptionHandler(DateFinishBeforeStartException.class)
+    public ResponseEntity<ExceptionResponse> handleDatefinishBeforeStartException(DateFinishBeforeStartException exception) {
         return ResponseEntity.badRequest().body(new ExceptionResponse(
                 exception.getMessage(), HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }
