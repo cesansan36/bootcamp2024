@@ -13,7 +13,8 @@ public class Technology {
 	private final String description;
 
 	public Technology(Long id, String name, String description) {
-		DomValidation.validateFields(name, description);
+		DomValidation.validateName(name);
+		DomValidation.validateDescription(description);
 
 		this.id = id;
 		this.name = requireNonNull(name, String.format(DomConstants.FIELD_NULL_MESSAGE, DomConstants.Field.NAME));

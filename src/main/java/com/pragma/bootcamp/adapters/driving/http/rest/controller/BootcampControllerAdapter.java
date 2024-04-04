@@ -61,10 +61,10 @@ public class BootcampControllerAdapter {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<BootcampResponse>> getAllBootcamps(@RequestParam Integer page,
-                                                                  @RequestParam Integer size,
-                                                                  @RequestParam boolean isAscending,
-                                                                  @RequestParam boolean isSortByCapacitiesAmount) {
+    public ResponseEntity<List<BootcampResponse>> getAllBootcamps(@RequestParam(defaultValue = "0") Integer page,
+                                                                  @RequestParam(defaultValue = "3") Integer size,
+                                                                  @RequestParam(defaultValue = "true") boolean isAscending,
+                                                                  @RequestParam(defaultValue = "true") boolean isSortByCapacitiesAmount) {
         if (page < 0) {
             page = 0;
         }

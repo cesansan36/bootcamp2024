@@ -21,7 +21,8 @@ public class Bootcamp {
     private List<Capacity> capacities;
 
     public Bootcamp(Long id, String name, String description) {
-        DomValidation.validateFields(name, description);
+        DomValidation.validateName(name);
+        DomValidation.validateDescription(description);
 
         this.id = id;
         this.name = name;

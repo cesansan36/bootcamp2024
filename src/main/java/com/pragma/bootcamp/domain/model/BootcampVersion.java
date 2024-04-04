@@ -4,6 +4,7 @@ import com.pragma.bootcamp.domain.exception.DatefinishBeforeStartException;
 import com.pragma.bootcamp.domain.exception.QuantityAboveRequiredException;
 import com.pragma.bootcamp.domain.exception.QuantityBelowRequiredException;
 import com.pragma.bootcamp.domain.util.DomConstants;
+import com.pragma.bootcamp.domain.util.DomValidation;
 
 import java.util.Date;
 
@@ -16,11 +17,15 @@ public class BootcampVersion {
     private Bootcamp bootcamp;
 
     public BootcampVersion(Long id, String name, int maxParticipants, Date  startDate, Date  endDate) {
+        DomValidation.validateName(name);
+
         this.id = id;
         this.name = name;
         this.maxParticipants = maxParticipants;
         this.startDate = startDate;
         this.endDate = endDate;
+
+        validate();
     }
 
     public String getName() {

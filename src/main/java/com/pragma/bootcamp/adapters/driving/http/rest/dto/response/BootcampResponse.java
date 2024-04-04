@@ -10,7 +10,6 @@ import java.util.List;
 public class BootcampResponse {
     private final Long id;
     private final String name;
-    private final String description;
 
     private final List<CapacityInBootcampResponse> capacities;
 }

@@ -42,7 +42,7 @@ public class BootcampVersionAdapter implements IBootcampVersionPersistencePort {
         } else if (sortingField == Constants.SortingField.MAX_PARTICIPANTS){
             sortingFieldName = AdapterConstants.FIELD_NAME_OF_SORT_VERSION_BY_MAX_PARTICIPANTS;
         }
-        else if (sortingField == Constants.SortingField.BOOTCAMP_NAME) {
+        else if (sortingField == Constants.SortingField.NAME) {
             sortingFieldName = AdapterConstants.FIELD_NAME_OF_SORT_VERSION_BY_NAME;
         }
         else {

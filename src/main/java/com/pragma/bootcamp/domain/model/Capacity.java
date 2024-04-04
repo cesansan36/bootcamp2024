@@ -21,7 +21,8 @@ public class Capacity {
     private List<Technology> technologies;
 
     public Capacity(Long id, String name, String description) {
-        DomValidation.validateFields(name, description);
+        DomValidation.validateName(name);
+        DomValidation.validateDescription(description);
 
         this.id = id;
         this.name = name;

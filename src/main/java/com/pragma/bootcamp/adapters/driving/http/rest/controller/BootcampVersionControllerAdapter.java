@@ -51,6 +51,13 @@ public class BootcampVersionControllerAdapter
                                                                                @RequestParam(defaultValue = "true") boolean isAscending,
                                                                                @RequestParam() Constants.SortingField sortingField
     ) {
+        if (page < 0) {
+            page = 0;
+        }
+        if (size < 1) {
+            size = 1;
+        }
+
         return ResponseEntity.ok(
                 bootcampVersionResponseMapper.toResponseList(
                         bootcampVersionServicePort.getAllBootcampVersion(page, size, isAscending, sortingField)
@@ -64,6 +71,13 @@ public class BootcampVersionControllerAdapter
                                                                                @RequestParam(defaultValue = "true") boolean isAscending,
                                                                                @RequestParam() Constants.SortingField sortingField,
                                                                                @PathVariable String bootcampName) {
+        if (page < 0) {
+            page = 0;
+        }
+        if (size < 1) {
+            size = 1;
+        }
+
         Bootcamp found = bootcampServicePort.getBootcamp(bootcampName);
 
         return ResponseEntity.ok(
