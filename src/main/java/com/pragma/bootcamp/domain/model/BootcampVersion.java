@@ -6,17 +6,17 @@ import com.pragma.bootcamp.domain.exception.QuantityBelowRequiredException;
 import com.pragma.bootcamp.domain.util.DomConstants;
 import com.pragma.bootcamp.domain.util.DomValidation;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class BootcampVersion {
     private final Long id;
     private final String name;
     private final int maxParticipants;
-    private final Date  startDate;
-    private final Date endDate;
+    private final LocalDate startDate;
+    private final LocalDate endDate;
     private Bootcamp bootcamp;
 
-    public BootcampVersion(Long id, String name, int maxParticipants, Date  startDate, Date  endDate) {
+    public BootcampVersion(Long id, String name, int maxParticipants, LocalDate  startDate, LocalDate  endDate) {
         DomValidation.validateName(name);
 
         this.id = id;
@@ -40,11 +40,11 @@ public class BootcampVersion {
         return maxParticipants;
     }
 
-    public Date  getStartDate() {
+    public LocalDate  getStartDate() {
         return startDate;
     }
 
-    public Date  getEndDate() {
+    public LocalDate  getEndDate() {
         return endDate;
     }
 
@@ -63,7 +63,7 @@ public class BootcampVersion {
         if (maxParticipants > DomConstants.MAX_PARTICIPANTS_IN_BOOTCAMP_VERSION) {
             throw new QuantityAboveRequiredException(String.format(DomConstants.ABOVE_MINIMUM_AMOUNT_OF_PARTICIPANTS_MESSAGE, DomConstants.MAX_PARTICIPANTS_IN_BOOTCAMP_VERSION));
         }
-        if (!endDate.after(startDate)) {
+        if (!endDate.isAfter(startDate)) {
             throw new DateFinishBeforeStartException(DomConstants.DATE_FINISH_BEFORE_START_MESSAGE);
         }
     }

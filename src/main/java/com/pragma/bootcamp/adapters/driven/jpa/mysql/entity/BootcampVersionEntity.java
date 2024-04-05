@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "bootcamp_version")
@@ -27,8 +27,8 @@ public class BootcampVersionEntity {
     private Long id;
     private String name;
     private Integer maxParticipants;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     @ManyToOne
     @JoinColumn(name = "BOOTCAMP_ID")
     private BootcampEntity bootcamp;

@@ -9,6 +9,7 @@ import com.pragma.bootcamp.testdata.TestDataDomain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,8 +22,8 @@ class BootcampVersionTest {
         Long id = 1L;
         String name = "Bootcamp 2024";
         int maxParticipants = 40;
-        Date startDate = TestDataDomain.getDateWithOffset(0);
-        Date endDate = TestDataDomain.getDateWithOffset(1);;
+        LocalDate startDate = TestDataDomain.getDateWithOffset(0);
+        LocalDate endDate = TestDataDomain.getDateWithOffset(1);;
 
         BootcampVersion bootcampVersion = new BootcampVersion(id, name, maxParticipants, startDate, endDate);
 
@@ -39,8 +40,8 @@ class BootcampVersionTest {
         Long id = 1L;
         String name = "";
         int maxParticipants = 40;
-        Date startDate = TestDataDomain.getDateWithOffset(0);
-        Date endDate = TestDataDomain.getDateWithOffset(1);
+        LocalDate startDate = TestDataDomain.getDateWithOffset(0);
+        LocalDate endDate = TestDataDomain.getDateWithOffset(1);
 
         assertThrows(EmptyFieldException.class, () -> new BootcampVersion(id, name, maxParticipants, startDate, endDate));
     }
@@ -51,8 +52,8 @@ class BootcampVersionTest {
         Long id = 1L;
         String name = "qwertyuiopasdfghjklñzxcvbnmqwertyuiopasdfghjklñzxcvbnmqwertyuiopasdfghjklñzxcvbnmqwertyuiopasdfghjklñzxcvbnm";
         int maxParticipants = 40;
-        Date startDate = TestDataDomain.getDateWithOffset(0);
-        Date endDate = TestDataDomain.getDateWithOffset(1);
+        LocalDate startDate = TestDataDomain.getDateWithOffset(0);
+        LocalDate endDate = TestDataDomain.getDateWithOffset(1);
 
         assertThrows(CharLimitSurpassedException.class, () -> new BootcampVersion(id, name, maxParticipants, startDate, endDate));
     }
@@ -63,8 +64,8 @@ class BootcampVersionTest {
         Long id = 1L;
         String name = "Bootcamp 2024";
         int maxParticipants = 0;
-        Date startDate = TestDataDomain.getDateWithOffset(0);
-        Date endDate = TestDataDomain.getDateWithOffset(1);
+        LocalDate startDate = TestDataDomain.getDateWithOffset(0);
+        LocalDate endDate = TestDataDomain.getDateWithOffset(1);
 
         assertThrows(QuantityBelowRequiredException.class, () -> new BootcampVersion(id, name, maxParticipants, startDate, endDate));
     }
@@ -75,8 +76,8 @@ class BootcampVersionTest {
         Long id = 1L;
         String name = "Bootcamp 2024";
         int maxParticipants = 9999;
-        Date startDate = TestDataDomain.getDateWithOffset(0);
-        Date endDate = TestDataDomain.getDateWithOffset(1);
+        LocalDate startDate = TestDataDomain.getDateWithOffset(0);
+        LocalDate endDate = TestDataDomain.getDateWithOffset(1);
 
         assertThrows(QuantityAboveRequiredException.class, () -> new BootcampVersion(id, name, maxParticipants, startDate, endDate));
     }
@@ -87,8 +88,8 @@ class BootcampVersionTest {
         Long id = 1L;
         String name = "Bootcamp 2024";
         int maxParticipants = 30;
-        Date startDate = TestDataDomain.getDateWithOffset(1);
-        Date endDate = TestDataDomain.getDateWithOffset(0);
+        LocalDate startDate = TestDataDomain.getDateWithOffset(1);
+        LocalDate endDate = TestDataDomain.getDateWithOffset(0);
 
         assertThrows(DateFinishBeforeStartException.class, () -> new BootcampVersion(id, name, maxParticipants, startDate, endDate));
     }

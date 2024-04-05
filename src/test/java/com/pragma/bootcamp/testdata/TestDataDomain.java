@@ -6,13 +6,11 @@ import com.pragma.bootcamp.domain.model.BootcampVersion;
 import com.pragma.bootcamp.domain.model.Capacity;
 import com.pragma.bootcamp.domain.model.Technology;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 public class TestDataDomain {
     private TestDataDomain() {throw new IllegalStateException("Utility class");}
@@ -38,17 +36,13 @@ public class TestDataDomain {
         return String.format(VALID_DESCRIPTION, id);
     }
 
-    public static Date getDateWithOffset(int daysOffset) {
-        Date date = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.DAY_OF_MONTH, daysOffset);
-        return calendar.getTime();
+    public static LocalDate getDateWithOffset(int daysOffset) {
+        LocalDate date = LocalDate.now().plusDays(daysOffset);
+        return date;
     }
-    public static Date parseDate(String date) throws ParseException {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_USED);
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(Constants.TIME_ZONE));
-        return simpleDateFormat.parse(date);
+    public static LocalDate parseDate(String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT_USED);
+        return LocalDate.parse(date, formatter);
     }
     public static Technology getTechnology(Long id, DataCase nameCase, DataCase descriptionCase) {
         String name = nameCase == DataCase.EMPTY ? EMPTY_STRING : (nameCase == DataCase.TOO_LONG ? TOO_LONG_NAME : VALID_NAME);
@@ -121,8 +115,8 @@ public class TestDataDomain {
         if (nameCase == DataCase.VALID) {
             name = String.format(name, id);
         }
-        Date startDate = getDateWithOffset(0);
-        Date endDate = getDateWithOffset(separationBetweenDates);
+        LocalDate startDate = getDateWithOffset(0);
+        LocalDate endDate = getDateWithOffset(separationBetweenDates);
 
         return new BootcampVersion(id, name, VALID_MAX_PARTICIPANTS, startDate, endDate);
     }

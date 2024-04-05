@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -35,7 +34,7 @@ public class BootcampVersionControllerAdapter
     private final IBootcampVersionResponseMapper bootcampVersionResponseMapper;
 
     @PostMapping("/add")
-    public ResponseEntity<Void> addBootcampVersion(@RequestBody AddBootcampVersionRequest request) throws ParseException {
+    public ResponseEntity<Void> addBootcampVersion(@RequestBody AddBootcampVersionRequest request) {
         AddBootcampVersionRequest fixed = request.fixValues();
 
         BootcampVersion bootcampVersion = bootcampVersionRequestMapper.requestToModel(fixed);

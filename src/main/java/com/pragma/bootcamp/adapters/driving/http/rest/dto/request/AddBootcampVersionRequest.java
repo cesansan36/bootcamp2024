@@ -3,21 +3,19 @@ package com.pragma.bootcamp.adapters.driving.http.rest.dto.request;
 import com.pragma.bootcamp.configuration.Constants;
 import lombok.Getter;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 public class AddBootcampVersionRequest {
 
     private final String name;
     private final Integer maxParticipants;
-    private final Date  startDate;
-    private final Date endDate;
+    private final LocalDate startDate;
+    private final LocalDate endDate;
     private final String bootcampName;
 
-    public AddBootcampVersionRequest(String name, Integer maxParticipants, String startDate, String endDate, String bootcampName) throws ParseException {
+    public AddBootcampVersionRequest(String name, Integer maxParticipants, String startDate, String endDate, String bootcampName) {
         this.name = name;
         this.maxParticipants = maxParticipants;
         this.startDate = parseDate(startDate);
@@ -26,24 +24,21 @@ public class AddBootcampVersionRequest {
     }
 
     public String getFormattedStartDate() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_USED);
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(Constants.TIME_ZONE));
-        return simpleDateFormat.format(startDate);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT_USED);
+        return startDate.format(formatter);
     }
 
     public String getFormattedEndDate() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_USED);
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(Constants.TIME_ZONE));
-        return simpleDateFormat.format(endDate);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT_USED);
+        return endDate.format(formatter);
     }
 
-    public Date parseDate(String date) throws ParseException {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_USED);
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(Constants.TIME_ZONE));
-        return simpleDateFormat.parse(date);
+    public LocalDate parseDate(String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.DATE_FORMAT_USED);
+        return LocalDate.parse(date, formatter);
     }
 
-    public AddBootcampVersionRequest fixValues() throws ParseException {
+    public AddBootcampVersionRequest fixValues() {
         String newName = name;
         if (name == null || name.trim().isEmpty()) {
             newName = bootcampName + " " + getFormattedStartDate();
