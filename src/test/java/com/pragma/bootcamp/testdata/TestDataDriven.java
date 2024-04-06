@@ -1,9 +1,8 @@
 package com.pragma.bootcamp.testdata;
 
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.BootcampEntity;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.CapacityEntity;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.CapabilityEntity;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.TechnologyEntity;
-import com.pragma.bootcamp.domain.model.Technology;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,7 @@ public class TestDataDriven {
 
     public enum Element {
         TECHNOLOGY,
-        CAPACITY,
+        CAPABILITY,
         BOOTCAMP
     }
     public static final String ENTITY_NAME = "%1$s name %2$s";
@@ -41,17 +40,17 @@ public class TestDataDriven {
         return entities;
     }
 
-    public static CapacityEntity getCapacityEntity(Long id){
-        CapacityEntity entity = new CapacityEntity();
+    public static CapabilityEntity getCapabilityEntity(Long id){
+        CapabilityEntity entity = new CapabilityEntity();
         entity.setId(id);
-        entity.setName(getValidName(id, Element.CAPACITY));
-        entity.setName(getValidDescription(id, Element.CAPACITY));
+        entity.setName(getValidName(id, Element.CAPABILITY));
+        entity.setName(getValidDescription(id, Element.CAPABILITY));
         return entity;
     }
-    public static List<CapacityEntity> getListOfCapacityEntity(int num){
-        List<CapacityEntity> entities = new ArrayList<>();
+    public static List<CapabilityEntity> getListOfCapabilityEntity(int num){
+        List<CapabilityEntity> entities = new ArrayList<>();
         for (long i = 1L ; i <= num ; i++) {
-            entities.add(getCapacityEntity(i));
+            entities.add(getCapabilityEntity(i));
         }
         return entities;
     }

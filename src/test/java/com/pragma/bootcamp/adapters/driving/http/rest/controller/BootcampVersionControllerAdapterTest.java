@@ -1,20 +1,15 @@
 package com.pragma.bootcamp.adapters.driving.http.rest.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pragma.bootcamp.adapters.driving.http.rest.dto.request.AddBootcampRequest;
 import com.pragma.bootcamp.adapters.driving.http.rest.dto.request.AddBootcampVersionRequest;
 import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.BootcampVersionResponse;
-import com.pragma.bootcamp.adapters.driving.http.rest.mapper.IBootcampRequestMapper;
-import com.pragma.bootcamp.adapters.driving.http.rest.mapper.IBootcampResponseMapper;
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.IBootcampVersionRequestMapper;
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.IBootcampVersionResponseMapper;
 import com.pragma.bootcamp.configuration.Constants;
 import com.pragma.bootcamp.domain.model.Bootcamp;
 import com.pragma.bootcamp.domain.model.BootcampVersion;
-import com.pragma.bootcamp.domain.model.Capacity;
 import com.pragma.bootcamp.domain.primaryport.IBootcampServicePort;
 import com.pragma.bootcamp.domain.primaryport.IBootcampVersionServicePort;
-import com.pragma.bootcamp.domain.primaryport.ICapacityServicePort;
 import com.pragma.bootcamp.testdata.TestDataController;
 import com.pragma.bootcamp.testdata.TestDataDomain;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,11 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.text.ParseException;
-import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -113,10 +105,10 @@ class BootcampVersionControllerAdapterTest {
 //                .andExpect(jsonPath("$[0].name").value(TestDataController.fieldText(1L, TestDataController.Fields.NAME, TestDataController.Element.BOOTCAMP)))
 //                .andExpect(jsonPath("$[1].id").value(2L))
 //                .andExpect(jsonPath("$[1].name").value(TestDataController.fieldText(2L, TestDataController.Fields.NAME, TestDataController.Element.BOOTCAMP)))
-//                .andExpect(jsonPath("$[0].capacities.size()").value(2))
-//                .andExpect(jsonPath("$[1].capacities[0].name").value(TestDataController.fieldText(1L, TestDataController.Fields.NAME, TestDataController.Element.CAPACITY)))
-//                .andExpect(jsonPath("$[1].capacities[0].technologies.size()").value(2))
-//                .andExpect(jsonPath("$[0].capacities[1].technologies[1].name").value(TestDataController.fieldText(2L, TestDataController.Fields.NAME, TestDataController.Element.TECHNOLOGY)))
+//                .andExpect(jsonPath("$[0].capabilities.size()").value(2))
+//                .andExpect(jsonPath("$[1].capabilities[0].name").value(TestDataController.fieldText(1L, TestDataController.Fields.NAME, TestDataController.Element.CAPABILITY)))
+//                .andExpect(jsonPath("$[1].capabilities[0].technologies.size()").value(2))
+//                .andExpect(jsonPath("$[0].capabilities[1].technologies[1].name").value(TestDataController.fieldText(2L, TestDataController.Fields.NAME, TestDataController.Element.TECHNOLOGY)))
 //        ;
 
     }

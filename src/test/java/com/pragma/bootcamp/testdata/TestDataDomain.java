@@ -3,13 +3,12 @@ package com.pragma.bootcamp.testdata;
 import com.pragma.bootcamp.configuration.Constants;
 import com.pragma.bootcamp.domain.model.Bootcamp;
 import com.pragma.bootcamp.domain.model.BootcampVersion;
-import com.pragma.bootcamp.domain.model.Capacity;
+import com.pragma.bootcamp.domain.model.Capability;
 import com.pragma.bootcamp.domain.model.Technology;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class TestDataDomain {
@@ -64,7 +63,7 @@ public class TestDataDomain {
         }
         return techs;
     }
-    public static Capacity getCapacityWithNoTechnologies(Long id, DataCase nameCase, DataCase descriptionCase) {
+    public static Capability getCapabilityWithNoTechnologies(Long id, DataCase nameCase, DataCase descriptionCase) {
         String name = nameCase == DataCase.EMPTY ? EMPTY_STRING : (nameCase == DataCase.TOO_LONG ? TOO_LONG_NAME : VALID_NAME);
         String description = descriptionCase == DataCase.EMPTY ? EMPTY_STRING : (nameCase == DataCase.TOO_LONG ? TOO_LONG_DESCRIPTION : VALID_DESCRIPTION);
 
@@ -75,18 +74,18 @@ public class TestDataDomain {
             description = String.format(description, id);
         }
 
-        return new Capacity(id, name, description);
+        return new Capability(id, name, description);
     }
-    public static List<Capacity> getListOfValidCapacities(Integer num) {
-        List<Capacity> caps = new ArrayList<>();
+    public static List<Capability> getListOfValidCapabilities(Integer num) {
+        List<Capability> caps = new ArrayList<>();
         for (Long i = 0L ; i < num ; i++) {
-            Capacity cap = getCapacityWithNoTechnologies(i, DataCase.VALID, DataCase.VALID);
+            Capability cap = getCapabilityWithNoTechnologies(i, DataCase.VALID, DataCase.VALID);
             cap.setTechnologies(getListOfValidTechnologies(3));
             caps.add(cap);
         }
         return caps;
     }
-    public static Bootcamp getBootcampWithNoCapacities(Long id, DataCase nameCase, DataCase descriptionCase) {
+    public static Bootcamp getBootcampWithNoCapabilities(Long id, DataCase nameCase, DataCase descriptionCase) {
         String name = nameCase == DataCase.EMPTY ? EMPTY_STRING : (nameCase == DataCase.TOO_LONG ? TOO_LONG_NAME : VALID_NAME);
         String description = descriptionCase == DataCase.EMPTY ? EMPTY_STRING : (nameCase == DataCase.TOO_LONG ? TOO_LONG_DESCRIPTION : VALID_DESCRIPTION);
 
@@ -102,8 +101,8 @@ public class TestDataDomain {
     public static List<Bootcamp> getListOfValidBootcamps(Integer num) {
         List<Bootcamp> bootcamps = new ArrayList<>();
         for (Long i = 0L ; i < num ; i++) {
-            Bootcamp bootcamp = getBootcampWithNoCapacities(i, DataCase.VALID, DataCase.VALID);
-            bootcamp.setCapacities(getListOfValidCapacities(3));
+            Bootcamp bootcamp = getBootcampWithNoCapabilities(i, DataCase.VALID, DataCase.VALID);
+            bootcamp.setCapabilities(getListOfValidCapabilities(3));
             bootcamps.add(bootcamp);
         }
         return bootcamps;
@@ -125,7 +124,7 @@ public class TestDataDomain {
         List<BootcampVersion> bootcampVersions = new ArrayList<>();
         for (Long i = 0L ; i < num ; i++) {
             BootcampVersion bootcampVersion = getBootcampVersionWithNoBootcamp(i, DataCase.VALID, separationBetweenDates);
-            Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapacities(i, DataCase.VALID, DataCase.VALID);
+            Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapabilities(i, DataCase.VALID, DataCase.VALID);
             bootcampVersion.setBootcamp(bootcamp);
             bootcampVersions.add(bootcampVersion);
         }

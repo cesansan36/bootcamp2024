@@ -7,7 +7,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
-public class AddCapacityRequest {
+public class AddCapabilityRequest {
     private final String name;
     private final String description;
     private final List<String> technologiesNames;

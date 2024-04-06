@@ -1,9 +1,9 @@
 package com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper;
 
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.BootcampEntity;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.CapacityEntity;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.CapabilityEntity;
 import com.pragma.bootcamp.domain.model.Bootcamp;
-import com.pragma.bootcamp.domain.model.Capacity;
+import com.pragma.bootcamp.domain.model.Capability;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -17,20 +17,20 @@ public interface IBootcampEntityMapper {
     Bootcamp toModel(BootcampEntity bootcampEntity);
     List<Bootcamp> toModelList(List<BootcampEntity> bootcampEntities);
 
-    @Mapping(target = "capacities", qualifiedByName = "mapCapacities")
+    @Mapping(target = "capabilities", qualifiedByName = "mapCapabilities")
     BootcampEntity toEntity(Bootcamp bootcamp);
 
-    @Named("mapCapacities")
-    default List<CapacityEntity> mapCapacities(List<Capacity> capacities) {
-        if (capacities == null) {
+    @Named("mapCapabilities")
+    default List<CapabilityEntity> mapCapabilities(List<Capability> capabilities) {
+        if (capabilities == null) {
             return new ArrayList<>();
         }
-        return capacities.stream()
+        return capabilities.stream()
                 .map(this::toEntity)
                 .toList();
     }
 
     @Mapping(target = "bootcamps", ignore = true)
     @Mapping(target = "description", ignore = true)
-    CapacityEntity toEntity(Capacity capacity);
+    CapabilityEntity toEntity(Capability capability);
 }

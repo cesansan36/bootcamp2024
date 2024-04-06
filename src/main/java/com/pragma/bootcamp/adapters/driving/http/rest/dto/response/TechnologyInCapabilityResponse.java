@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class TechnologyInCapacityResponse {
+public class TechnologyInCapabilityResponse {
 
     private final Long id;
     private final String name;

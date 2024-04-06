@@ -13,14 +13,14 @@ import static java.util.Comparator.comparingLong;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toCollection;
 
-public class Capacity {
+public class Capability {
 
     private final Long id;
     private final String name;
     private final String description;
     private List<Technology> technologies;
 
-    public Capacity(Long id, String name, String description) {
+    public Capability(Long id, String name, String description) {
         DomValidation.validateName(name);
         DomValidation.validateDescription(description);
 
@@ -57,11 +57,11 @@ public class Capacity {
         List<Technology> unique = technologies.stream()
                 .collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparingLong(Technology::getId))), ArrayList::new));
 
-        if (unique.size() < DomConstants.MIN_TECHNOLOGIES_IN_CAPACITY) {
-            throw new QuantityBelowRequiredException(String.format(DomConstants.BELOW_MINIMUM_AMOUNT_OF_TECHNOLOGIES_MESSAGE, DomConstants.MIN_TECHNOLOGIES_IN_CAPACITY));
+        if (unique.size() < DomConstants.MIN_TECHNOLOGIES_IN_CAPABILITY) {
+            throw new QuantityBelowRequiredException(String.format(DomConstants.BELOW_MINIMUM_AMOUNT_OF_TECHNOLOGIES_MESSAGE, DomConstants.MIN_TECHNOLOGIES_IN_CAPABILITY));
         }
-        if (unique.size() > DomConstants.MAX_TECHNOLOGIES_IN_CAPACITY) {
-            throw new QuantityAboveRequiredException(String.format(DomConstants.ABOVE_MINIMUM_AMOUNT_OF_TECHNOLOGIES_MESSAGE, DomConstants.MAX_TECHNOLOGIES_IN_CAPACITY));
+        if (unique.size() > DomConstants.MAX_TECHNOLOGIES_IN_CAPABILITY) {
+            throw new QuantityAboveRequiredException(String.format(DomConstants.ABOVE_MINIMUM_AMOUNT_OF_TECHNOLOGIES_MESSAGE, DomConstants.MAX_TECHNOLOGIES_IN_CAPABILITY));
         }
         return unique;
     }

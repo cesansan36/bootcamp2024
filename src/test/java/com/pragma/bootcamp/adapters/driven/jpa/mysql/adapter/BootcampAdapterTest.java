@@ -41,7 +41,7 @@ class BootcampAdapterTest {
     @Test
     @DisplayName("Should save bootcamp correctly")
     void saveBootcampSuccess() {
-        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapacities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
+        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapabilities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
 
         when(bootcampRepository.findByName(anyString())).thenReturn(Optional.empty());
 
@@ -56,7 +56,7 @@ class BootcampAdapterTest {
     @Test
     @DisplayName("Should throw exception because bootcamp already exists")
     void saveBootcampException() {
-        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapacities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
+        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapabilities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
 
         when(bootcampRepository.findByName(anyString())).thenReturn(Optional.of(new BootcampEntity()));
 
@@ -73,7 +73,7 @@ class BootcampAdapterTest {
         bootcampEntity.setId(bootcampEntityId);
         bootcampEntity.setName(bootcampEntityName);
         bootcampEntity.setDescription(bootcampEntityDescription);
-        Bootcamp retrieved = TestDataDomain.getBootcampWithNoCapacities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
+        Bootcamp retrieved = TestDataDomain.getBootcampWithNoCapabilities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
 
         when(bootcampRepository.findByName(anyString())).thenReturn(Optional.of(bootcampEntity));
         when(bootcampEntityMapper.toModel(bootcampEntity)).thenReturn(retrieved);

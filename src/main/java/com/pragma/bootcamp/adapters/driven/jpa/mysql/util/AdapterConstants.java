@@ -7,7 +7,7 @@ public class AdapterConstants {
 
     public enum Registry {
         TECHNOLOGY,
-        CAPACITY,
+        CAPABILITY,
         BOOTCAMP,
         BOOTCAMP_VERSION
     }
@@ -17,13 +17,13 @@ public class AdapterConstants {
     public static final String FIELD_NAME_FOR_SORTING_TECHNOLOGIES = "name";
     public static final String FIELD_NAME_OF_SORT_BY_NAME = "name";
     public static final String FIELD_NAME_OF_SORT_BY_TECHNOLOGIES = "teccount";
-    public static final String FIELD_NAME_OF_SORT_BY_CAPACITIES = "capcount";
+    public static final String FIELD_NAME_OF_SORT_BY_CAPABILITIES = "capcount";
     public static final String FIELD_NAME_OF_SORT_VERSION_BY_NAME = "name";
     public static final String FIELD_NAME_OF_SORT_VERSION_BY_BOOTCAMP_NAME = "bootcamp.name";
     public static final String FIELD_NAME_OF_SORT_VERSION_BY_MAX_PARTICIPANTS = "maxParticipants";
     public static final String FIELD_NAME_OF_SORT_VERSION_BY_START_DATE = "startDate";
-    public static final String GET_ALL_CAPACITIES_CUSTOM_QUERY = "SELECT capacity.*, count(capacity_technology.ID_CAPACITY) as teccount FROM capacity, capacity_technology WHERE capacity.id = capacity_technology.ID_CAPACITY GROUP BY capacity_technology.ID_CAPACITY";
-    public static final String GET_ALL_BOOTCAMPS_CUSTOM_QUERY = "SELECT bootcamp.*, count(capacity_bootcamp.ID_BOOTCAMP) as capcount FROM bootcamp, capacity_bootcamp WHERE bootcamp.id = capacity_bootcamp.ID_BOOTCAMP GROUP BY capacity_bootcamp.ID_BOOTCAMP";
+    public static final String GET_ALL_CAPABILITIES_CUSTOM_QUERY = "SELECT capability.*, count(capability_technology.ID_CAPABILITY) as teccount FROM capability, capability_technology WHERE capability.id = capability_technology.ID_CAPABILITY GROUP BY capability_technology.ID_CAPABILITY";
+    public static final String GET_ALL_BOOTCAMPS_CUSTOM_QUERY = "SELECT bootcamp.*, count(capability_bootcamp.ID_BOOTCAMP) as capcount FROM bootcamp, capability_bootcamp WHERE bootcamp.id = capability_bootcamp.ID_BOOTCAMP GROUP BY capability_bootcamp.ID_BOOTCAMP";
 
 
 }

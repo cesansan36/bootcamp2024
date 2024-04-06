@@ -55,13 +55,13 @@ class BootcampTest {
     }
 
     @Test
-    @DisplayName("Setting and getting capacities with no validation")
+    @DisplayName("Setting and getting capabilities with no validation")
     void addingCapacities () {
-        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapacities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
-        List<Capacity> caps = TestDataDomain.getListOfValidCapacities(3);
-        bootcamp.setCapacities(caps);
+        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapabilities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
+        List<Capability> caps = TestDataDomain.getListOfValidCapabilities(3);
+        bootcamp.setCapabilities(caps);
 
-        List<Capacity> receivedCaps = bootcamp.getCapacities();
+        List<Capability> receivedCaps = bootcamp.getCapabilities();
 
         assertAll(
                 () -> assertEquals(caps.size(), receivedCaps.size()),
@@ -75,29 +75,29 @@ class BootcampTest {
         );
     }
     @Test
-    @DisplayName("Setting and getting capacities with validation - success")
+    @DisplayName("Setting and getting capabilities with validation - success")
     void addingAndValidatingCapacitiesSuccess () {
-        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapacities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
-        List<Capacity> caps = TestDataDomain.getListOfValidCapacities(4);
+        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapabilities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
+        List<Capability> caps = TestDataDomain.getListOfValidCapabilities(4);
 
-        bootcamp.validateAndSetCapacities(caps);
+        bootcamp.validateAndSetCapabilities(caps);
 
-        assertEquals(caps.size(), bootcamp.getCapacities().size());
+        assertEquals(caps.size(), bootcamp.getCapabilities().size());
     }
     @Test
-    @DisplayName("Fail validation because too few capacities")
+    @DisplayName("Fail validation because too few capabilities")
     void addTooFewCapacities () {
-        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapacities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
-        List<Capacity> caps = TestDataDomain.getListOfValidCapacities(0);
+        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapabilities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
+        List<Capability> caps = TestDataDomain.getListOfValidCapabilities(0);
 
-        assertThrows(QuantityBelowRequiredException.class, () -> bootcamp.validateAndSetCapacities(caps));
+        assertThrows(QuantityBelowRequiredException.class, () -> bootcamp.validateAndSetCapabilities(caps));
     }
     @Test
-    @DisplayName("Fail validation because too many capacities")
+    @DisplayName("Fail validation because too many capabilities")
     void addTooManyCapacities () {
-        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapacities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
-        List<Capacity> caps = TestDataDomain.getListOfValidCapacities(5);
+        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapabilities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
+        List<Capability> caps = TestDataDomain.getListOfValidCapabilities(5);
 
-        assertThrows(QuantityAboveRequiredException.class, () -> bootcamp.validateAndSetCapacities(caps));
+        assertThrows(QuantityAboveRequiredException.class, () -> bootcamp.validateAndSetCapabilities(caps));
     }
 }

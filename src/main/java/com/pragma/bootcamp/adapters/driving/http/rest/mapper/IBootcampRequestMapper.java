@@ -8,6 +8,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface IBootcampRequestMapper {
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "capacities", ignore = true)
+    @Mapping(target = "capabilities", ignore = true)
     Bootcamp addRequestToBootcamp(AddBootcampRequest addBootcampRequest);
 }

@@ -15,7 +15,7 @@ public class TestDataController {
 
     public enum Element {
         TECHNOLOGY,
-        CAPACITY,
+        CAPABILITY,
         BOOTCAMP,
         BOOTCAMP_VERSION
     }
@@ -42,40 +42,40 @@ public class TestDataController {
         }
         return techsResponses;
     }
-    public static TechnologyInCapacityResponse getTechnologyInCapacityResponse(Long id) {
-        return new TechnologyInCapacityResponse(id, String.format(NAME, Element.TECHNOLOGY, id));
+    public static TechnologyInCapabilityResponse getTechnologyInCapabilityResponse(Long id) {
+        return new TechnologyInCapabilityResponse(id, String.format(NAME, Element.TECHNOLOGY, id));
     }
-    public static List<TechnologyInCapacityResponse> getListOfTechnologyInCapacityResponse(Integer num) {
-        List<TechnologyInCapacityResponse> techsInCapResponses = new ArrayList<>();
+    public static List<TechnologyInCapabilityResponse> getListOfTechnologyInCapabilityResponse(Integer num) {
+        List<TechnologyInCapabilityResponse> techsInCapResponses = new ArrayList<>();
         for (Long i = 1L ; i <= num ; i++) {
-            techsInCapResponses.add(getTechnologyInCapacityResponse(i));
+            techsInCapResponses.add(getTechnologyInCapabilityResponse(i));
         }
         return techsInCapResponses;
     }
-    public static CapacityResponse getCapacityResponse(Long id, Integer technologiesAmount) {
-        List<TechnologyInCapacityResponse> techsInCapResponses = getListOfTechnologyInCapacityResponse(technologiesAmount);
-        return new CapacityResponse(id, String.format(NAME, Element.CAPACITY, id), String.format(DESCRIPTION, Element.CAPACITY, id), techsInCapResponses);
+    public static CapabilityResponse getCapabilityResponse(Long id, Integer technologiesAmount) {
+        List<TechnologyInCapabilityResponse> techsInCapResponses = getListOfTechnologyInCapabilityResponse(technologiesAmount);
+        return new CapabilityResponse(id, String.format(NAME, Element.CAPABILITY, id), String.format(DESCRIPTION, Element.CAPABILITY, id), techsInCapResponses);
     }
-    public static List<CapacityResponse> getListOfCapacityResponse(Integer num, Integer technologiesAmount) {
-        List<CapacityResponse> capResponses = new ArrayList<>();
+    public static List<CapabilityResponse> getListOfCapabilityResponse(Integer num, Integer technologiesAmount) {
+        List<CapabilityResponse> capResponses = new ArrayList<>();
         for (Long i = 1L ; i <= num ; i++) {
-            capResponses.add(getCapacityResponse(i, technologiesAmount));
+            capResponses.add(getCapabilityResponse(i, technologiesAmount));
         }
         return capResponses;
     }
-    public static CapacityInBootcampResponse getCapacityInBootcampResponse(Long id, Integer technologiesAmount) {
-        return new CapacityInBootcampResponse(id, String.format(NAME, Element.CAPACITY, id), getListOfTechnologyInCapacityResponse(technologiesAmount));
+    public static CapabilityInBootcampResponse getCapabilityInBootcampResponse(Long id, Integer technologiesAmount) {
+        return new CapabilityInBootcampResponse(id, String.format(NAME, Element.CAPABILITY, id), getListOfTechnologyInCapabilityResponse(technologiesAmount));
     }
-    public static List<CapacityInBootcampResponse> getListOfCapacityInBootcampResponse(Integer num, Integer technologiesAmount) {
-        List<CapacityInBootcampResponse> capsInBootcampResponse = new ArrayList<>();
+    public static List<CapabilityInBootcampResponse> getListOfCapabilityInBootcampResponse(Integer num, Integer technologiesAmount) {
+        List<CapabilityInBootcampResponse> capsInBootcampResponse = new ArrayList<>();
         for (Long i = 1L ; i <= num ; i++) {
-            capsInBootcampResponse.add(getCapacityInBootcampResponse(i, technologiesAmount));
+            capsInBootcampResponse.add(getCapabilityInBootcampResponse(i, technologiesAmount));
         }
         return capsInBootcampResponse;
     }
 
     public static BootcampResponse getBootcampResponse(Long id, Integer capacitiesAmount, Integer technologiesAmount) {
-        List<CapacityInBootcampResponse> capsInBootcampResponse = getListOfCapacityInBootcampResponse(capacitiesAmount, technologiesAmount);
+        List<CapabilityInBootcampResponse> capsInBootcampResponse = getListOfCapabilityInBootcampResponse(capacitiesAmount, technologiesAmount);
         return new BootcampResponse(id,
                 String.format(NAME, Element.BOOTCAMP, id),
                 capsInBootcampResponse);

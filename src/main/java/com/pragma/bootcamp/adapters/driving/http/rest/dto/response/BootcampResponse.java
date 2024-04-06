@@ -11,5 +11,5 @@ public class BootcampResponse {
     private final Long id;
     private final String name;
 
-    private final List<CapacityInBootcampResponse> capacities;
+    private final List<CapabilityInBootcampResponse> capabilities;
 }

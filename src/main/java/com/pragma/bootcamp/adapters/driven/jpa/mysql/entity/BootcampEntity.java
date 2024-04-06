@@ -25,10 +25,10 @@ public class BootcampEntity {
 
     @ManyToMany
     @JoinTable(
-            name = "capacity_bootcamp",
+            name = "capability_bootcamp",
             joinColumns = @JoinColumn(name = "ID_BOOTCAMP"),
-            inverseJoinColumns = @JoinColumn(name = "ID_CAPACITY")
+            inverseJoinColumns = @JoinColumn(name = "ID_CAPABILITY")
     )
     @JsonIgnore
-    private List<CapacityEntity> capacities;
+    private List<CapabilityEntity> capabilities;
 }

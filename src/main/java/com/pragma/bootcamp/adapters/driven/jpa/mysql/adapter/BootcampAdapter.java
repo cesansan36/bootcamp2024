@@ -42,7 +42,7 @@ public class BootcampAdapter implements IBootcampPersistencePort {
 
     @Override
     public List<Bootcamp> getAllBootcamps(Integer page, Integer size, boolean isAscending, boolean isSortByCapacitiesAmount) {
-        String sortingField = isSortByCapacitiesAmount ? AdapterConstants.FIELD_NAME_OF_SORT_BY_CAPACITIES : AdapterConstants.FIELD_NAME_OF_SORT_BY_NAME;
+        String sortingField = isSortByCapacitiesAmount ? AdapterConstants.FIELD_NAME_OF_SORT_BY_CAPABILITIES : AdapterConstants.FIELD_NAME_OF_SORT_BY_NAME;
 
         Sort sort = isAscending ? Sort.by(sortingField).ascending() : Sort.by(sortingField).descending();
 

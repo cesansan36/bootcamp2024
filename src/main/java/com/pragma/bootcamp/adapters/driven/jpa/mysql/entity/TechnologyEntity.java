@@ -23,5 +23,5 @@ public class TechnologyEntity {
     private String description;
 
     @ManyToMany(mappedBy = "technologies")
-    private List<CapacityEntity> capacities;
+    private List<CapabilityEntity> capabilities;
 }

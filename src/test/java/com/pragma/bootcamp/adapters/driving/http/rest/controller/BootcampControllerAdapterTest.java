@@ -2,21 +2,13 @@ package com.pragma.bootcamp.adapters.driving.http.rest.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pragma.bootcamp.adapters.driving.http.rest.dto.request.AddBootcampRequest;
-import com.pragma.bootcamp.adapters.driving.http.rest.dto.request.AddCapacityRequest;
 import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.BootcampResponse;
-import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.CapacityInBootcampResponse;
-import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.CapacityResponse;
-import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.TechnologyInCapacityResponse;
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.IBootcampRequestMapper;
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.IBootcampResponseMapper;
-import com.pragma.bootcamp.adapters.driving.http.rest.mapper.ICapacityRequestMapper;
-import com.pragma.bootcamp.adapters.driving.http.rest.mapper.ICapacityResponseMapper;
 import com.pragma.bootcamp.domain.model.Bootcamp;
-import com.pragma.bootcamp.domain.model.Capacity;
-import com.pragma.bootcamp.domain.model.Technology;
+import com.pragma.bootcamp.domain.model.Capability;
 import com.pragma.bootcamp.domain.primaryport.IBootcampServicePort;
-import com.pragma.bootcamp.domain.primaryport.ICapacityServicePort;
-import com.pragma.bootcamp.domain.primaryport.ITechnologyServicePort;
+import com.pragma.bootcamp.domain.primaryport.ICapabilityServicePort;
 import com.pragma.bootcamp.testdata.TestDataController;
 import com.pragma.bootcamp.testdata.TestDataDomain;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +21,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
@@ -44,7 +35,7 @@ class BootcampControllerAdapterTest {
     private BootcampControllerAdapter bootcampControllerAdapter;
 
     private IBootcampServicePort bootcampServicePort;
-    private ICapacityServicePort capacityServicePort;
+    private ICapabilityServicePort capabilityServicePort;
     private IBootcampRequestMapper bootcampRequestMapper;
     private IBootcampResponseMapper bootcampResponseMapper;
 
@@ -52,10 +43,10 @@ class BootcampControllerAdapterTest {
     @BeforeEach
     void setUp() {
         bootcampServicePort = mock(IBootcampServicePort.class);
-        capacityServicePort = mock(ICapacityServicePort.class);
+        capabilityServicePort = mock(ICapabilityServicePort.class);
         bootcampRequestMapper = mock(IBootcampRequestMapper.class);
         bootcampResponseMapper = mock(IBootcampResponseMapper.class);
-        bootcampControllerAdapter = new BootcampControllerAdapter(bootcampServicePort, capacityServicePort, bootcampRequestMapper, bootcampResponseMapper);
+        bootcampControllerAdapter = new BootcampControllerAdapter(bootcampServicePort, capabilityServicePort, bootcampRequestMapper, bootcampResponseMapper);
 
         mockMvc = MockMvcBuilders.standaloneSetup(bootcampControllerAdapter).build();
     }
@@ -65,18 +56,18 @@ class BootcampControllerAdapterTest {
         Object inputObject = new Object() {
             public final String name = "Bootcamp 1";
             public final String description = "The bootcamp 1";
-            public final List<String> capacitiesNames = Arrays.asList("Cap 1", "Cap 2", "Cap 3");
+            public final List<String> capabilitiesNames = Arrays.asList("Cap 1", "Cap 2", "Cap 3");
         };
         ObjectMapper objectMapper = new ObjectMapper();
         String inputJson = objectMapper.writeValueAsString(inputObject);
 
         Bootcamp bootcamp = new Bootcamp(1L, "Bootcamp 1", "The bootcamp 1");
-        List<Capacity> caps = TestDataDomain.getListOfValidCapacities(3);
-        bootcamp.setCapacities(caps);
+        List<Capability> caps = TestDataDomain.getListOfValidCapabilities(3);
+        bootcamp.setCapabilities(caps);
 
-        when(capacityServicePort.getCapacity("Cap 1")).thenReturn(caps.getFirst());
-        when(capacityServicePort.getCapacity("Cap 2")).thenReturn(caps.get(1));
-        when(capacityServicePort.getCapacity("Cap 3")).thenReturn(caps.getLast());
+        when(capabilityServicePort.getCapability("Cap 1")).thenReturn(caps.getFirst());
+        when(capabilityServicePort.getCapability("Cap 2")).thenReturn(caps.get(1));
+        when(capabilityServicePort.getCapability("Cap 3")).thenReturn(caps.getLast());
         when(bootcampRequestMapper.addRequestToBootcamp(any(AddBootcampRequest.class))).thenReturn(bootcamp);
 
         MockHttpServletRequestBuilder request = post("/bootcamp/add").contentType(MediaType.APPLICATION_JSON).content(inputJson);
@@ -85,14 +76,14 @@ class BootcampControllerAdapterTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        verify(capacityServicePort, times(3)).getCapacity(anyString());
+        verify(capabilityServicePort, times(3)).getCapability(anyString());
         verify(bootcampRequestMapper, times(1)).addRequestToBootcamp(any(AddBootcampRequest.class));
         verify(bootcampServicePort, times(1)).saveBootcamp(bootcamp);
     }
 
     @Test
     void getBootcamp() throws Exception {
-        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapacities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
+        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapabilities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
         BootcampResponse bootcampResponse = TestDataController.getBootcampResponse(1L, 2, 2);
 
         when(bootcampServicePort.getBootcamp(anyString())).thenReturn(bootcamp);
@@ -105,11 +96,11 @@ class BootcampControllerAdapterTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.name").value(TestDataController.fieldText(1L, TestDataController.Fields.NAME, TestDataController.Element.BOOTCAMP)))
-                .andExpect(jsonPath("$.capacities.size()").value(2))
-                .andExpect(jsonPath("$.capacities[0].id").value(1L))
-                .andExpect(jsonPath("$.capacities.[0].name").value(TestDataController.fieldText(1L, TestDataController.Fields.NAME, TestDataController.Element.CAPACITY)))
-                .andExpect(jsonPath("$.capacities.[1].technologies.size()").value(2))
-                .andExpect(jsonPath("$.capacities.[1].technologies[1].name").value(TestDataController.fieldText(2L, TestDataController.Fields.NAME, TestDataController.Element.TECHNOLOGY)))
+                .andExpect(jsonPath("$.capabilities.size()").value(2))
+                .andExpect(jsonPath("$.capabilities[0].id").value(1L))
+                .andExpect(jsonPath("$.capabilities.[0].name").value(TestDataController.fieldText(1L, TestDataController.Fields.NAME, TestDataController.Element.CAPABILITY)))
+                .andExpect(jsonPath("$.capabilities.[1].technologies.size()").value(2))
+                .andExpect(jsonPath("$.capabilities.[1].technologies[1].name").value(TestDataController.fieldText(2L, TestDataController.Fields.NAME, TestDataController.Element.TECHNOLOGY)))
         ;
 
         verify(bootcampServicePort, times(1)).getBootcamp(anyString());
@@ -133,10 +124,10 @@ class BootcampControllerAdapterTest {
                 .andExpect(jsonPath("$[0].name").value(TestDataController.fieldText(1L, TestDataController.Fields.NAME, TestDataController.Element.BOOTCAMP)))
                 .andExpect(jsonPath("$[1].id").value(2L))
                 .andExpect(jsonPath("$[1].name").value(TestDataController.fieldText(2L, TestDataController.Fields.NAME, TestDataController.Element.BOOTCAMP)))
-                .andExpect(jsonPath("$[0].capacities.size()").value(2))
-                .andExpect(jsonPath("$[1].capacities[0].name").value(TestDataController.fieldText(1L, TestDataController.Fields.NAME, TestDataController.Element.CAPACITY)))
-                .andExpect(jsonPath("$[1].capacities[0].technologies.size()").value(2))
-                .andExpect(jsonPath("$[0].capacities[1].technologies[1].name").value(TestDataController.fieldText(2L, TestDataController.Fields.NAME, TestDataController.Element.TECHNOLOGY)))
+                .andExpect(jsonPath("$[0].capabilities.size()").value(2))
+                .andExpect(jsonPath("$[1].capabilities[0].name").value(TestDataController.fieldText(1L, TestDataController.Fields.NAME, TestDataController.Element.CAPABILITY)))
+                .andExpect(jsonPath("$[1].capabilities[0].technologies.size()").value(2))
+                .andExpect(jsonPath("$[0].capabilities[1].technologies[1].name").value(TestDataController.fieldText(2L, TestDataController.Fields.NAME, TestDataController.Element.TECHNOLOGY)))
         ;
 
         verify(bootcampServicePort, times(1)).getAllBootcamps(anyInt(), anyInt(), anyBoolean(), anyBoolean());

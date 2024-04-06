@@ -18,7 +18,7 @@ public class Bootcamp {
     private final Long id;
     private final String name;
     private final String description;
-    private List<Capacity> capacities;
+    private List<Capability> capacities;
 
     public Bootcamp(Long id, String name, String description) {
         DomValidation.validateName(name);
@@ -41,21 +41,21 @@ public class Bootcamp {
         return description;
     }
 
-    public List<Capacity> getCapacities() {
+    public List<Capability> getCapabilities() {
         return capacities;
     }
 
-    public void setCapacities(List<Capacity> capacities) {
+    public void setCapabilities(List<Capability> capacities) {
         this.capacities = capacities;
     }
 
-    public void validateAndSetCapacities(List<Capacity> capacities) {
-        this.capacities = validateCapacities(capacities);
+    public void validateAndSetCapabilities(List<Capability> capacities) {
+        this.capacities = validateCapabilities(capacities);
     }
 
-    private List<Capacity> validateCapacities(List<Capacity> capacities) {
-        List<Capacity> unique = capacities.stream()
-                .collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparingLong(Capacity::getId))), ArrayList::new));
+    private List<Capability> validateCapabilities(List<Capability> capacities) {
+        List<Capability> unique = capacities.stream()
+                .collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparingLong(Capability::getId))), ArrayList::new));
 
         if (unique.size() < DomConstants.MIN_CAPACITIES_IN_BOOTCAMP) {
             throw  new QuantityBelowRequiredException(String.format(

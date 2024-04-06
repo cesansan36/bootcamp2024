@@ -7,8 +7,8 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
-public class CapacityInBootcampResponse {
+public class CapabilityInBootcampResponse {
     private final Long id;
     private final String name;
-    private final List<TechnologyInCapacityResponse> technologies;
+    private final List<TechnologyInCapabilityResponse> technologies;
 }

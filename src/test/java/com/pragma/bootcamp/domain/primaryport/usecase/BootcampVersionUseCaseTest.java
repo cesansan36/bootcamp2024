@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -68,7 +67,7 @@ class BootcampVersionUseCaseTest {
     @Test
     void getVersionsOfBootcamp() {
         List<BootcampVersion> bootcampVersions = TestDataDomain.getListOfValidBootcampVersions(2, 3);
-        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapacities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
+        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapabilities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
         when(bootcampVersionPersistencePort.getVersionsOfBootcamp(anyInt(), anyInt(), anyBoolean(), any(Constants.SortingField.class), any(Bootcamp.class))).thenReturn(bootcampVersions);
 
         List<BootcampVersion> found = bootcampVersionUseCase.getVersionsOfBootcamp(1,2,true, Constants.SortingField.MAX_PARTICIPANTS, bootcamp);

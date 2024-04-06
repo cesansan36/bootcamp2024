@@ -10,5 +10,5 @@ import java.util.List;
 public class AddBootcampRequest {
     private final String name;
     private final String description;
-    private final List<String> capacitiesNames;
+    private final List<String> capabilitiesNames;
 }

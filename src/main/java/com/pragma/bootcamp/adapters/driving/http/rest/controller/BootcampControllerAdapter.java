@@ -5,9 +5,9 @@ import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.BootcampRespo
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.IBootcampRequestMapper;
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.IBootcampResponseMapper;
 import com.pragma.bootcamp.domain.model.Bootcamp;
-import com.pragma.bootcamp.domain.model.Capacity;
+import com.pragma.bootcamp.domain.model.Capability;
 import com.pragma.bootcamp.domain.primaryport.IBootcampServicePort;
-import com.pragma.bootcamp.domain.primaryport.ICapacityServicePort;
+import com.pragma.bootcamp.domain.primaryport.ICapabilityServicePort;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ import static java.util.stream.Collectors.toCollection;
 public class BootcampControllerAdapter {
 
     private final IBootcampServicePort bootcampServicePort;
-    private final ICapacityServicePort capacityServicePort;
+    private final ICapabilityServicePort capabilityServicePort;
     private final IBootcampRequestMapper bootcampRequestMapper;
     private final IBootcampResponseMapper bootcampResponseMapper;
 
@@ -36,18 +36,18 @@ public class BootcampControllerAdapter {
     @PostMapping("/add")
     public ResponseEntity<Void> addBootcamp(@RequestBody AddBootcampRequest request) {
 
-        List<Capacity> caps = new ArrayList<>();
+        List<Capability> caps = new ArrayList<>();
 
-        request.getCapacitiesNames().forEach(capacityName -> {
-            Capacity found = capacityServicePort.getCapacity(capacityName);
+        request.getCapabilitiesNames().forEach(capabilityName -> {
+            Capability found = capabilityServicePort.getCapability(capabilityName);
             caps.add(found);
         });
 
-        List<Capacity> unique = caps.stream()
-                .collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparingLong(Capacity::getId))), ArrayList::new));
+        List<Capability> unique = caps.stream()
+                .collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparingLong(Capability::getId))), ArrayList::new));
 
         Bootcamp bootcamp = bootcampRequestMapper.addRequestToBootcamp(request);
-        bootcamp.validateAndSetCapacities(unique);
+        bootcamp.validateAndSetCapabilities(unique);
 
         bootcampServicePort.saveBootcamp(bootcamp);
         return ResponseEntity.status(HttpStatus.CREATED).build();
