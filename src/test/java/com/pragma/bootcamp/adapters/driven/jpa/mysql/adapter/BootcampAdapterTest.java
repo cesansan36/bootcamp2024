@@ -1,11 +1,13 @@
 package com.pragma.bootcamp.adapters.driven.jpa.mysql.adapter;
 
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.BootcampEntity;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.CapabilityEntity;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.NoDataFoundException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.RegistryAlreadyExistsException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.IBootcampEntityMapper;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.IBootcampRepository;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ICapabilityRepository;
 import com.pragma.bootcamp.domain.model.Bootcamp;
 import com.pragma.bootcamp.testdata.TestDataDomain;
 import com.pragma.bootcamp.testdata.TestDataDriven;
@@ -15,13 +17,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class BootcampAdapterTest {
 
@@ -29,13 +36,15 @@ class BootcampAdapterTest {
 
     private IBootcampRepository bootcampRepository;
     private IBootcampEntityMapper bootcampEntityMapper;
+    private ICapabilityRepository capabilityRepository;
 
     @BeforeEach
     void setUp() {
         bootcampRepository = mock(IBootcampRepository.class);
         bootcampEntityMapper = mock(IBootcampEntityMapper.class);
+        capabilityRepository = mock(ICapabilityRepository.class);
 
-        bootcampAdapter = new BootcampAdapter(bootcampRepository, bootcampEntityMapper);
+        bootcampAdapter = new BootcampAdapter(bootcampRepository, bootcampEntityMapper, capabilityRepository);
     }
 
     @Test
@@ -43,7 +52,21 @@ class BootcampAdapterTest {
     void saveBootcampSuccess() {
         Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapabilities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
 
+        BootcampEntity bootcampEntity = new BootcampEntity();
+        bootcampEntity.setId(0L);
+        bootcampEntity.setName(bootcamp.getName());
+        bootcampEntity.setDescription(bootcamp.getDescription());
+
+        CapabilityEntity capabilityEntity = new CapabilityEntity();
+        capabilityEntity.setId(0L);
+        capabilityEntity.setName(TestDataDomain.getValidName(1));
+        capabilityEntity.setDescription(TestDataDomain.getValidDescription(1));
+
+        bootcampEntity.setCapabilities(Arrays.asList(capabilityEntity, capabilityEntity));
+
         when(bootcampRepository.findByName(anyString())).thenReturn(Optional.empty());
+        when(bootcampEntityMapper.toEntity(any(Bootcamp.class))).thenReturn(bootcampEntity);
+        when(capabilityRepository.findByName(anyString())).thenReturn(Optional.of(capabilityEntity));
 
         bootcampAdapter.saveBootcamp(bootcamp);
 
@@ -102,14 +125,14 @@ class BootcampAdapterTest {
         int page = 0;
         int size = 10;
         boolean isAscending = true;
-        boolean isSortByCapacitiesAmount = true;
+        boolean isSortByCapabilitiesAmount = true;
         List<BootcampEntity> bootcampEntities = TestDataDriven.getListOfBootcampEntity(2);
         List<Bootcamp> bootcamps = TestDataDomain.getListOfValidBootcamps(2);
 
         when(bootcampRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(bootcampEntities));
         when(bootcampEntityMapper.toModelList(bootcampEntities)).thenReturn(bootcamps);
 
-        List<Bootcamp> found = bootcampAdapter.getAllBootcamps(page, size, isAscending, isSortByCapacitiesAmount);
+        List<Bootcamp> found = bootcampAdapter.getAllBootcamps(page, size, isAscending, isSortByCapabilitiesAmount);
 
         assertAll(
                 () -> assertEquals(bootcamps.size(), found.size()),
@@ -128,10 +151,13 @@ class BootcampAdapterTest {
         int page = 0;
         int size = 10;
         boolean isAscending = true;
-        boolean isSortByCapacitiesAmount = true;
+        boolean isSortByCapabilitiesAmount = true;
 
         when(bootcampRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(Collections.emptyList()));
 
-        assertThrows(NoDataFoundException.class, () -> bootcampAdapter.getAllBootcamps(page, size, isAscending, isSortByCapacitiesAmount));
+        assertThrows(NoDataFoundException.class, () -> bootcampAdapter.getAllBootcamps(page, size, isAscending, isSortByCapabilitiesAmount));
     }
+
+    // TODO There should be a Test for when I want to add a bootcamp, it's not already used but can't find the technologies
+    // Same with capacities
 }

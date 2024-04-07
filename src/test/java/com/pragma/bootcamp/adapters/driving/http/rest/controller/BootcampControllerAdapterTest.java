@@ -35,7 +35,6 @@ class BootcampControllerAdapterTest {
     private BootcampControllerAdapter bootcampControllerAdapter;
 
     private IBootcampServicePort bootcampServicePort;
-    private ICapabilityServicePort capabilityServicePort;
     private IBootcampRequestMapper bootcampRequestMapper;
     private IBootcampResponseMapper bootcampResponseMapper;
 
@@ -43,10 +42,9 @@ class BootcampControllerAdapterTest {
     @BeforeEach
     void setUp() {
         bootcampServicePort = mock(IBootcampServicePort.class);
-        capabilityServicePort = mock(ICapabilityServicePort.class);
         bootcampRequestMapper = mock(IBootcampRequestMapper.class);
         bootcampResponseMapper = mock(IBootcampResponseMapper.class);
-        bootcampControllerAdapter = new BootcampControllerAdapter(bootcampServicePort, capabilityServicePort, bootcampRequestMapper, bootcampResponseMapper);
+        bootcampControllerAdapter = new BootcampControllerAdapter(bootcampServicePort, bootcampRequestMapper, bootcampResponseMapper);
 
         mockMvc = MockMvcBuilders.standaloneSetup(bootcampControllerAdapter).build();
     }
@@ -61,13 +59,10 @@ class BootcampControllerAdapterTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String inputJson = objectMapper.writeValueAsString(inputObject);
 
-        Bootcamp bootcamp = new Bootcamp(1L, "Bootcamp 1", "The bootcamp 1");
+        Bootcamp bootcamp = new Bootcamp(0L, "Bootcamp 1", "transfer");
         List<Capability> caps = TestDataDomain.getListOfValidCapabilities(3);
         bootcamp.setCapabilities(caps);
 
-        when(capabilityServicePort.getCapability("Cap 1")).thenReturn(caps.getFirst());
-        when(capabilityServicePort.getCapability("Cap 2")).thenReturn(caps.get(1));
-        when(capabilityServicePort.getCapability("Cap 3")).thenReturn(caps.getLast());
         when(bootcampRequestMapper.addRequestToBootcamp(any(AddBootcampRequest.class))).thenReturn(bootcamp);
 
         MockHttpServletRequestBuilder request = post("/bootcamp/add").contentType(MediaType.APPLICATION_JSON).content(inputJson);
@@ -76,7 +71,6 @@ class BootcampControllerAdapterTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        verify(capabilityServicePort, times(3)).getCapability(anyString());
         verify(bootcampRequestMapper, times(1)).addRequestToBootcamp(any(AddBootcampRequest.class));
         verify(bootcampServicePort, times(1)).saveBootcamp(bootcamp);
     }
@@ -115,7 +109,7 @@ class BootcampControllerAdapterTest {
         when(bootcampServicePort.getAllBootcamps(anyInt(), anyInt(), anyBoolean(), anyBoolean())).thenReturn(bootcamps);
         when(bootcampResponseMapper.toBootcampResponseList(bootcamps)).thenReturn(responses);
 
-        MockHttpServletRequestBuilder request = get("/bootcamp/?page=0&size=2&isAscending=true&isSortByCapacitiesAmount=true");
+        MockHttpServletRequestBuilder request = get("/bootcamp/?page=0&size=2&isAscending=true&isSortByCapabilitiesAmount=true");
 
         mockMvc.perform(request)
                 .andDo(print())

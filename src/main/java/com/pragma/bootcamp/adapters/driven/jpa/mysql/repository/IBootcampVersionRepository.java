@@ -13,4 +13,5 @@ public interface IBootcampVersionRepository extends JpaRepository<BootcampVersio
     Page<BootcampVersionEntity> findAll(Pageable pageable);
     Page<BootcampVersionEntity> findByBootcampId(Long bootcampId, Pageable pageable);
 
+
 }

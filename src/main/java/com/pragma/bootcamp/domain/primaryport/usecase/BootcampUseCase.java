@@ -24,7 +24,7 @@ public class BootcampUseCase implements IBootcampServicePort {
     }
 
     @Override
-    public List<Bootcamp> getAllBootcamps(Integer page, Integer size, boolean isAscending, boolean isSortByCapacitiesAmount) {
-        return bootcampPersistencePort.getAllBootcamps(page, size, isAscending, isSortByCapacitiesAmount);
+    public List<Bootcamp> getAllBootcamps(Integer page, Integer size, boolean isAscending, boolean isSortByCapabilitiesAmount) {
+        return bootcampPersistencePort.getAllBootcamps(page, size, isAscending, isSortByCapabilitiesAmount);
     }
 }

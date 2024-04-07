@@ -17,6 +17,7 @@ public interface ICapabilityEntityMapper {
     Capability toModel(CapabilityEntity capabilityEntity);
     List<Capability> toModelList(List<CapabilityEntity> capabilityEntities);
     @Mapping(target = "technologies", qualifiedByName = "mapTechnologies")
+    @Mapping(target = "bootcamps", ignore = true)
     CapabilityEntity toEntity(Capability capability);
 
     @Named("mapTechnologies")

@@ -6,7 +6,6 @@ import com.pragma.bootcamp.adapters.driving.http.rest.mapper.IBootcampVersionReq
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.IBootcampVersionResponseMapper;
 import com.pragma.bootcamp.configuration.Constants;
 import com.pragma.bootcamp.domain.model.Bootcamp;
-import com.pragma.bootcamp.domain.model.BootcampVersion;
 import com.pragma.bootcamp.domain.primaryport.IBootcampServicePort;
 import com.pragma.bootcamp.domain.primaryport.IBootcampVersionServicePort;
 import lombok.RequiredArgsConstructor;
@@ -35,13 +34,9 @@ public class BootcampVersionControllerAdapter
 
     @PostMapping("/add")
     public ResponseEntity<Void> addBootcampVersion(@RequestBody AddBootcampVersionRequest request) {
-        AddBootcampVersionRequest fixed = request.fixValues();
+        request.autoNameOnEmpty();
 
-        BootcampVersion bootcampVersion = bootcampVersionRequestMapper.requestToModel(fixed);
-        Bootcamp found = bootcampServicePort.getBootcamp(request.getBootcampName());
-        bootcampVersion.setBootcamp(found);
-
-        bootcampVersionServicePort.saveBootcampVersion(bootcampVersion);
+        bootcampVersionServicePort.saveBootcampVersion(bootcampVersionRequestMapper.requestToModel(request));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
     @GetMapping("/")
@@ -77,11 +72,12 @@ public class BootcampVersionControllerAdapter
             size = 1;
         }
 
-        Bootcamp found = bootcampServicePort.getBootcamp(bootcampName);
+//        // TODO change this so it doesn't create an instance of Bootcamp
+//        Bootcamp found = bootcampServicePort.getBootcamp(bootcampName);
 
         return ResponseEntity.ok(
             bootcampVersionResponseMapper.toResponseList(
-                    bootcampVersionServicePort.getVersionsOfBootcamp(page, size, isAscending, sortingField, found)
+                    bootcampVersionServicePort.getVersionsOfBootcamp(page, size, isAscending, sortingField, bootcampName)
             )
         );
     }

@@ -34,7 +34,6 @@ class CapabilityControllerAdapterTest {
     private CapabilityControllerAdapter capabilityControllerAdapter;
 
     private ICapabilityServicePort capabilityServicePort;
-    private ITechnologyServicePort technologyServicePort;
     private ICapabilityRequestMapper capabilityRequestMapper;
     private ICapabilityResponseMapper capabilityResponseMapper;
 
@@ -43,10 +42,9 @@ class CapabilityControllerAdapterTest {
     @BeforeEach
     void setUp() {
         capabilityServicePort = mock(ICapabilityServicePort.class);
-        technologyServicePort = mock(ITechnologyServicePort.class);
         capabilityRequestMapper = mock(ICapabilityRequestMapper.class);
         capabilityResponseMapper = mock(ICapabilityResponseMapper.class);
-        capabilityControllerAdapter = new CapabilityControllerAdapter(capabilityServicePort, technologyServicePort, capabilityRequestMapper, capabilityResponseMapper);
+        capabilityControllerAdapter = new CapabilityControllerAdapter(capabilityServicePort, capabilityRequestMapper, capabilityResponseMapper);
 
         mockMvc = MockMvcBuilders.standaloneSetup(capabilityControllerAdapter).build();
     }
@@ -61,13 +59,10 @@ class CapabilityControllerAdapterTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String inputJson = objectMapper.writeValueAsString(inputObject);
 
-        Capability cap = new Capability(1L, "Cap 1", "The cap 1");
+        Capability cap = new Capability(0L, "Cap 1", "transfer");
         List<Technology> techs = TestDataDomain.getListOfValidTechnologies(3);
         cap.setTechnologies(techs);
 
-        when(technologyServicePort.getTechnology("Tec 1")).thenReturn(techs.getFirst());
-        when(technologyServicePort.getTechnology("Tec 2")).thenReturn(techs.get(1));
-        when(technologyServicePort.getTechnology("Tec 3")).thenReturn(techs.getLast());
         when(capabilityRequestMapper.addRequestToCapability(any(AddCapabilityRequest.class))).thenReturn(cap);
 
         MockHttpServletRequestBuilder request = post("/capability/add").contentType(MediaType.APPLICATION_JSON).content(inputJson);
@@ -76,7 +71,6 @@ class CapabilityControllerAdapterTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        verify(technologyServicePort, times(3)).getTechnology(anyString());
         verify(capabilityRequestMapper, times(1)).addRequestToCapability(any(AddCapabilityRequest.class));
         verify(capabilityServicePort, times(1)).saveCapability(cap);
     }
@@ -106,37 +100,10 @@ class CapabilityControllerAdapterTest {
 
         verify(capabilityServicePort, times(1)).getCapability(anyString());
         verify(capabilityResponseMapper, times(1)).toCapabilityResponse(cap);
-        /*
-        Capability cap = new Capability(1L, "Cap", "The cap");
-        TechnologyInCapabilityResponse technologyInCapacityResponse1 = new TechnologyInCapabilityResponse(1L, "tech 1");
-        TechnologyInCapabilityResponse technologyInCapacityResponse2 = new TechnologyInCapabilityResponse(2L, "tech 2");
-        List<TechnologyInCapabilityResponse> techsInCap = Arrays.asList(technologyInCapacityResponse1, technologyInCapacityResponse2);
-        CapabilityResponse capResponse = new CapabilityResponse(1L, "Cap", "The cap", techsInCap);
-
-        when(capabilityServicePort.getCapability(anyString())).thenReturn(cap);
-        when(capabilityResponseMapper.toCapabilityResponse(cap)).thenReturn(capResponse);
-
-        MockHttpServletRequestBuilder request = get("/capacity/search/Cap");
-
-        mockMvc.perform(request)
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.name").value("Cap"))
-                .andExpect(jsonPath("$.description").value("The cap"))
-                .andExpect(jsonPath("$.technologies.size()").value(2))
-                .andExpect(jsonPath("$.technologies[0].id").value(1L))
-                .andExpect(jsonPath("$.technologies.[0].name").value("tech 1"))
-                .andExpect(jsonPath("$.technologies.[1].id").value(2L))
-                .andExpect(jsonPath("$.technologies.[1].name").value("tech 2"))
-        ;
-
-        verify(capabilityServicePort, times(1)).getCapability(anyString());
-        verify(capabilityResponseMapper, times(1)).toCapabilityResponse(cap);*/
     }
 
     @Test
-    void getAllCapacities() throws Exception {
+    void getAllCapabilities() throws Exception {
         List<Capability> caps = TestDataDomain.getListOfValidCapabilities(2);
         List<CapabilityResponse> responses = TestDataController.getListOfCapabilityResponse(2, 2);
 
@@ -160,43 +127,5 @@ class CapabilityControllerAdapterTest {
 
         verify(capabilityServicePort, times(1)).getAllCapabilities(anyInt(), anyInt(), anyBoolean(), anyBoolean());
         verify(capabilityResponseMapper, times(1)).toCapabilityResponseList(caps);
-
-        /*
-        Capability cap1 = new Capability(1L, "Cap 1", "The cap 1");
-        Capability cap2 = new Capability(2L, "Cap 2", "The cap 2");
-        List<Capability> caps = Arrays.asList(cap1, cap2);
-
-        TechnologyInCapabilityResponse technologyInCapacityResponse1 = new TechnologyInCapabilityResponse(1L, "tech 1");
-        TechnologyInCapabilityResponse technologyInCapacityResponse2 = new TechnologyInCapabilityResponse(2L, "tech 2");
-        TechnologyInCapabilityResponse technologyInCapacityResponse3 = new TechnologyInCapabilityResponse(3L, "tech 3");
-        TechnologyInCapabilityResponse technologyInCapacityResponse4 = new TechnologyInCapabilityResponse(4L, "tech 4");
-        List<TechnologyInCapabilityResponse> techsInCap1 = Arrays.asList(technologyInCapacityResponse1, technologyInCapacityResponse2);
-        List<TechnologyInCapabilityResponse> techsInCap2 = Arrays.asList(technologyInCapacityResponse3, technologyInCapacityResponse4);
-        CapabilityResponse capResponse1 = new CapabilityResponse(1L, "Cap 1", "The cap 1", techsInCap1);
-        CapabilityResponse capResponse2 = new CapabilityResponse(2L, "Cap 2", "The cap 2", techsInCap2);
-        List<CapabilityResponse> responses = Arrays.asList(capResponse1, capResponse2);
-
-        when(capabilityServicePort.getAllCapabilities(anyInt(), anyInt(), anyBoolean(), anyBoolean())).thenReturn(caps);
-        when(capabilityResponseMapper.toCapabilityResponseList(caps)).thenReturn(responses);
-
-        MockHttpServletRequestBuilder request = get("/capacity/?page=0&size=2&isAscending=true&isSortByTechnologiesAmount=true");
-
-        mockMvc.perform(request)
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].name").value("Cap 1"))
-                .andExpect(jsonPath("$[0].description").value("The cap 1"))
-                .andExpect(jsonPath("$[1].id").value(2L))
-                .andExpect(jsonPath("$[1].name").value("Cap 2"))
-                .andExpect(jsonPath("$[1].description").value("The cap 2"))
-                .andExpect(jsonPath("$[0].technologies.size()").value(2))
-                .andExpect(jsonPath("$[1].technologies[1].name").value("tech 4"))
-        ;
-
-        verify(capabilityServicePort, times(1)).getAllCapabilities(anyInt(), anyInt(), anyBoolean(), anyBoolean());
-        verify(capabilityResponseMapper, times(1)).toCapabilityResponseList(caps);
-
-         */
     }
 }

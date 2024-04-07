@@ -1,11 +1,13 @@
 package com.pragma.bootcamp.adapters.driven.jpa.mysql.adapter;
 
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.BootcampEntity;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.CapabilityEntity;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.NoDataFoundException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.RegistryAlreadyExistsException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.IBootcampEntityMapper;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.IBootcampRepository;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ICapabilityRepository;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.util.AdapterConstants;
 import com.pragma.bootcamp.domain.model.Bootcamp;
 import com.pragma.bootcamp.domain.secondaryport.IBootcampPersistencePort;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -21,6 +24,7 @@ public class BootcampAdapter implements IBootcampPersistencePort {
 
     private final IBootcampRepository bootcampRepository;
     private final IBootcampEntityMapper bootcampEntityMapper;
+    private final ICapabilityRepository capabilityRepository;
 
     @Override
     public void saveBootcamp(Bootcamp bootcamp) {
@@ -30,7 +34,15 @@ public class BootcampAdapter implements IBootcampPersistencePort {
                             AdapterConstants.REGISTRY_NAME_ALREADY_USED,
                             AdapterConstants.Registry.BOOTCAMP));
         }
-        bootcampRepository.save(bootcampEntityMapper.toEntity(bootcamp));
+
+        BootcampEntity bootcampEntity = bootcampEntityMapper.toEntity(bootcamp);
+        List<CapabilityEntity> capabilityEntities = new ArrayList<>();
+        bootcampEntity.getCapabilities().forEach(capabilityEntity ->
+            capabilityRepository.findByName(capabilityEntity.getName()).ifPresent(capabilityEntities::add)
+        );
+        bootcampEntity.setCapabilities(capabilityEntities);
+
+        bootcampRepository.save(bootcampEntity);
     }
 
     @Override
@@ -41,8 +53,8 @@ public class BootcampAdapter implements IBootcampPersistencePort {
     }
 
     @Override
-    public List<Bootcamp> getAllBootcamps(Integer page, Integer size, boolean isAscending, boolean isSortByCapacitiesAmount) {
-        String sortingField = isSortByCapacitiesAmount ? AdapterConstants.FIELD_NAME_OF_SORT_BY_CAPABILITIES : AdapterConstants.FIELD_NAME_OF_SORT_BY_NAME;
+    public List<Bootcamp> getAllBootcamps(Integer page, Integer size, boolean isAscending, boolean isSortByCapabilitiesAmount) {
+        String sortingField = isSortByCapabilitiesAmount ? AdapterConstants.FIELD_NAME_OF_SORT_BY_CAPABILITIES : AdapterConstants.FIELD_NAME_OF_SORT_BY_NAME;
 
         Sort sort = isAscending ? Sort.by(sortingField).ascending() : Sort.by(sortingField).descending();
 

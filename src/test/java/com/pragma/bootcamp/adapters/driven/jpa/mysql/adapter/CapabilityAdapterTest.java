@@ -1,14 +1,17 @@
 package com.pragma.bootcamp.adapters.driven.jpa.mysql.adapter;
 
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.CapabilityEntity;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.TechnologyEntity;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.NoDataFoundException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.RegistryAlreadyExistsException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.ICapabilityEntityMapper;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ICapabilityRepository;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ITechnologyRepository;
 import com.pragma.bootcamp.domain.model.Capability;
 import com.pragma.bootcamp.testdata.TestDataDomain;
 import com.pragma.bootcamp.testdata.TestDataDriven;
+import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,13 +34,15 @@ class CapabilityAdapterTest {
 
     private ICapabilityRepository capabilityRepository;
     private ICapabilityEntityMapper capabilityEntityMapper;
+    private ITechnologyRepository technologyRepository;
 
     @BeforeEach
     void setUp() {
         capabilityRepository = mock(ICapabilityRepository.class);
         capabilityEntityMapper = mock(ICapabilityEntityMapper.class);
+        technologyRepository = mock(ITechnologyRepository.class);
 
-        capabilityAdapter = new CapabilityAdapter(capabilityRepository, capabilityEntityMapper);
+        capabilityAdapter = new CapabilityAdapter(capabilityRepository, capabilityEntityMapper, technologyRepository);
     }
 
     @Test
@@ -45,7 +50,21 @@ class CapabilityAdapterTest {
     void saveCapabilitySuccess() {
         Capability capability = TestDataDomain.getCapabilityWithNoTechnologies(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
 
+        CapabilityEntity  capabilityEntity = new CapabilityEntity();
+        capabilityEntity.setId(0L);
+        capabilityEntity.setName(capability.getName());
+        capabilityEntity.setDescription(capability.getDescription());
+
+        TechnologyEntity technologyEntity = new TechnologyEntity();
+        technologyEntity.setId(0L);
+        technologyEntity.setName(TestDataDomain.getValidName(1));
+        technologyEntity.setDescription(TestDataDomain.getValidDescription(1));
+
+        capabilityEntity.setTechnologies(Arrays.asList(technologyEntity, technologyEntity));
+
         when(capabilityRepository.findByName(anyString())).thenReturn(Optional.empty());
+        when(capabilityEntityMapper.toEntity(any(Capability.class))).thenReturn(capabilityEntity);
+        when(technologyRepository.findByName(anyString())).thenReturn(Optional.of(technologyEntity));
 
         capabilityAdapter.saveCapability(capability);
 
@@ -100,7 +119,7 @@ class CapabilityAdapterTest {
 
     @Test
     @DisplayName("Should get a list og capabilities correctly")
-    void getAllCapacitiesSuccess() {
+    void getAllCapabilitiesSuccess() {
         int page = 0;
         int size = 10;
         boolean isAscending = true;
@@ -126,7 +145,7 @@ class CapabilityAdapterTest {
     }
     @Test
     @DisplayName("Should throw no data found exception")
-    void getAllCapacitiesException() {
+    void getAllCapabilitiesException() {
         int page = 0;
         int size = 10;
         boolean isAscending = true;

@@ -1,8 +1,11 @@
 package com.pragma.bootcamp.adapters.driven.jpa.mysql.adapter;
 
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.BootcampEntity;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.BootcampVersionEntity;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.RegistryAlreadyExistsException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.IBootcampVersionEntityMapper;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.IBootcampRepository;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.IBootcampVersionRepository;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.util.AdapterConstants;
 import com.pragma.bootcamp.configuration.Constants;
@@ -20,7 +23,8 @@ import java.util.List;
 public class BootcampVersionAdapter implements IBootcampVersionPersistencePort {
 
     private final IBootcampVersionRepository bootcampVersionRepository;
-    private  final IBootcampVersionEntityMapper bootcampVersionEntityMapper;
+    private final IBootcampVersionEntityMapper bootcampVersionEntityMapper;
+    private final IBootcampRepository bootcampRepository;
 
 
     @Override
@@ -31,7 +35,13 @@ public class BootcampVersionAdapter implements IBootcampVersionPersistencePort {
                             AdapterConstants.REGISTRY_NAME_ALREADY_USED,
                             AdapterConstants.Registry.BOOTCAMP_VERSION));
         }
-        bootcampVersionRepository.save(bootcampVersionEntityMapper.toEntity(bootcampVersion));
+
+
+        BootcampVersionEntity bootcampVersionEntity = bootcampVersionEntityMapper.toEntity(bootcampVersion);
+        BootcampEntity bootcampEntity = bootcampRepository.findByName(bootcampVersion.getBootcamp().getName()).orElseThrow(ElementNotFoundException::new);
+        bootcampVersionEntity.setBootcamp(bootcampEntity);
+
+        bootcampVersionRepository.save(bootcampVersionEntity);
     }
 
     @Override
@@ -58,7 +68,7 @@ public class BootcampVersionAdapter implements IBootcampVersionPersistencePort {
     }
 
     @Override
-    public List<BootcampVersion> getVersionsOfBootcamp(Integer page, Integer size, boolean isAscending, Constants.SortingField sortingField, Bootcamp bootcamp) {
+    public List<BootcampVersion> getVersionsOfBootcamp(Integer page, Integer size, boolean isAscending, Constants.SortingField sortingField, String bootcamp) {
         String sortingFieldName;
         if (sortingField == Constants.SortingField.START_DATE) {
             sortingFieldName = AdapterConstants.FIELD_NAME_OF_SORT_VERSION_BY_START_DATE;
@@ -71,7 +81,9 @@ public class BootcampVersionAdapter implements IBootcampVersionPersistencePort {
         Sort sort = isAscending ? Sort.by(sortingFieldName).ascending() : Sort.by(sortingFieldName).descending();
         Pageable pagination = PageRequest.of(page, size, sort);
 
-        List<BootcampVersionEntity> bootcampVersionEntities = bootcampVersionRepository.findByBootcampId(bootcamp.getId(), pagination).getContent();
+        BootcampEntity bootcampEntity = bootcampRepository.findByName(bootcamp).orElseThrow(ElementNotFoundException::new);
+
+        List<BootcampVersionEntity> bootcampVersionEntities = bootcampVersionRepository.findByBootcampId(bootcampEntity.getId(), pagination).getContent();
 
         return bootcampVersionEntityMapper.toModelList(bootcampVersionEntities);
     }

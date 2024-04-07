@@ -56,7 +56,7 @@ class BootcampTest {
 
     @Test
     @DisplayName("Setting and getting capabilities with no validation")
-    void addingCapacities () {
+    void addingCapabilities() {
         Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapabilities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
         List<Capability> caps = TestDataDomain.getListOfValidCapabilities(3);
         bootcamp.setCapabilities(caps);
@@ -76,7 +76,7 @@ class BootcampTest {
     }
     @Test
     @DisplayName("Setting and getting capabilities with validation - success")
-    void addingAndValidatingCapacitiesSuccess () {
+    void addingAndValidatingCapabilitiesSuccess() {
         Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapabilities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
         List<Capability> caps = TestDataDomain.getListOfValidCapabilities(4);
 
@@ -86,7 +86,7 @@ class BootcampTest {
     }
     @Test
     @DisplayName("Fail validation because too few capabilities")
-    void addTooFewCapacities () {
+    void addTooFewCapabilities() {
         Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapabilities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
         List<Capability> caps = TestDataDomain.getListOfValidCapabilities(0);
 
@@ -94,7 +94,7 @@ class BootcampTest {
     }
     @Test
     @DisplayName("Fail validation because too many capabilities")
-    void addTooManyCapacities () {
+    void addTooManyCapabilities() {
         Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapabilities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
         List<Capability> caps = TestDataDomain.getListOfValidCapabilities(5);
 

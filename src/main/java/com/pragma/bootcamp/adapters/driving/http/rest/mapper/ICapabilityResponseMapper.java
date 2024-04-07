@@ -10,5 +10,5 @@ import java.util.List;
 public interface ICapabilityResponseMapper {
 
     CapabilityResponse toCapabilityResponse(Capability capability);
-    List<CapabilityResponse> toCapabilityResponseList(List<Capability> capacities);
+    List<CapabilityResponse> toCapabilityResponseList(List<Capability> capabilities);
 }

@@ -74,16 +74,16 @@ public class TestDataController {
         return capsInBootcampResponse;
     }
 
-    public static BootcampResponse getBootcampResponse(Long id, Integer capacitiesAmount, Integer technologiesAmount) {
-        List<CapabilityInBootcampResponse> capsInBootcampResponse = getListOfCapabilityInBootcampResponse(capacitiesAmount, technologiesAmount);
+    public static BootcampResponse getBootcampResponse(Long id, Integer capabilitiesAmount, Integer technologiesAmount) {
+        List<CapabilityInBootcampResponse> capsInBootcampResponse = getListOfCapabilityInBootcampResponse(capabilitiesAmount, technologiesAmount);
         return new BootcampResponse(id,
                 String.format(NAME, Element.BOOTCAMP, id),
                 capsInBootcampResponse);
     }
-    public static List<BootcampResponse> getListOfBootcampResponse(Integer num, Integer capacitiesAmount, Integer technologiesAmount) {
+    public static List<BootcampResponse> getListOfBootcampResponse(Integer num, Integer capabilitiesAmount, Integer technologiesAmount) {
         List<BootcampResponse> bootcampResponses = new ArrayList<>();
         for (Long i = 1L ; i <= num ; i++) {
-            bootcampResponses.add(getBootcampResponse(i, capacitiesAmount, technologiesAmount));
+            bootcampResponses.add(getBootcampResponse(i, capabilitiesAmount, technologiesAmount));
         }
         return bootcampResponses;
     }
@@ -92,8 +92,8 @@ public class TestDataController {
         return new BootcampVersionResponse(id,
                 String.format(NAME, Element.BOOTCAMP_VERSION, id),
                 4,
-                TestDataDomain.parseDate("2021-01-01"),
-                TestDataDomain.parseDate("2021-01-03"),
+                "2021-01-01",
+                "2021-01-03",
                 "b_a");
     }
     public static List<BootcampVersionResponse> getListOfBootcampVersionResponse(Integer num) throws ParseException {

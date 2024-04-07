@@ -4,47 +4,28 @@ import com.pragma.bootcamp.adapters.driving.http.rest.dto.request.AddCapabilityR
 import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.CapabilityResponse;
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.ICapabilityRequestMapper;
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.ICapabilityResponseMapper;
-import com.pragma.bootcamp.domain.model.Capability;
-import com.pragma.bootcamp.domain.model.Technology;
 import com.pragma.bootcamp.domain.primaryport.ICapabilityServicePort;
-import com.pragma.bootcamp.domain.primaryport.ITechnologyServicePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.TreeSet;
-
-import static java.util.Comparator.comparingLong;
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toCollection;
 
 @RestController
 @RequestMapping("/capability")
 @RequiredArgsConstructor
 public class CapabilityControllerAdapter {
     private final ICapabilityServicePort capabilityServicePort;
-    private final ITechnologyServicePort technologyServicePort;
     private final ICapabilityRequestMapper capabilityRequestMapper;
     private final ICapabilityResponseMapper capabilityResponseMapper;
 
     @PostMapping("/add")
     public ResponseEntity<Void> addCapability(@RequestBody AddCapabilityRequest request) {
-
-        List<Technology> techs = new ArrayList<>();
-        request.getTechnologiesNames().forEach(technologyName -> {
-            Technology found = technologyServicePort.getTechnology(technologyName);
-            techs.add(found);
-        });
-        List<Technology> unique = techs.stream()
-                .collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparingLong(Technology::getId))), ArrayList::new));
-
-        Capability capability = capabilityRequestMapper.addRequestToCapability(request);
-        capability.validateAndSetTechnologies(unique);
-
-        capabilityServicePort.saveCapability(capability);
+        request.setTechnologiesNames(new ArrayList<>(new HashSet<>(request.getTechnologiesNames())));
+        capabilityServicePort.saveCapability(capabilityRequestMapper.addRequestToCapability(request));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

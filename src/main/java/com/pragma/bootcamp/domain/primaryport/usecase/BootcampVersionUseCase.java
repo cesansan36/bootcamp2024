@@ -28,7 +28,7 @@ public class BootcampVersionUseCase implements IBootcampVersionServicePort {
     }
 
     @Override
-    public List<BootcampVersion> getVersionsOfBootcamp(Integer page, Integer size, boolean isAscending, Constants.SortingField sortingField, Bootcamp bootcamp) {
+    public List<BootcampVersion> getVersionsOfBootcamp(Integer page, Integer size, boolean isAscending, Constants.SortingField sortingField, String bootcamp) {
         return bootcampVerPersistencePort.getVersionsOfBootcamp(page, size, isAscending, sortingField, bootcamp);
     }
 }

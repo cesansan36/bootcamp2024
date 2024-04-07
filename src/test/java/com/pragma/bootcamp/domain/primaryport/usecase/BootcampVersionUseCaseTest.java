@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -66,11 +67,11 @@ class BootcampVersionUseCaseTest {
 
     @Test
     void getVersionsOfBootcamp() {
+        // TODO Repair this test
         List<BootcampVersion> bootcampVersions = TestDataDomain.getListOfValidBootcampVersions(2, 3);
-        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapabilities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
-        when(bootcampVersionPersistencePort.getVersionsOfBootcamp(anyInt(), anyInt(), anyBoolean(), any(Constants.SortingField.class), any(Bootcamp.class))).thenReturn(bootcampVersions);
+        when(bootcampVersionPersistencePort.getVersionsOfBootcamp(anyInt(), anyInt(), anyBoolean(), any(Constants.SortingField.class), anyString())).thenReturn(bootcampVersions);
 
-        List<BootcampVersion> found = bootcampVersionUseCase.getVersionsOfBootcamp(1,2,true, Constants.SortingField.MAX_PARTICIPANTS, bootcamp);
+        List<BootcampVersion> found = bootcampVersionUseCase.getVersionsOfBootcamp(1,2,true, Constants.SortingField.MAX_PARTICIPANTS, "bootcamp 1");
 
         assertAll(
                 () -> assertEquals(bootcampVersions.size(), found.size()),
@@ -86,7 +87,7 @@ class BootcampVersionUseCaseTest {
                 () -> assertEquals(bootcampVersions.get(1).getStartDate(), found.get(1).getStartDate()),
                 () -> assertEquals(bootcampVersions.get(1).getEndDate(), found.get(1).getEndDate()),
                 () -> assertEquals(bootcampVersions.get(1).getBootcamp().getId(), found.get(1).getBootcamp().getId()),
-                () -> verify(bootcampVersionPersistencePort, times(1)).getVersionsOfBootcamp(anyInt(), anyInt(), anyBoolean(), any(Constants.SortingField.class), any(Bootcamp.class))
+                () -> verify(bootcampVersionPersistencePort, times(1)).getVersionsOfBootcamp(anyInt(), anyInt(), anyBoolean(), any(Constants.SortingField.class), anyString())
         );
     }
 }
