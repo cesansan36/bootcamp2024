@@ -1,7 +1,6 @@
 package com.pragma.bootcamp.domain.primaryport;
 
 import com.pragma.bootcamp.configuration.Constants;
-import com.pragma.bootcamp.domain.model.Bootcamp;
 import com.pragma.bootcamp.domain.model.BootcampVersion;
 
 import java.util.List;

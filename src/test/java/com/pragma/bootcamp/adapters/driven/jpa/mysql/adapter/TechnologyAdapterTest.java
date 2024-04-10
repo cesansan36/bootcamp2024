@@ -1,9 +1,9 @@
 package com.pragma.bootcamp.adapters.driven.jpa.mysql.adapter;
 
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.TechnologyEntity;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
+import com.pragma.bootcamp.domain.exception.ElementNotFoundException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.NoDataFoundException;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.RegistryAlreadyExistsException;
+import com.pragma.bootcamp.domain.exception.RegistryAlreadyExistsException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.ITechnologyEntityMapper;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ITechnologyRepository;
 import com.pragma.bootcamp.domain.model.Technology;

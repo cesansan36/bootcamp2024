@@ -1,8 +1,8 @@
 package com.pragma.bootcamp.configuration.exceptionhandler;
 
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
+import com.pragma.bootcamp.domain.exception.ElementNotFoundException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.NoDataFoundException;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.RegistryAlreadyExistsException;
+import com.pragma.bootcamp.domain.exception.RegistryAlreadyExistsException;
 import com.pragma.bootcamp.configuration.Constants;
 import com.pragma.bootcamp.domain.exception.CharLimitSurpassedException;
 import com.pragma.bootcamp.domain.exception.DateFinishBeforeStartException;

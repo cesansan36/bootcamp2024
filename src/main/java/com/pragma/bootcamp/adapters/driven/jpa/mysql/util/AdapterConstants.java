@@ -5,15 +5,6 @@ public class AdapterConstants {
         throw new IllegalStateException("Utility class");
     }
 
-    public enum Registry {
-        TECHNOLOGY,
-        CAPABILITY,
-        BOOTCAMP,
-        BOOTCAMP_VERSION
-    }
-
-    public static final String REGISTRY_NAME_ALREADY_USED = "A %s with that name already exists";
-
     public static final String FIELD_NAME_FOR_SORTING_TECHNOLOGIES = "name";
     public static final String FIELD_NAME_OF_SORT_BY_NAME = "name";
     public static final String FIELD_NAME_OF_SORT_BY_TECHNOLOGIES = "teccount";

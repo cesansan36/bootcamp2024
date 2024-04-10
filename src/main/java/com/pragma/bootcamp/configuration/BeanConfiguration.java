@@ -58,17 +58,17 @@ public class BeanConfiguration {
 
     @Bean
     public ICapabilityServicePort capabilityServicePort() {
-        return new CapabilityUseCase(capabilityPersistencePort());
+        return new CapabilityUseCase(capabilityPersistencePort(), technologyPersistencePort());
     }
 
     @Bean
     public IBootcampPersistencePort bootcampPersistencePort() {
-        return new BootcampAdapter(bootcampRepository, bootcampEntityMapper, capabilityRepository);
+        return new BootcampAdapter(bootcampRepository, bootcampEntityMapper);
     }
 
     @Bean
     public IBootcampServicePort bootcampServicePort() {
-        return new BootcampUseCase(bootcampPersistencePort());
+        return new BootcampUseCase(bootcampPersistencePort(), capabilityPersistencePort());
     }
 
     @Bean
@@ -78,6 +78,6 @@ public class BeanConfiguration {
 
     @Bean
     public IBootcampVersionServicePort bootcampVersionServicePort() {
-        return new BootcampVersionUseCase(bootcampVersionPersistencePort());
+        return new BootcampVersionUseCase(bootcampVersionPersistencePort(), bootcampPersistencePort());
     }
 }

@@ -5,7 +5,6 @@ import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.BootcampRespo
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.IBootcampRequestMapper;
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.IBootcampResponseMapper;
 import com.pragma.bootcamp.domain.primaryport.IBootcampServicePort;
-import com.pragma.bootcamp.domain.primaryport.ICapabilityServicePort;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

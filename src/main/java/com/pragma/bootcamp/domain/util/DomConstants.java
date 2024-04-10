@@ -11,6 +11,15 @@ public class DomConstants {
         DESCRIPTION
     }
 
+    public enum Registry {
+        TECHNOLOGY,
+        CAPABILITY,
+        BOOTCAMP,
+        BOOTCAMP_VERSION
+    }
+
+    public static final String REGISTRY_NAME_ALREADY_USED = "A %s with that name already exists";
+
     public static final int MAX_NAME_FIELD_SIZE = 50;
     public static final int MAX_DESCRIPTION_FIELD_SIZE = 90;
     public static final int MIN_TECHNOLOGIES_IN_CAPABILITY = 3;

@@ -1,10 +1,6 @@
 package com.pragma.bootcamp.adapters.driven.jpa.mysql.adapter;
 
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.CapabilityEntity;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.TechnologyEntity;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.NoDataFoundException;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.RegistryAlreadyExistsException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.ICapabilityEntityMapper;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ICapabilityRepository;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ITechnologyRepository;
@@ -16,8 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class CapabilityAdapter implements ICapabilityPersistencePort {
@@ -27,29 +23,12 @@ public class CapabilityAdapter implements ICapabilityPersistencePort {
 
     @Override
     public void saveCapability(Capability capability) {
-        if (capabilityRepository.findByName(capability.getName()).isPresent()) {
-            throw new RegistryAlreadyExistsException(
-                    String.format(
-                            AdapterConstants.REGISTRY_NAME_ALREADY_USED,
-                            AdapterConstants.Registry.CAPABILITY));
-        }
-
-        CapabilityEntity capabilityEntity = capabilityEntityMapper.toEntity(capability);
-        List<TechnologyEntity> technologyEntities = new ArrayList<>();
-        capabilityEntity.getTechnologies().forEach(technologyEntity ->
-            technologyRepository.findByName(technologyEntity.getName()).ifPresent(technologyEntities::add)
-        );
-
-        capabilityEntity.setTechnologies(technologyEntities);
-
-        capabilityRepository.save(capabilityEntity);
+        capabilityRepository.save(capabilityEntityMapper.toEntity(capability));
     }
 
     @Override
-    public Capability getCapability(String name) {
-        CapabilityEntity capabilityEntity = capabilityRepository.findByName(name).orElseThrow(ElementNotFoundException::new);
-
-        return capabilityEntityMapper.toModel(capabilityEntity);
+    public Optional<Capability> getCapability(String name) {
+        return capabilityRepository.findByName(name).map(capabilityEntityMapper::toModel);
     }
 
     @Override
@@ -61,9 +40,6 @@ public class CapabilityAdapter implements ICapabilityPersistencePort {
         Pageable pagination = PageRequest.of(page, size, sort);
         List<CapabilityEntity> capabilityEntities = capabilityRepository.findAll(pagination).getContent();
 
-        if (capabilityEntities.isEmpty()) {
-            throw new NoDataFoundException();
-        }
         return capabilityEntityMapper.toModelList(capabilityEntities);
     }
 }

@@ -20,7 +20,7 @@ class BootcampUseCaseTest {
     @BeforeEach
     void setUp() {
         bootcampPersistencePort = mock(IBootcampPersistencePort.class);
-        bootcampUseCase = new BootcampUseCase(bootcampPersistencePort);
+//        bootcampUseCase = new BootcampUseCase(bootcampPersistencePort);
     }
 
     @Test
@@ -35,7 +35,7 @@ class BootcampUseCaseTest {
     @Test
     void getBootcamp() {
         Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapabilities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
-        when(bootcampPersistencePort.getBootcamp(anyString())).thenReturn(bootcamp);
+//        when(bootcampPersistencePort.getBootcamp(anyString())).thenReturn(bootcamp);
 
         Bootcamp found = bootcampUseCase.getBootcamp("some name");
         assertAll(

@@ -5,7 +5,6 @@ import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.BootcampVersi
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.IBootcampVersionRequestMapper;
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.IBootcampVersionResponseMapper;
 import com.pragma.bootcamp.configuration.Constants;
-import com.pragma.bootcamp.domain.model.Bootcamp;
 import com.pragma.bootcamp.domain.primaryport.IBootcampServicePort;
 import com.pragma.bootcamp.domain.primaryport.IBootcampVersionServicePort;
 import lombok.RequiredArgsConstructor;

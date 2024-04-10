@@ -1,4 +1,4 @@
-package com.pragma.bootcamp.adapters.driven.jpa.mysql.exception;
+package com.pragma.bootcamp.domain.exception;
 
 public class ElementNotFoundException extends RuntimeException {
     public ElementNotFoundException() {

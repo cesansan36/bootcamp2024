@@ -1,9 +1,6 @@
 package com.pragma.bootcamp.adapters.driven.jpa.mysql.adapter;
 
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.TechnologyEntity;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.NoDataFoundException;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.RegistryAlreadyExistsException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.ITechnologyEntityMapper;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ITechnologyRepository;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.util.AdapterConstants;
@@ -43,9 +40,7 @@ public class TechnologyAdapter implements ITechnologyPersistencePort {
         Sort sort = isAscending ? Sort.by(AdapterConstants.FIELD_NAME_FOR_SORTING_TECHNOLOGIES).ascending() : Sort.by(AdapterConstants.FIELD_NAME_FOR_SORTING_TECHNOLOGIES).descending();
         Pageable pagination = PageRequest.of(page, size, sort);
         List<TechnologyEntity> technologies = technologyRepository.findAll(pagination).getContent();
-//        if (technologies.isEmpty()) {
-//            throw new NoDataFoundException();
-//        }
+
         return technologyEntityMapper.toModelList(technologies);
     }
 

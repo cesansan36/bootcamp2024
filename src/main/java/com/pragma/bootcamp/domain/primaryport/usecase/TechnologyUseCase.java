@@ -1,11 +1,11 @@
 package com.pragma.bootcamp.domain.primaryport.usecase;
 
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.RegistryAlreadyExistsException;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.util.AdapterConstants;
+import com.pragma.bootcamp.domain.exception.ElementNotFoundException;
+import com.pragma.bootcamp.domain.exception.RegistryAlreadyExistsException;
 import com.pragma.bootcamp.domain.model.Technology;
 import com.pragma.bootcamp.domain.primaryport.ITechnologyServicePort;
 import com.pragma.bootcamp.domain.secondaryport.ITechnologyPersistencePort;
+import com.pragma.bootcamp.domain.util.DomConstants;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,8 +25,8 @@ public class TechnologyUseCase implements ITechnologyServicePort {
         if (previousTechnology.isPresent()) {
             throw new RegistryAlreadyExistsException(
                     String.format(
-                            AdapterConstants.REGISTRY_NAME_ALREADY_USED,
-                            AdapterConstants.Registry.TECHNOLOGY));
+                            DomConstants.REGISTRY_NAME_ALREADY_USED,
+                            DomConstants.Registry.TECHNOLOGY));
         }
 
         technologyPersistencePort.saveTechnology(technology);
@@ -52,6 +52,7 @@ public class TechnologyUseCase implements ITechnologyServicePort {
         if (previousTechnology.isEmpty()) {
             throw new ElementNotFoundException();
         }
+
         return technologyPersistencePort.updateTechnology(technology);
     }
 
