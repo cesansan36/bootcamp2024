@@ -72,9 +72,6 @@ public class BootcampVersionControllerAdapter
             size = 1;
         }
 
-//        // TODO change this so it doesn't create an instance of Bootcamp
-//        Bootcamp found = bootcampServicePort.getBootcamp(bootcampName);
-
         return ResponseEntity.ok(
             bootcampVersionResponseMapper.toResponseList(
                     bootcampVersionServicePort.getVersionsOfBootcamp(page, size, isAscending, sortingField, bootcampName)

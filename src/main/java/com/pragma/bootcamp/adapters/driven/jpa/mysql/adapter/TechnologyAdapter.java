@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class TechnologyAdapter implements ITechnologyPersistencePort {
@@ -24,19 +25,17 @@ public class TechnologyAdapter implements ITechnologyPersistencePort {
 
     @Override
     public void saveTechnology(Technology technology) {
-        if (technologyRepository.findByName(technology.getName()).isPresent()) {
-            throw new RegistryAlreadyExistsException(
-                    String.format(
-                            AdapterConstants.REGISTRY_NAME_ALREADY_USED,
-                            AdapterConstants.Registry.TECHNOLOGY));
-        }
         technologyRepository.save(technologyEntityMapper.toEntity(technology));
     }
 
     @Override
-    public Technology getTechnology(String name) {
-        TechnologyEntity technology = technologyRepository.findByName(name).orElseThrow(ElementNotFoundException::new);
-        return technologyEntityMapper.toModel(technology);
+    public Optional<Technology> getTechnology(String name) {
+        return technologyRepository.findByName(name).map(technologyEntityMapper::toModel);
+    }
+
+    @Override
+    public Optional<Technology> getTechnologyById(Long id) {
+        return technologyRepository.findById(id).map(technologyEntityMapper::toModel);
     }
 
     @Override
@@ -44,25 +43,20 @@ public class TechnologyAdapter implements ITechnologyPersistencePort {
         Sort sort = isAscending ? Sort.by(AdapterConstants.FIELD_NAME_FOR_SORTING_TECHNOLOGIES).ascending() : Sort.by(AdapterConstants.FIELD_NAME_FOR_SORTING_TECHNOLOGIES).descending();
         Pageable pagination = PageRequest.of(page, size, sort);
         List<TechnologyEntity> technologies = technologyRepository.findAll(pagination).getContent();
-        if (technologies.isEmpty()) {
-            throw new NoDataFoundException();
-        }
+//        if (technologies.isEmpty()) {
+//            throw new NoDataFoundException();
+//        }
         return technologyEntityMapper.toModelList(technologies);
     }
 
     @Override
     public Technology updateTechnology(Technology technology) {
-        if (technologyRepository.findById(technology.getId()).isEmpty()) {
-            throw new ElementNotFoundException();
-        }
         return technologyEntityMapper.toModel(technologyRepository.save(technologyEntityMapper.toEntity(technology)));
     }
 
     @Override
     public void deleteTechnology(Long id) {
-        if (technologyRepository.findById(id).isEmpty()) {
-            throw new ElementNotFoundException();
-        }
+
         technologyRepository.deleteById(id);
     }
 }

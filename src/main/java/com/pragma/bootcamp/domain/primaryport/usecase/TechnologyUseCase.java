@@ -1,10 +1,14 @@
 package com.pragma.bootcamp.domain.primaryport.usecase;
 
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.RegistryAlreadyExistsException;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.util.AdapterConstants;
 import com.pragma.bootcamp.domain.model.Technology;
 import com.pragma.bootcamp.domain.primaryport.ITechnologyServicePort;
 import com.pragma.bootcamp.domain.secondaryport.ITechnologyPersistencePort;
 
 import java.util.List;
+import java.util.Optional;
 
 public class TechnologyUseCase implements ITechnologyServicePort {
 
@@ -16,12 +20,25 @@ public class TechnologyUseCase implements ITechnologyServicePort {
 
     @Override
     public void saveTechnology(Technology technology) {
+
+        Optional<Technology> previousTechnology = technologyPersistencePort.getTechnology(technology.getName());
+        if (previousTechnology.isPresent()) {
+            throw new RegistryAlreadyExistsException(
+                    String.format(
+                            AdapterConstants.REGISTRY_NAME_ALREADY_USED,
+                            AdapterConstants.Registry.TECHNOLOGY));
+        }
+
         technologyPersistencePort.saveTechnology(technology);
     }
 
     @Override
     public Technology getTechnology(String name) {
-        return technologyPersistencePort.getTechnology(name);
+        Optional<Technology> technology = technologyPersistencePort.getTechnology(name);
+        if (technology.isEmpty()) {
+            throw new ElementNotFoundException();
+        }
+        return technology.get();
     }
 
     @Override
@@ -31,11 +48,18 @@ public class TechnologyUseCase implements ITechnologyServicePort {
 
     @Override
     public Technology updateTechnology(Technology technology) {
+        Optional<Technology> previousTechnology = technologyPersistencePort.getTechnology(technology.getName());
+        if (previousTechnology.isEmpty()) {
+            throw new ElementNotFoundException();
+        }
         return technologyPersistencePort.updateTechnology(technology);
     }
 
     @Override
     public void deleteTechnology(Long id) {
+        if (technologyPersistencePort.getTechnologyById(id).isEmpty()) {
+            throw new ElementNotFoundException();
+        }
         technologyPersistencePort.deleteTechnology(id);
     }
 }
