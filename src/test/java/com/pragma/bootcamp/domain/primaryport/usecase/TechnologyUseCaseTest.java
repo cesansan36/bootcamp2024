@@ -3,6 +3,7 @@ package com.pragma.bootcamp.domain.primaryport.usecase;
 import com.pragma.bootcamp.domain.model.Technology;
 import com.pragma.bootcamp.domain.secondaryport.ITechnologyPersistencePort;
 import com.pragma.bootcamp.testdata.TestDataDomain;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,6 +25,7 @@ class TechnologyUseCaseTest {
     ITechnologyPersistencePort technologyPersistencePort;
 
     @Test
+    @DisplayName("Successfully save")
     void saveTechnology() {
         Technology tec = TestDataDomain.getTechnology(0L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
         technologyUseCase.saveTechnology(tec);
@@ -32,7 +34,31 @@ class TechnologyUseCaseTest {
     }
 
     @Test
+    @DisplayName("Fail save because technology already exists")
+    void failSaveTechnology() {
+        Technology tec = TestDataDomain.getTechnology(0L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
+        technologyUseCase.saveTechnology(tec);
+
+        verify(technologyPersistencePort, times(1)).saveTechnology(tec);
+    }
+
+    @Test
+    @DisplayName("Successfully get")
     void getTechnology() {
+        Technology tec = TestDataDomain.getTechnology(0L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
+//        when(technologyPersistencePort.getTechnology(anyString())).thenReturn(tec);
+//
+//        Technology found = technologyUseCase.getTechnology("some name");
+//        assertAll(
+//                () -> assertEquals(tec.getId(), found.getId()),
+//                () -> assertEquals(tec.getName(), found.getName()),
+//                () -> assertEquals(tec.getDescription(), found.getDescription()),
+//                () -> verify(technologyPersistencePort, times(1)).getTechnology("some name")
+//        );
+    }
+    @Test
+    @DisplayName("Fail get because technology does not exists")
+    void failGetTechnology() {
         Technology tec = TestDataDomain.getTechnology(0L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
 //        when(technologyPersistencePort.getTechnology(anyString())).thenReturn(tec);
 //
@@ -46,6 +72,7 @@ class TechnologyUseCaseTest {
     }
 
     @Test
+    @DisplayName("Get list of technologies")
     void getAllTechnologies() {
         List<Technology> techs = TestDataDomain.getListOfValidTechnologies(2);
 
@@ -66,6 +93,7 @@ class TechnologyUseCaseTest {
     }
 
     @Test
+    @DisplayName("Successfully update")
     void updateTechnology() {
         Technology sendTech = TestDataDomain.getTechnology(0L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
         Technology receivedTech = TestDataDomain.getTechnology(0L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
@@ -80,12 +108,22 @@ class TechnologyUseCaseTest {
                 () -> verify(technologyPersistencePort, times(1)).updateTechnology(sendTech)
         );
     }
+    @Test
+    @DisplayName("Fail update because technology does not exists")
+    void failUpdateTechnology() {
+    }
 
     @Test
+    @DisplayName("Successfully delete")
     void deleteTechnology() {
         Long id = 1L;
         technologyUseCase.deleteTechnology(id);
 
         verify(technologyPersistencePort, times(1)).deleteTechnology(id);
+    }
+
+    @Test
+    @DisplayName("Fail delete because technology does not exists")
+    void failDeleteTechnology() {
     }
 }

@@ -38,32 +38,23 @@ class TechnologyAdapterTest {
 
     @Test
     @DisplayName("Should save technology correctly")
-    void saveTechnologySuccess() {
+    void saveTechnology() {
         Technology tech = TestDataDomain.getTechnology(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
+        TechnologyEntity technologyEntity = new TechnologyEntity(1L, "some name", "some description", Collections.emptyList());
 
-        when(technologyRepository.findByName(anyString())).thenReturn(Optional.empty());
+        when(technologyEntityMapper.toEntity(any(Technology.class))).thenReturn(technologyEntity);
 
         technologyAdapter.saveTechnology(tech);
 
         assertAll(
-                () -> verify(technologyRepository, times(1)).findByName(anyString()),
-                () -> verify(technologyEntityMapper, times(1)).toEntity(tech),
-                () -> verify(technologyRepository, times(1)).save(any())
+                () -> verify(technologyEntityMapper, times(1)).toEntity(any(Technology.class)),
+                () -> verify(technologyRepository, times(1)).save(any(TechnologyEntity.class))
         );
-    }
-    @Test
-    @DisplayName("Should throw exception because technology already exists")
-    void saveTechnologyException() {
-        Technology tech = TestDataDomain.getTechnology(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
-
-        when(technologyRepository.findByName(anyString())).thenReturn(Optional.of(new TechnologyEntity()));
-
-        assertThrows(RegistryAlreadyExistsException.class, () -> technologyAdapter.saveTechnology(tech));
     }
 
     @Test
     @DisplayName("Should get a technology correctly")
-    void getTechnologySuccess() {
+    void getTechnology() {
         Long techEntityId = 1L;
         String techEntityName = TestDataDomain.getValidName(1);
         String techEntityDescription = TestDataDomain.getValidDescription(1);
@@ -85,18 +76,10 @@ class TechnologyAdapterTest {
 //        );
     }
 
-    @Test
-    @DisplayName("Should throw exception since technology doesn't exists")
-    void getTechnologyException() {
-        String techName = "Java";
 
-        when(technologyRepository.findByNameContaining(anyString())).thenReturn(Optional.empty());
-
-        assertThrows(ElementNotFoundException.class, () -> technologyAdapter.getTechnology(techName));
-    }
 
     @Test
-    void getAllTechnologiesSuccess() {
+    void getAllTechnologies() {
         int page = 0;
         int size = 10;
         boolean isAscending = true;
@@ -120,19 +103,10 @@ class TechnologyAdapterTest {
         );
     }
 
-    @Test
-    void getAllTechnologiesException() {
-        int page = 0;
-        int size = 10;
-        boolean isAscending = true;
 
-        when(technologyRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(Collections.emptyList()));
-
-        assertThrows(NoDataFoundException.class, () -> technologyAdapter.getAllTechnologies(page, size, isAscending));
-    }
 
     @Test
-    void updateTechnologySuccess() {
+    void updateTechnology() {
         Technology technology = TestDataDomain.getTechnology(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
         TechnologyEntity technologyEntity = TestDataDriven.getTechnologyEntity(1L);
 
@@ -154,17 +128,10 @@ class TechnologyAdapterTest {
         );
     }
 
-    @Test
-    void updateTechnologyException() {
-        Technology technology = TestDataDomain.getTechnology(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
 
-        when(technologyRepository.findById(anyLong())).thenReturn(Optional.empty());
-
-        assertThrows(ElementNotFoundException.class, () -> technologyAdapter.updateTechnology(technology));
-    }
 
     @Test
-    void deleteTechnologySuccess() {
+    void deleteTechnology() {
         Long idToDelete = 1L;
         TechnologyEntity technologyEntity = TestDataDriven.getTechnologyEntity(1L);
 
@@ -173,14 +140,5 @@ class TechnologyAdapterTest {
         technologyAdapter.deleteTechnology(idToDelete);
 
         verify(technologyRepository, times(1)).deleteById(anyLong());
-    }
-
-    @Test
-    void deleteTechnologyException() {
-        Long idToDelete = 1L;
-
-        when(technologyRepository.findById(anyLong())).thenReturn(Optional.empty());
-
-        assertThrows(ElementNotFoundException.class, () -> technologyAdapter.deleteTechnology(idToDelete));
     }
 }

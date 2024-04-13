@@ -44,7 +44,7 @@ class BootcampAdapterTest {
         bootcampEntityMapper = mock(IBootcampEntityMapper.class);
         capabilityRepository = mock(ICapabilityRepository.class);
 
-        bootcampAdapter = new BootcampAdapter(bootcampRepository, bootcampEntityMapper, capabilityRepository);
+        bootcampAdapter = new BootcampAdapter(bootcampRepository, bootcampEntityMapper);
     }
 
     @Test

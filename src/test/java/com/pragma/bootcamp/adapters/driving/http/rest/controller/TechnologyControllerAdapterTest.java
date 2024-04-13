@@ -11,6 +11,8 @@ import com.pragma.bootcamp.domain.model.Technology;
 import com.pragma.bootcamp.domain.primaryport.ITechnologyServicePort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -91,8 +93,12 @@ class TechnologyControllerAdapterTest {
         verify(technologyResponseMapper, times(1)).toTechnologyResponse(tech);
     }
 
-    @Test
-    void getAllTechnologies() throws Exception {
+    @ParameterizedTest
+    @CsvSource({
+            "0, 2, true",
+            "-1, 0, false",
+    })
+    void getAllTechnologies(Integer page, Integer size, boolean isAscending) throws Exception {
         Technology tech1 = new Technology(1L, "java", "Not Python");
         Technology tech2 = new Technology(2L, "python", "Not Java");
         List<Technology> techs = Arrays.asList(tech1, tech2);
@@ -105,7 +111,9 @@ class TechnologyControllerAdapterTest {
         when(technologyServicePort.getAllTechnologies(anyInt(), anyInt(), anyBoolean())).thenReturn(techs);
         when(technologyResponseMapper.toTechnologyResponseList(techs)).thenReturn(responses);
 
-        MockHttpServletRequestBuilder request = get("/technology/?page=0&size=2&isAscending=true");
+        String url = "/technology/?page=%1$s&size=%2$s&isAscending=%3$s".formatted(page, size, isAscending);
+
+        MockHttpServletRequestBuilder request = get(url);
 
         mockMvc.perform(request)
                 .andDo(print())
