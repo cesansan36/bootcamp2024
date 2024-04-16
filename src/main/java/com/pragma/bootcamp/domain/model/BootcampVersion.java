@@ -14,9 +14,9 @@ public class BootcampVersion {
     private final int maxParticipants;
     private final LocalDate startDate;
     private final LocalDate endDate;
-    private Bootcamp bootcamp;
+    private final Bootcamp bootcamp;
 
-    public BootcampVersion(Long id, String name, int maxParticipants, LocalDate  startDate, LocalDate  endDate) {
+    public BootcampVersion(Long id, String name, int maxParticipants, LocalDate  startDate, LocalDate  endDate, Bootcamp bootcamp) {
         DomValidation.validateName(name);
 
         this.id = id;
@@ -24,6 +24,7 @@ public class BootcampVersion {
         this.maxParticipants = maxParticipants;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.bootcamp = bootcamp;
 
         validate();
     }
@@ -52,11 +53,8 @@ public class BootcampVersion {
         return bootcamp;
     }
 
-    public void setBootcamp(Bootcamp bootcamp) {
-        this.bootcamp = bootcamp;
-    }
 
-    public void validate() {
+    private void validate() {
         if (maxParticipants < DomConstants.MIN_PARTICIPANTS_IN_BOOTCAMP_VERSION) {
             throw new QuantityBelowRequiredException(String.format(DomConstants.BELOW_MINIMUM_AMOUNT_OF_PARTICIPANTS_MESSAGE, DomConstants.MIN_PARTICIPANTS_IN_BOOTCAMP_VERSION));
         }

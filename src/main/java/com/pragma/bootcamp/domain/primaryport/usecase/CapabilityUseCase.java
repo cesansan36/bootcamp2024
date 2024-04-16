@@ -36,15 +36,15 @@ public class CapabilityUseCase implements ICapabilityServicePort {
 
         List<Technology> technologies = new ArrayList<>();
         capability.getTechnologies().forEach(technology -> {
-            Optional<Technology> previousTechnology = technologyPersistencePort.getTechnology(technology.getName());
-            if (previousTechnology.isEmpty()) {
+            Optional<Technology> foundTechnology = technologyPersistencePort.getTechnology(technology.getName());
+            if (foundTechnology.isEmpty()) {
                 throw new ElementNotFoundException();
             }
-            technologies.add(previousTechnology.get());
+            technologies.add(foundTechnology.get());
         });
-        capability.setTechnologies(technologies);
+        Capability capabilityWithFoundTechnologies = new Capability(capability.getId(), capability.getName(), capability.getDescription(), technologies);
 
-        capabilityPersistencePort.saveCapability(capability);
+        capabilityPersistencePort.saveCapability(capabilityWithFoundTechnologies);
     }
 
     @Override

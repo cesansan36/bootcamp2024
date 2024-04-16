@@ -18,15 +18,18 @@ public class Bootcamp {
     private final Long id;
     private final String name;
     private final String description;
-    private List<Capability> capabilities;
+    private final List<Capability> capabilities;
 
-    public Bootcamp(Long id, String name, String description) {
+    public Bootcamp(Long id, String name, String description, List<Capability> capabilities) {
         DomValidation.validateName(name);
         DomValidation.validateDescription(description);
+
+        List<Capability> unique = validateCapabilities(capabilities);
 
         this.id = id;
         this.name = name;
         this.description = description;
+        this.capabilities = unique;
     }
 
     public Long getId() {
@@ -43,14 +46,6 @@ public class Bootcamp {
 
     public List<Capability> getCapabilities() {
         return capabilities;
-    }
-
-    public void setCapabilities(List<Capability> capabilities) {
-        this.capabilities = capabilities;
-    }
-
-    public void validateAndSetCapabilities(List<Capability> capabilities) {
-        this.capabilities = validateCapabilities(capabilities);
     }
 
     private List<Capability> validateCapabilities(List<Capability> capabilities) {

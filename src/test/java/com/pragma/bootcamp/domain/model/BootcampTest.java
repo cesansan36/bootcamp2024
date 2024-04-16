@@ -10,94 +10,81 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 class BootcampTest {
     @Test
     @DisplayName("Regular behaviour")
     void regularBehaviour() {
-        Bootcamp bootcamp = new Bootcamp(0L, "Bootcamp_1", "Bootcamp 1");
+        List<Capability> capabilities = TestDataDomain.getListOfValidCapabilities(4, 4);
+
+        Bootcamp bootcamp = new Bootcamp(1L, "Bootcamp A", "Description A", capabilities);
 
         assertAll(
-                () -> assertEquals(0L, bootcamp.getId()),
-                () -> assertEquals("Bootcamp_1", bootcamp.getName()),
-                () -> assertEquals("Bootcamp 1", bootcamp.getDescription())
+                () -> assertEquals(1L, bootcamp.getId()),
+                () -> assertEquals("Bootcamp A", bootcamp.getName()),
+                () -> assertEquals("Description A", bootcamp.getDescription()),
+                () -> assertEquals(capabilities, bootcamp.getCapabilities()),
+                () -> assertEquals(4, bootcamp.getCapabilities().size()),
+                () -> assertEquals(capabilities.getFirst(), bootcamp.getCapabilities().getFirst()),
+                () -> assertEquals(capabilities.get(1).getId(), bootcamp.getCapabilities().get(1).getId()),
+                () -> assertEquals(capabilities.get(2).getName(), bootcamp.getCapabilities().get(2).getName()),
+                () -> assertEquals(capabilities.get(3).getDescription(), bootcamp.getCapabilities().get(3).getDescription())
         );
     }
 
     @Test
     @DisplayName("Should fail on empty name")
     void emptyNameException() {
-        EmptyFieldException exception = assertThrows(EmptyFieldException.class, () -> new Bootcamp(0L, "", "bootcamp_1"));
+        List<Capability> capabilities = TestDataDomain.getListOfValidCapabilities(4, 4);
+        EmptyFieldException exception = assertThrows(EmptyFieldException.class, () -> new Bootcamp(1L, "", "Description A", capabilities));
 
         assertEquals("Field NAME can not be empty", exception.getMessage());
     }
+
     @Test
     @DisplayName("Should fail on empty description")
     void emptyDescriptionException() {
-        EmptyFieldException exception = assertThrows(EmptyFieldException.class, () -> new Bootcamp(0L, "bootcamp 1", ""));
+        List<Capability> capabilities = TestDataDomain.getListOfValidCapabilities(4, 4);
+        EmptyFieldException exception = assertThrows(EmptyFieldException.class, () -> new Bootcamp(1L, "Bootcamp A", "", capabilities));
 
         assertEquals("Field DESCRIPTION can not be empty", exception.getMessage());
     }
+
+    @Test
+    @DisplayName("Should fail on bellow minimum capabilities")
+    void emptyCapabilitiesException() {
+        List<Capability> capabilities = TestDataDomain.getListOfValidCapabilities(0, 4);
+
+        assertThrows(QuantityBelowRequiredException.class, () -> new Bootcamp(1L, "Bootcamp A", "Description A", capabilities));
+    }
+
     @Test
     @DisplayName("Should fail on name longer than 50 chars")
     void longNameException() {
-        CharLimitSurpassedException exception = assertThrows(CharLimitSurpassedException.class, () -> new Bootcamp(0L, TestDataDomain.TOO_LONG_NAME, "bootcamp_1"));
+        List<Capability> capabilities = TestDataDomain.getListOfValidCapabilities(4, 4);
+        CharLimitSurpassedException exception = assertThrows(CharLimitSurpassedException.class, () -> new Bootcamp(1L, "123456789012345678901234567890123456789012345678901", "Description A", capabilities));
 
         assertEquals("Field NAME can not have more than 50 characters", exception.getMessage());
     }
+
     @Test
     @DisplayName("Should fail on description longer than 90")
     void longDescriptionException() {
-        CharLimitSurpassedException exception = assertThrows(CharLimitSurpassedException.class, () -> new Bootcamp(0L, "bootcamp 1", TestDataDomain.TOO_LONG_DESCRIPTION));
+        List<Capability> capabilities = TestDataDomain.getListOfValidCapabilities(4, 4);
+        CharLimitSurpassedException exception = assertThrows(CharLimitSurpassedException.class, () -> new Bootcamp(1L, "Bootcamp A", "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901", capabilities));
 
         assertEquals("Field DESCRIPTION can not have more than 90 characters", exception.getMessage());
     }
 
     @Test
-    @DisplayName("Setting and getting capabilities with no validation")
-    void addingCapabilities() {
-        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapabilities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
-        List<Capability> caps = TestDataDomain.getListOfValidCapabilities(3);
-        bootcamp.setCapabilities(caps);
+    @DisplayName("Should fail on capabilities quantity above required")
+    void quantityAboveRequiredException() {
+        List<Capability> tooMuchCapabilities = TestDataDomain.getListOfValidCapabilities(30, 4);
 
-        List<Capability> receivedCaps = bootcamp.getCapabilities();
-
-        assertAll(
-                () -> assertEquals(caps.size(), receivedCaps.size()),
-                () -> {
-                    for (int i = 0 ; i < receivedCaps.size() ; i++) {
-                        assertEquals(caps.get(i).getId(), receivedCaps.get(i).getId());
-                        assertEquals(caps.get(i).getName(), receivedCaps.get(i).getName());
-                        assertEquals(caps.get(i).getDescription(), receivedCaps.get(i).getDescription());
-                    }
-                }
-        );
-    }
-    @Test
-    @DisplayName("Setting and getting capabilities with validation - success")
-    void addingAndValidatingCapabilitiesSuccess() {
-        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapabilities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
-        List<Capability> caps = TestDataDomain.getListOfValidCapabilities(4);
-
-        bootcamp.validateAndSetCapabilities(caps);
-
-        assertEquals(caps.size(), bootcamp.getCapabilities().size());
-    }
-    @Test
-    @DisplayName("Fail validation because too few capabilities")
-    void addTooFewCapabilities() {
-        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapabilities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
-        List<Capability> caps = TestDataDomain.getListOfValidCapabilities(0);
-
-        assertThrows(QuantityBelowRequiredException.class, () -> bootcamp.validateAndSetCapabilities(caps));
-    }
-    @Test
-    @DisplayName("Fail validation because too many capabilities")
-    void addTooManyCapabilities() {
-        Bootcamp bootcamp = TestDataDomain.getBootcampWithNoCapabilities(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
-        List<Capability> caps = TestDataDomain.getListOfValidCapabilities(5);
-
-        assertThrows(QuantityAboveRequiredException.class, () -> bootcamp.validateAndSetCapabilities(caps));
+        assertThrows(QuantityAboveRequiredException.class, () -> new Bootcamp(1L, "Bootcamp A", "Description A", tooMuchCapabilities));
     }
 }

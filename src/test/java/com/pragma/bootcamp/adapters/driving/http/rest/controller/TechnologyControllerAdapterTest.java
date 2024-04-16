@@ -1,7 +1,6 @@
 package com.pragma.bootcamp.adapters.driving.http.rest.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pragma.bootcamp.adapters.driving.http.rest.controller.TechnologyControllerAdapter;
 import com.pragma.bootcamp.adapters.driving.http.rest.dto.request.AddTechnologyRequest;
 import com.pragma.bootcamp.adapters.driving.http.rest.dto.request.UpdateTechnologyRequest;
 import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.TechnologyResponse;
@@ -21,9 +20,20 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -58,9 +68,9 @@ class TechnologyControllerAdapterTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String inputJson = objectMapper.writeValueAsString(inputObject);
 
-        Technology tech = new Technology(1L, "Java", "Not python");
+        Technology technology = new Technology(1L, "Java", "Not python");
 
-        when(technologyRequestMapper.addRequestToTechnology(any(AddTechnologyRequest.class))).thenReturn(tech);
+        when(technologyRequestMapper.addRequestToTechnology(any(AddTechnologyRequest.class))).thenReturn(technology);
 
         MockHttpServletRequestBuilder request = post("/technology/add").contentType(MediaType.APPLICATION_JSON).content(inputJson);
 
@@ -69,16 +79,16 @@ class TechnologyControllerAdapterTest {
                 .andExpect(status().isCreated());
 
         verify(technologyRequestMapper, times(1)).addRequestToTechnology(any(AddTechnologyRequest.class));
-        verify(technologyServicePort, times(1)).saveTechnology(tech);
+        verify(technologyServicePort, times(1)).saveTechnology(any(Technology.class));
     }
 
     @Test
     void getTechnology() throws Exception {
-        Technology tech = new Technology(1L, "java", "Not Python");
-        TechnologyResponse techResponse = new TechnologyResponse(1L, "java", "Not Python");
+        Technology technology = new Technology(1L, "java", "Not Python");
+        TechnologyResponse technologyResponse = new TechnologyResponse(1L, "java", "Not Python");
 
-        when(technologyServicePort.getTechnology(anyString())).thenReturn(tech);
-        when(technologyResponseMapper.toTechnologyResponse(tech)).thenReturn(techResponse);
+        when(technologyServicePort.getTechnology(anyString())).thenReturn(technology);
+        when(technologyResponseMapper.toTechnologyResponse(any(Technology.class))).thenReturn(technologyResponse);
 
         MockHttpServletRequestBuilder request = get("/technology/search/java");
 
@@ -90,7 +100,7 @@ class TechnologyControllerAdapterTest {
                 .andExpect(jsonPath("$.description").value("Not Python"));
 
         verify(technologyServicePort, times(1)).getTechnology(anyString());
-        verify(technologyResponseMapper, times(1)).toTechnologyResponse(tech);
+        verify(technologyResponseMapper, times(1)).toTechnologyResponse(any(Technology.class));
     }
 
     @ParameterizedTest
@@ -99,17 +109,16 @@ class TechnologyControllerAdapterTest {
             "-1, 0, false",
     })
     void getAllTechnologies(Integer page, Integer size, boolean isAscending) throws Exception {
-        Technology tech1 = new Technology(1L, "java", "Not Python");
-        Technology tech2 = new Technology(2L, "python", "Not Java");
-        List<Technology> techs = Arrays.asList(tech1, tech2);
+        Technology technology1 = new Technology(1L, "java", "Not Python");
+        Technology technology2 = new Technology(2L, "python", "Not Java");
+        List<Technology> technologies = Arrays.asList(technology1, technology2);
 
-        TechnologyResponse techResponse1 = new TechnologyResponse(1L, "java", "Not Python");
-        TechnologyResponse techResponse2 = new TechnologyResponse(2L, "python", "Not Java");
+        TechnologyResponse technologyResponse1 = new TechnologyResponse(1L, "java", "Not Python");
+        TechnologyResponse technologyResponse2 = new TechnologyResponse(2L, "python", "Not Java");
+        List<TechnologyResponse> technologyResponses = Arrays.asList(technologyResponse1, technologyResponse2);
 
-        List<TechnologyResponse> responses = Arrays.asList(techResponse1, techResponse2);
-
-        when(technologyServicePort.getAllTechnologies(anyInt(), anyInt(), anyBoolean())).thenReturn(techs);
-        when(technologyResponseMapper.toTechnologyResponseList(techs)).thenReturn(responses);
+        when(technologyServicePort.getAllTechnologies(anyInt(), anyInt(), anyBoolean())).thenReturn(technologies);
+        when(technologyResponseMapper.toTechnologyResponseList(anyList())).thenReturn(technologyResponses);
 
         String url = "/technology/?page=%1$s&size=%2$s&isAscending=%3$s".formatted(page, size, isAscending);
 
@@ -126,7 +135,7 @@ class TechnologyControllerAdapterTest {
                 .andExpect(jsonPath("$[1].description").value("Not Java"));
 
         verify(technologyServicePort, times(1)).getAllTechnologies(anyInt(), anyInt(), anyBoolean());
-        verify(technologyResponseMapper, times(1)).toTechnologyResponseList(techs);
+        verify(technologyResponseMapper, times(1)).toTechnologyResponseList(anyList());
     }
 
     @Test
@@ -138,12 +147,13 @@ class TechnologyControllerAdapterTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String inputJson = objectMapper.writeValueAsString(inputObject);
 
-        Technology tech = new Technology(1L, "java", "Not Python");
-        TechnologyResponse techResponse = new TechnologyResponse(1L, "java", "Not Python");
+        Technology technology = new Technology(1L, "java", "Not Python");
+        Technology updatedTechnology = new Technology(1L, "java", "Not Python");
+        TechnologyResponse technologyResponse = new TechnologyResponse(1L, "java", "Not Python");
 
-        when(technologyRequestMapper.updateRequestToTechnology(any(UpdateTechnologyRequest.class))).thenReturn(tech);
-        when(technologyServicePort.updateTechnology(tech)).thenReturn(tech);
-        when(technologyResponseMapper.toTechnologyResponse(tech)).thenReturn(techResponse);
+        when(technologyRequestMapper.updateRequestToTechnology(any(UpdateTechnologyRequest.class))).thenReturn(technology);
+        when(technologyServicePort.updateTechnology(any(Technology.class))).thenReturn(updatedTechnology);
+        when(technologyResponseMapper.toTechnologyResponse(any(Technology.class))).thenReturn(technologyResponse);
 
         MockHttpServletRequestBuilder request = put("/technology/").contentType(MediaType.APPLICATION_JSON).content(inputJson);
 
@@ -155,8 +165,8 @@ class TechnologyControllerAdapterTest {
                 .andExpect(jsonPath("$.description").value("Not Python"));
 
         verify(technologyRequestMapper, times(1)).updateRequestToTechnology(any(UpdateTechnologyRequest.class));
-        verify(technologyServicePort, times(1)).updateTechnology(tech);
-        verify(technologyResponseMapper, times(1)).toTechnologyResponse(tech);
+        verify(technologyServicePort, times(1)).updateTechnology(any(Technology.class));
+        verify(technologyResponseMapper, times(1)).toTechnologyResponse(any(Technology.class));
     }
 
     @Test

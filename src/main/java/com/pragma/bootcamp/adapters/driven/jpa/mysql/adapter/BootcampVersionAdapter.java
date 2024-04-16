@@ -2,7 +2,6 @@ package com.pragma.bootcamp.adapters.driven.jpa.mysql.adapter;
 
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.BootcampVersionEntity;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.IBootcampVersionEntityMapper;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.IBootcampRepository;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.IBootcampVersionRepository;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.util.AdapterConstants;
 import com.pragma.bootcamp.configuration.Constants;
@@ -21,7 +20,6 @@ public class BootcampVersionAdapter implements IBootcampVersionPersistencePort {
 
     private final IBootcampVersionRepository bootcampVersionRepository;
     private final IBootcampVersionEntityMapper bootcampVersionEntityMapper;
-    private final IBootcampRepository bootcampRepository;
 
 
     @Override
@@ -51,7 +49,6 @@ public class BootcampVersionAdapter implements IBootcampVersionPersistencePort {
 
         Sort sort = isAscending ? Sort.by(sortingFieldName).ascending() : Sort.by(sortingFieldName).descending();
         Pageable pagination = PageRequest.of(page, size, sort);
-
         List<BootcampVersionEntity> bootcampVersionEntities = bootcampVersionRepository.findAll(pagination).getContent();
 
         return bootcampVersionEntityMapper.toModelList(bootcampVersionEntities);
@@ -59,20 +56,27 @@ public class BootcampVersionAdapter implements IBootcampVersionPersistencePort {
 
     @Override
     public List<BootcampVersion> getVersionsOfBootcamp(Integer page, Integer size, boolean isAscending, Constants.SortingField sortingField, Long bootcampId) {
+        String sortingFieldName = getSortingFieldName(sortingField);
+
+        Sort sort = isAscending ? Sort.by(sortingFieldName).ascending() : Sort.by(sortingFieldName).descending();
+        Pageable pagination = PageRequest.of(page, size, sort);
+        List<BootcampVersionEntity> bootcampVersionEntities = bootcampVersionRepository.findByBootcampId(bootcampId, pagination).getContent();
+
+        return bootcampVersionEntityMapper.toModelList(bootcampVersionEntities);
+    }
+
+    private static String getSortingFieldName(Constants.SortingField sortingField) {
         String sortingFieldName;
         if (sortingField == Constants.SortingField.START_DATE) {
             sortingFieldName = AdapterConstants.FIELD_NAME_OF_SORT_VERSION_BY_START_DATE;
         } else {
-            if (sortingField == Constants.SortingField.MAX_PARTICIPANTS)
+            if (sortingField == Constants.SortingField.MAX_PARTICIPANTS) {
                 sortingFieldName = AdapterConstants.FIELD_NAME_OF_SORT_VERSION_BY_MAX_PARTICIPANTS;
-            else sortingFieldName = AdapterConstants.FIELD_NAME_OF_SORT_VERSION_BY_NAME;
+            }
+            else {
+                sortingFieldName = AdapterConstants.FIELD_NAME_OF_SORT_VERSION_BY_NAME;
+            }
         }
-
-        Sort sort = isAscending ? Sort.by(sortingFieldName).ascending() : Sort.by(sortingFieldName).descending();
-        Pageable pagination = PageRequest.of(page, size, sort);
-
-        List<BootcampVersionEntity> bootcampVersionEntities = bootcampVersionRepository.findByBootcampId(bootcampId, pagination).getContent();
-
-        return bootcampVersionEntityMapper.toModelList(bootcampVersionEntities);
+        return sortingFieldName;
     }
 }

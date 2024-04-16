@@ -25,7 +25,7 @@ public class BootcampVersionUseCase implements IBootcampVersionServicePort {
 
     @Override
     public void saveBootcampVersion(BootcampVersion bootcampVersion) {
-        bootcampVersion.validate();
+
         Optional<BootcampVersion> previousBootcampVersion = bootcampVersionPersistencePort.getBootcampVersion(bootcampVersion.getName());
         if (previousBootcampVersion.isPresent()) {
             throw new RegistryAlreadyExistsException(
@@ -34,11 +34,10 @@ public class BootcampVersionUseCase implements IBootcampVersionServicePort {
                             DomConstants.Registry.BOOTCAMP_VERSION));
         }
 
-
         Bootcamp bootcamp = bootcampPersistencePort.getBootcamp(bootcampVersion.getBootcamp().getName()).orElseThrow(ElementNotFoundException::new);
-        bootcampVersion.setBootcamp(bootcamp);
+        BootcampVersion bootcampVersionWithFoundBootcamp = new BootcampVersion(bootcampVersion.getId(), bootcampVersion.getName(), bootcampVersion.getMaxParticipants(), bootcampVersion.getStartDate(), bootcampVersion.getEndDate(), bootcamp);
 
-        bootcampVersionPersistencePort.saveBootcampVersion(bootcampVersion);
+        bootcampVersionPersistencePort.saveBootcampVersion(bootcampVersionWithFoundBootcamp);
     }
 
     @Override

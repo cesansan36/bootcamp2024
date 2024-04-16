@@ -1,7 +1,6 @@
 package com.pragma.bootcamp.adapters.driven.jpa.mysql.adapter;
 
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.BootcampEntity;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.NoDataFoundException;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.IBootcampEntityMapper;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.IBootcampRepository;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.util.AdapterConstants;
@@ -34,15 +33,10 @@ public class BootcampAdapter implements IBootcampPersistencePort {
     @Override
     public List<Bootcamp> getAllBootcamps(Integer page, Integer size, boolean isAscending, boolean isSortByCapabilitiesAmount) {
         String sortingField = isSortByCapabilitiesAmount ? AdapterConstants.FIELD_NAME_OF_SORT_BY_CAPABILITIES : AdapterConstants.FIELD_NAME_OF_SORT_BY_NAME;
-
         Sort sort = isAscending ? Sort.by(sortingField).ascending() : Sort.by(sortingField).descending();
-
         Pageable pagination = PageRequest.of(page, size, sort);
         List<BootcampEntity> bootcamps = bootcampRepository.findAll(pagination).getContent();
 
-        if (bootcamps.isEmpty()) {
-            throw new NoDataFoundException();
-        }
         return bootcampEntityMapper.toModelList(bootcamps);
     }
 }

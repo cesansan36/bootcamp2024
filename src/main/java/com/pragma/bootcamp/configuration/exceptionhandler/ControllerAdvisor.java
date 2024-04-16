@@ -1,7 +1,6 @@
 package com.pragma.bootcamp.configuration.exceptionhandler;
 
 import com.pragma.bootcamp.domain.exception.ElementNotFoundException;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.exception.NoDataFoundException;
 import com.pragma.bootcamp.domain.exception.RegistryAlreadyExistsException;
 import com.pragma.bootcamp.configuration.Constants;
 import com.pragma.bootcamp.domain.exception.CharLimitSurpassedException;
@@ -32,12 +31,6 @@ public class ControllerAdvisor {
         return ResponseEntity.badRequest().body(new ExceptionResponse(exception.getMessage(),
                 HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }
-    @ExceptionHandler(NoDataFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleNoDataFoundException() {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(
-                Constants.NO_DATA_FOUND_EXCEPTION_MESSAGE, HttpStatus.NOT_FOUND.toString(), LocalDateTime.now()
-                ));
-    }
     @ExceptionHandler(EmptyFieldException.class)
     public ResponseEntity<ExceptionResponse> handleEmptyFieldException(EmptyFieldException exception) {
         return ResponseEntity.badRequest().body(new ExceptionResponse(
@@ -61,7 +54,7 @@ public class ControllerAdvisor {
                 exception.getMessage(), HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }
     @ExceptionHandler(DateFinishBeforeStartException.class)
-    public ResponseEntity<ExceptionResponse> handleDatefinishBeforeStartException(DateFinishBeforeStartException exception) {
+    public ResponseEntity<ExceptionResponse> handleDateFinishBeforeStartException(DateFinishBeforeStartException exception) {
         return ResponseEntity.badRequest().body(new ExceptionResponse(
                 exception.getMessage(), HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
     }

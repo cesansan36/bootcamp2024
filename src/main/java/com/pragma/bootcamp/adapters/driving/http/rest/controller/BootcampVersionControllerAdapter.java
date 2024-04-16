@@ -5,7 +5,6 @@ import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.BootcampVersi
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.IBootcampVersionRequestMapper;
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.IBootcampVersionResponseMapper;
 import com.pragma.bootcamp.configuration.Constants;
-import com.pragma.bootcamp.domain.primaryport.IBootcampServicePort;
 import com.pragma.bootcamp.domain.primaryport.IBootcampVersionServicePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,10 +22,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/bootcamp_version")
 @RequiredArgsConstructor
-
 public class BootcampVersionControllerAdapter
 {
-    private final IBootcampServicePort bootcampServicePort;
     private final IBootcampVersionServicePort bootcampVersionServicePort;
     private final IBootcampVersionRequestMapper bootcampVersionRequestMapper;
     private final IBootcampVersionResponseMapper bootcampVersionResponseMapper;

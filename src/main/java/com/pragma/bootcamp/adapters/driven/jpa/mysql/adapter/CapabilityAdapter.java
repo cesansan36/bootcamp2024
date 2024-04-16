@@ -3,7 +3,6 @@ package com.pragma.bootcamp.adapters.driven.jpa.mysql.adapter;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.CapabilityEntity;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.ICapabilityEntityMapper;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ICapabilityRepository;
-import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ITechnologyRepository;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.util.AdapterConstants;
 import com.pragma.bootcamp.domain.model.Capability;
 import com.pragma.bootcamp.domain.secondaryport.ICapabilityPersistencePort;
@@ -19,7 +18,6 @@ import java.util.Optional;
 public class CapabilityAdapter implements ICapabilityPersistencePort {
     private final ICapabilityRepository capabilityRepository;
     private final ICapabilityEntityMapper capabilityEntityMapper;
-    private final ITechnologyRepository technologyRepository;
 
     @Override
     public void saveCapability(Capability capability) {
@@ -34,9 +32,7 @@ public class CapabilityAdapter implements ICapabilityPersistencePort {
     @Override
     public List<Capability> getAllCapabilities(Integer page, Integer size, boolean isAscending, boolean isSortByTechnologiesAmount) {
         String sortingField = isSortByTechnologiesAmount ? AdapterConstants.FIELD_NAME_OF_SORT_BY_TECHNOLOGIES : AdapterConstants.FIELD_NAME_OF_SORT_BY_NAME;
-
         Sort sort = isAscending ? Sort.by(sortingField).ascending() : Sort.by(sortingField).descending();
-
         Pageable pagination = PageRequest.of(page, size, sort);
         List<CapabilityEntity> capabilityEntities = capabilityRepository.findAll(pagination).getContent();
 

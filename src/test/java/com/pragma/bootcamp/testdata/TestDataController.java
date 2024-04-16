@@ -1,8 +1,14 @@
 package com.pragma.bootcamp.testdata;
 
-import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.*;
 
-import java.text.ParseException;
+import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.BootcampResponse;
+import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.BootcampVersionResponse;
+import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.CapabilityInBootcampResponse;
+import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.CapabilityResponse;
+import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.TechnologyInCapabilityResponse;
+import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.TechnologyResponse;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +31,9 @@ public class TestDataController {
         DESCRIPTION
     }
 
-    public static String fieldText(Long id,Fields fields,  Element element ) {
+    public static final int VALID_MAX_PARTICIPANTS = 10;
+
+    public static String fieldText(Long id, Fields fields,  Element element ) {
         if (fields.equals(Fields.NAME)) {
             return String.format(NAME, element, id);
         }
@@ -78,6 +86,7 @@ public class TestDataController {
         List<CapabilityInBootcampResponse> capsInBootcampResponse = getListOfCapabilityInBootcampResponse(capabilitiesAmount, technologiesAmount);
         return new BootcampResponse(id,
                 String.format(NAME, Element.BOOTCAMP, id),
+                String.format(DESCRIPTION, Element.BOOTCAMP, id),
                 capsInBootcampResponse);
     }
     public static List<BootcampResponse> getListOfBootcampResponse(Integer num, Integer capabilitiesAmount, Integer technologiesAmount) {
@@ -88,18 +97,18 @@ public class TestDataController {
         return bootcampResponses;
     }
 
-    public static BootcampVersionResponse getBootcampVersionResponse(Long id) throws ParseException {
+    public static BootcampVersionResponse getBootcampVersionResponse(Long id, int separationBetweenDates) {
         return new BootcampVersionResponse(id,
                 String.format(NAME, Element.BOOTCAMP_VERSION, id),
-                4,
-                "2021-01-01",
-                "2021-01-03",
-                "b_a");
+                VALID_MAX_PARTICIPANTS,
+                LocalDate.now().toString(),
+                LocalDate.now().plusDays(separationBetweenDates).toString(),
+                getBootcampResponse(id, 1, 1).getName());
     }
-    public static List<BootcampVersionResponse> getListOfBootcampVersionResponse(Integer num) throws ParseException {
+    public static List<BootcampVersionResponse> getListOfBootcampVersionResponse(Integer amount, int separationBetweenDates) {
         List<BootcampVersionResponse> bootcampVersionResponses = new ArrayList<>();
-        for (Long i = 1L ; i <= num ; i++) {
-            bootcampVersionResponses.add(getBootcampVersionResponse(i));
+        for (Long i = 1L ; i <= amount ; i++) {
+            bootcampVersionResponses.add(getBootcampVersionResponse(i, separationBetweenDates));
         }
         return bootcampVersionResponses;
     }

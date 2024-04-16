@@ -10,12 +10,12 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface IBootcampRepository extends JpaRepository<BootcampEntity, Long> {
-    Optional<BootcampEntity> findByNameContaining(String name);
     Optional<BootcampEntity> findByName(String name);
 
     @Query(
             value = AdapterConstants.GET_ALL_BOOTCAMPS_CUSTOM_QUERY,
             nativeQuery = true
     )
+
     Page<BootcampEntity> findAll(Pageable pageable);
 }

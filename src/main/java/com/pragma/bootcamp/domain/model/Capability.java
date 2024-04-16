@@ -18,15 +18,18 @@ public class Capability {
     private final Long id;
     private final String name;
     private final String description;
-    private List<Technology> technologies;
+    private final List<Technology> technologies;
 
-    public Capability(Long id, String name, String description) {
+    public Capability(Long id, String name, String description, List<Technology> technologies) {
         DomValidation.validateName(name);
         DomValidation.validateDescription(description);
+
+        List<Technology> unique = validateTechnologies(technologies);
 
         this.id = id;
         this.name = name;
         this.description = description;
+        this.technologies = unique;
     }
 
     public Long getId() {
@@ -43,14 +46,6 @@ public class Capability {
 
     public List<Technology> getTechnologies() {
         return technologies;
-    }
-
-    public void setTechnologies(List<Technology> technologies) {
-        this.technologies = technologies;
-    }
-
-    public void validateAndSetTechnologies(List<Technology> technologies) {
-        this.technologies = validateTechnologies(technologies);
     }
 
     private List<Technology> validateTechnologies(List<Technology> technologies) {

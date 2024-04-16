@@ -11,7 +11,6 @@ import java.util.Optional;
 
 public interface ICapabilityRepository extends JpaRepository<CapabilityEntity, Long> {
 
-    Optional<CapabilityEntity> findByNameContaining(String name);
     Optional<CapabilityEntity> findByName(String name);
     @Query(
             value = AdapterConstants.GET_ALL_CAPABILITIES_CUSTOM_QUERY,

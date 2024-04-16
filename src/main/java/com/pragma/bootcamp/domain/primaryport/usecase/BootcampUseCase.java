@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
 public class BootcampUseCase implements IBootcampServicePort {
     private final IBootcampPersistencePort bootcampPersistencePort;
     private final ICapabilityPersistencePort capabilityPersistencePort;
@@ -42,9 +41,10 @@ public class BootcampUseCase implements IBootcampServicePort {
             }
             capabilities.add(previousCapability.get());
         });
-        bootcamp.setCapabilities(capabilities);
 
-        bootcampPersistencePort.saveBootcamp(bootcamp);
+        Bootcamp bootcampWithFoundCapabilities = new Bootcamp(bootcamp.getId(), bootcamp.getName(), bootcamp.getDescription(), capabilities);
+
+        bootcampPersistencePort.saveBootcamp(bootcampWithFoundCapabilities);
     }
 
     @Override

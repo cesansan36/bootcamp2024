@@ -10,94 +10,80 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CapabilityTest {
     @Test
     @DisplayName("Regular behaviour")
     void regularBehaviour() {
-        Capability cap = new Capability(0L, "Capability_1", "Capability 1");
+        List<Technology> technologies = TestDataDomain.getListOfValidTechnologies(4);
+
+        Capability capability = new Capability(1L, "Backend", "Handles server-side logic", technologies);
 
         assertAll(
-                () -> assertEquals(0L, cap.getId()),
-                () -> assertEquals("Capability_1", cap.getName()),
-                () -> assertEquals("Capability 1", cap.getDescription())
+                () -> assertEquals(1L, capability.getId()),
+                () -> assertEquals("Backend", capability.getName()),
+                () -> assertEquals("Handles server-side logic", capability.getDescription()),
+                () -> assertEquals(technologies, capability.getTechnologies()),
+                () -> assertEquals(4, capability.getTechnologies().size()),
+                () -> assertEquals(technologies.getFirst(), capability.getTechnologies().getFirst()),
+                () -> assertEquals(technologies.get(1).getId(), capability.getTechnologies().get(1).getId()),
+                () -> assertEquals(technologies.get(2).getName(), capability.getTechnologies().get(2).getName()),
+                () -> assertEquals(technologies.get(3).getDescription(), capability.getTechnologies().get(3).getDescription())
         );
     }
 
     @Test
     @DisplayName("Should fail on empty name")
     void emptyNameException() {
-        EmptyFieldException exception = assertThrows(EmptyFieldException.class, () -> new Capability(0L, "", "capability_1"));
+        List<Technology> technologies = TestDataDomain.getListOfValidTechnologies(4);
+        EmptyFieldException exception = assertThrows(EmptyFieldException.class, () -> new Capability(1L, "", "Handles server-side logic", technologies));
 
         assertEquals("Field NAME can not be empty", exception.getMessage());
     }
+
     @Test
     @DisplayName("Should fail on empty description")
     void emptyDescriptionException() {
-        EmptyFieldException exception = assertThrows(EmptyFieldException.class, () -> new Capability(0L, "capability 1", ""));
+        List<Technology> technologies = TestDataDomain.getListOfValidTechnologies(4);
+        EmptyFieldException exception = assertThrows(EmptyFieldException.class, () -> new Capability(1L, "Backend", "", technologies));
 
         assertEquals("Field DESCRIPTION can not be empty", exception.getMessage());
     }
+
+    @Test
+    @DisplayName("Should fail on bellow minimum technologies")
+    void emptyTechnologiesException() {
+        List<Technology> technologies = TestDataDomain.getListOfValidTechnologies(1);
+
+        assertThrows(QuantityBelowRequiredException.class, () -> new Capability(1L, "Backend", "Handles server-side logic", technologies));
+    }
+
     @Test
     @DisplayName("Should fail on name longer than 50 chars")
     void longNameException() {
-        CharLimitSurpassedException exception = assertThrows(CharLimitSurpassedException.class, () -> new Capability(0L, TestDataDomain.TOO_LONG_NAME, "capability_1"));
+        List<Technology> technologies = TestDataDomain.getListOfValidTechnologies(4);
+        CharLimitSurpassedException exception = assertThrows(CharLimitSurpassedException.class, () -> new Capability(1L, "123456789012345678901234567890123456789012345678901", "Handles server-side logic", technologies));
 
         assertEquals("Field NAME can not have more than 50 characters", exception.getMessage());
     }
+
     @Test
     @DisplayName("Should fail on description longer than 90")
     void longDescriptionException() {
-        CharLimitSurpassedException exception = assertThrows(CharLimitSurpassedException.class, () -> new Capability(0L, "capability 1", TestDataDomain.TOO_LONG_DESCRIPTION));
+        List<Technology> technologies = TestDataDomain.getListOfValidTechnologies(4);
+        CharLimitSurpassedException exception = assertThrows(CharLimitSurpassedException.class, () -> new Capability(1L, "Backend", "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901", technologies));
 
         assertEquals("Field DESCRIPTION can not have more than 90 characters", exception.getMessage());
     }
 
     @Test
-    @DisplayName("Setting and getting technologies with no validation")
-    void addingTechnologies () {
-        Capability cap = TestDataDomain.getCapabilityWithNoTechnologies(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
-        List<Technology> techs = TestDataDomain.getListOfValidTechnologies(3);
-        cap.setTechnologies(techs);
+    @DisplayName("Should fail on technologies quantity above required")
+    void quantityBelowRequiredException() {
+        List<Technology> tooMuchTechnologies = TestDataDomain.getListOfValidTechnologies(30);
 
-        List<Technology> receivedTechs = cap.getTechnologies();
-
-        assertAll(
-                () -> assertEquals(techs.size(), receivedTechs.size()),
-                () -> {
-                    for (int i = 0 ; i < receivedTechs.size() ; i++) {
-                        assertEquals(techs.get(i).getId(), receivedTechs.get(i).getId());
-                        assertEquals(techs.get(i).getName(), receivedTechs.get(i).getName());
-                        assertEquals(techs.get(i).getDescription(), receivedTechs.get(i).getDescription());
-                    }
-                }
-        );
-    }
-    @Test
-    @DisplayName("Setting and getting technologies with validation - success")
-    void addingAndValidatingTechnologiesSuccess () {
-        Capability cap = TestDataDomain.getCapabilityWithNoTechnologies(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
-        List<Technology> techs = TestDataDomain.getListOfValidTechnologies(4);
-
-        cap.validateAndSetTechnologies(techs);
-
-        assertEquals(techs.size(), cap.getTechnologies().size());
-    }
-    @Test
-    @DisplayName("Fail validation because too few technologies")
-    void addTooFewTechnologies () {
-        Capability cap = TestDataDomain.getCapabilityWithNoTechnologies(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
-        List<Technology> techs = TestDataDomain.getListOfValidTechnologies(2);
-
-        assertThrows(QuantityBelowRequiredException.class, () -> cap.validateAndSetTechnologies(techs));
-    }
-    @Test
-    @DisplayName("Fail validation because too many technologies")
-    void addTooManyTechnologies () {
-        Capability cap = TestDataDomain.getCapabilityWithNoTechnologies(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
-        List<Technology> techs = TestDataDomain.getListOfValidTechnologies(21);
-
-        assertThrows(QuantityAboveRequiredException.class, () -> cap.validateAndSetTechnologies(techs));
+        assertThrows(QuantityAboveRequiredException.class, () -> new Capability(1L, "Backend", "Handles server-side logic", tooMuchTechnologies));
     }
 }
