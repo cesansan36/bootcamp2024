@@ -46,7 +46,6 @@ class CapabilityUseCaseTest {
         int technologyAmount = 4;
         Capability sentCapability = TestDataDomain.getCapability(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID, technologyAmount);
         List<Technology> foundTechnologies = TestDataDomain.getListOfValidTechnologies(technologyAmount);
-//        Technology foundTechnology = TestDataDomain.getTechnology(4L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID);
 
         when(capabilityPersistencePort.getCapability(anyString())).thenReturn(Optional.empty());
         when(technologyPersistencePort.getTechnology(anyString())).thenAnswer(new Answer<Optional<Technology>>() {

@@ -43,8 +43,6 @@ class BootcampVersionUseCaseTest {
         BootcampVersion sentBootcampVersion = TestDataDomain.getBootcampVersion(1L, TestDataDomain.DataCase.VALID, 3, 4, 4);
         Bootcamp bootcamp = TestDataDomain.getBootcamp(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID, 3, 4);
 
-//        Bootcamp bootcamp = TestDataDomain.getBootcamp(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID, 3, 4);
-
         when(bootcampVersionPersistencePort.getBootcampVersion(anyString())).thenReturn(Optional.empty());
         when(bootcampPersistencePort.getBootcamp(anyString())).thenReturn(Optional.of(bootcamp));
 
@@ -58,7 +56,6 @@ class BootcampVersionUseCaseTest {
     void saveBootcampVersionFailVersionAlreadyExists() {
         BootcampVersion sentBootcampVersion = TestDataDomain.getBootcampVersion(1L, TestDataDomain.DataCase.VALID, 3, 4, 4);
         BootcampVersion foundBootcampVersion = TestDataDomain.getBootcampVersion(1L, TestDataDomain.DataCase.VALID, 3, 4, 4);
-//        Bootcamp bootcamp = TestDataDomain.getBootcamp(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID, 3, 4);
 
         when(bootcampVersionPersistencePort.getBootcampVersion(anyString())).thenReturn(Optional.of(foundBootcampVersion));
 
@@ -71,8 +68,6 @@ class BootcampVersionUseCaseTest {
     @Test
     void saveBootcampVersionFailBootcampNotFound() {
         BootcampVersion sentBootcampVersion = TestDataDomain.getBootcampVersion(1L, TestDataDomain.DataCase.VALID, 3, 4, 4);
-
-//        Bootcamp bootcamp = TestDataDomain.getBootcamp(1L, TestDataDomain.DataCase.VALID, TestDataDomain.DataCase.VALID, 3, 4);
 
         when(bootcampVersionPersistencePort.getBootcampVersion(anyString())).thenReturn(Optional.empty());
         when(bootcampPersistencePort.getBootcamp(anyString())).thenReturn(Optional.empty());

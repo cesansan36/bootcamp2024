@@ -23,7 +23,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/technology")
-//@RequiredArgsConstructor
 public class TechnologyControllerAdapter {
     private final ITechnologyServicePort technologyServicePort;
     private final ITechnologyRequestMapper technologyRequestMapper;
