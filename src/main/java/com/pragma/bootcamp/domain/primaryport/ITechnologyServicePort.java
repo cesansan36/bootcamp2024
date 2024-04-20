@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface ITechnologyServicePort {
 
+    void verifyUser(String token);
+
     void saveTechnology(Technology technology);
     Technology getTechnology(String name);
 

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,7 +37,8 @@ public class TechnologyControllerAdapter {
 
     @Operation(summary = "Add a Technology if not exists")
     @PostMapping("/add")
-    public ResponseEntity<Void> addTechnology(@RequestBody AddTechnologyRequest request) {
+    public ResponseEntity<Void> addTechnology(@RequestHeader("Authorization") String token, @RequestBody AddTechnologyRequest request) {
+        technologyServicePort.verifyUser(token);
         technologyServicePort.saveTechnology(technologyRequestMapper.addRequestToTechnology(request));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

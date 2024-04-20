@@ -12,6 +12,8 @@ import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.IBootcampReposit
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.IBootcampVersionRepository;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ICapabilityRepository;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ITechnologyRepository;
+import com.pragma.bootcamp.adapters.driven.user.adaptrer.UserService;
+import com.pragma.bootcamp.adapters.driven.user.feign.UserFeignClient;
 import com.pragma.bootcamp.domain.primaryport.IBootcampServicePort;
 import com.pragma.bootcamp.domain.primaryport.IBootcampVersionServicePort;
 import com.pragma.bootcamp.domain.primaryport.ICapabilityServicePort;
@@ -24,12 +26,15 @@ import com.pragma.bootcamp.domain.secondaryport.IBootcampPersistencePort;
 import com.pragma.bootcamp.domain.secondaryport.IBootcampVersionPersistencePort;
 import com.pragma.bootcamp.domain.secondaryport.ICapabilityPersistencePort;
 import com.pragma.bootcamp.domain.secondaryport.ITechnologyPersistencePort;
+import com.pragma.bootcamp.domain.secondaryport.IUserValidationPort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
+@EnableFeignClients
 public class BeanConfiguration {
     private final ITechnologyRepository technologyRepository;
     private final ITechnologyEntityMapper technologyEntityMapper;
@@ -39,6 +44,7 @@ public class BeanConfiguration {
     private final IBootcampEntityMapper bootcampEntityMapper;
     private final IBootcampVersionRepository bootcampVersionRepository;
     private final IBootcampVersionEntityMapper bootcampVersionEntityMapper;
+    private final UserFeignClient userFeignClient;
 
     @Bean
     public ITechnologyPersistencePort technologyPersistencePort() {
@@ -46,8 +52,13 @@ public class BeanConfiguration {
     }
 
     @Bean
+    public IUserValidationPort userValidationPort() {
+        return new UserService(userFeignClient);
+    }
+
+    @Bean
     public ITechnologyServicePort technologyServicePort() {
-        return new TechnologyUseCase(technologyPersistencePort());
+        return new TechnologyUseCase(technologyPersistencePort(), userValidationPort());
     }
 
 
