@@ -6,12 +6,14 @@ import com.pragma.bootcamp.domain.model.Bootcamp;
 import com.pragma.bootcamp.domain.model.BootcampVersion;
 import com.pragma.bootcamp.domain.model.Capability;
 import com.pragma.bootcamp.domain.model.Technology;
+import com.pragma.bootcamp.domain.util.DomConstants;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -25,10 +27,16 @@ public interface IBootcampVersionRequestMapper {
 
     @Named("mapBootcamp")
     default Bootcamp mapBootcamp(String bootcampName) {
-        Technology auxTechnology = new Technology(0L, "transfer", "transfer");
-        List<Technology> auxTechnologies = List.of(auxTechnology, auxTechnology, auxTechnology, auxTechnology, auxTechnology);
-        Capability auxCapability = new Capability(0L, "transfer", "transfer", auxTechnologies);
-        List<Capability> auxCapabilities = List.of(auxCapability, auxCapability, auxCapability, auxCapability, auxCapability);
+        List<Technology> auxTechnologies = new ArrayList<>();
+        for (int i = 0; i < DomConstants.MIN_TECHNOLOGIES_IN_CAPABILITY; i++) {
+            auxTechnologies.add(new Technology(0L, "transfer"+i, "transfer"));
+        }
+
+        List<Capability> auxCapabilities = new ArrayList<>();
+        for (int i = 0; i < DomConstants.MIN_CAPABILITIES_IN_BOOTCAMP; i++) {
+            auxCapabilities.add(new Capability(0L, "transfer"+i, "transfer", auxTechnologies));
+        }
+
         return new Bootcamp(0L, bootcampName, "transfer", auxCapabilities);
     }
 

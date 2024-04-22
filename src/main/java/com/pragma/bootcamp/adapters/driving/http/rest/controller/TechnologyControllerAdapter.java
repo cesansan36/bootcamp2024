@@ -5,8 +5,16 @@ import com.pragma.bootcamp.adapters.driving.http.rest.dto.request.UpdateTechnolo
 import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.TechnologyResponse;
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.ITechnologyRequestMapper;
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.ITechnologyResponseMapper;
+import com.pragma.bootcamp.adapters.driving.http.rest.util.ControllerConstants;
 import com.pragma.bootcamp.domain.primaryport.ITechnologyServicePort;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,7 +43,11 @@ public class TechnologyControllerAdapter {
         this.technologyResponseMapper = technologyResponseMapper;
     }
 
-    @Operation(summary = "Add a Technology if not exists")
+    @Operation(summary = ControllerConstants.OPERATION_SUMMARY_ADD_TECHNOLOGY, description = ControllerConstants.OPERATION_DESCRIPTION_ADD_TECHNOLOGY)
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = ControllerConstants.RESPONSE_CREATED_DESCRIPTION),
+        @ApiResponse(responseCode = "400", description = ControllerConstants.RESPONSE_BAD_REQUEST_DESCRIPTION_ADD_TECHNOLOGY)
+    })
     @PostMapping("/add")
     public ResponseEntity<Void> addTechnology(@RequestHeader("Authorization") String token, @RequestBody AddTechnologyRequest request) {
         technologyServicePort.verifyUser(token);
@@ -43,7 +55,11 @@ public class TechnologyControllerAdapter {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Operation(summary = "Looks for specific technology by its name")
+    @Operation(summary = ControllerConstants.OPERATION_SUMMARY_GET_ELEMENT, description = ControllerConstants.OPERATION_DESCRIPTION_GET_ELEMENT)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = ControllerConstants.RESPONSE_OK_DESCRIPTION),
+            @ApiResponse(responseCode = "404", description = ControllerConstants.RESPONSE_NOT_FOUND_DESCRIPTION, content = @Content(schema = @Schema(hidden = true)))
+    })
     @GetMapping("/search/{technologyName}")
     public ResponseEntity<TechnologyResponse> getTechnology(@PathVariable String technologyName) {
         return ResponseEntity.ok(
@@ -51,17 +67,21 @@ public class TechnologyControllerAdapter {
                         technologyServicePort.getTechnology(technologyName)));
     }
 
-    @Operation(summary = "Get all technologies paginated and sorted")
+    @Operation(summary = ControllerConstants.OPERATION_SUMMARY_GET_LIST, description = ControllerConstants.OPERATION_DESCRIPTION_GET_LIST_TECHNOLOGIES)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = ControllerConstants.RESPONSE_OK_DESCRIPTION)
+    })
     @GetMapping("/")
     public ResponseEntity<List<TechnologyResponse>> getAllTechnologies(@RequestParam(defaultValue = "0") Integer page,
                                                                        @RequestParam(defaultValue = "3") Integer size,
                                                                        @RequestParam(defaultValue = "true") boolean isAscending) {
-        if (page < 0) {
+        if (page == null || page < 0) {
             page = 0;
         }
-        if (size < 1) {
+        if (size == null || size < 1) {
             size = 1;
         }
+
         return ResponseEntity.ok(
                 technologyResponseMapper.toTechnologyResponseList(
                         technologyServicePort.getAllTechnologies(page, size, isAscending)));

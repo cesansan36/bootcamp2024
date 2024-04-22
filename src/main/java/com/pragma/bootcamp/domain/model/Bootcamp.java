@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
-import static java.util.Comparator.comparingLong;
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toCollection;
 
@@ -50,7 +50,7 @@ public class Bootcamp {
 
     private List<Capability> validateCapabilities(List<Capability> capabilities) {
         List<Capability> unique = capabilities.stream()
-                .collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparingLong(Capability::getId))), ArrayList::new));
+                .collect(collectingAndThen(toCollection(() -> new TreeSet<>(comparing(Capability::getName))), ArrayList::new));
 
         if (unique.size() < DomConstants.MIN_CAPABILITIES_IN_BOOTCAMP) {
             throw  new QuantityBelowRequiredException(String.format(

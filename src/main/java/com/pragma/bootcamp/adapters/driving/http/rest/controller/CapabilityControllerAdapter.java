@@ -4,7 +4,13 @@ import com.pragma.bootcamp.adapters.driving.http.rest.dto.request.AddCapabilityR
 import com.pragma.bootcamp.adapters.driving.http.rest.dto.response.CapabilityResponse;
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.ICapabilityRequestMapper;
 import com.pragma.bootcamp.adapters.driving.http.rest.mapper.ICapabilityResponseMapper;
+import com.pragma.bootcamp.adapters.driving.http.rest.util.ControllerConstants;
 import com.pragma.bootcamp.domain.primaryport.ICapabilityServicePort;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +34,11 @@ public class CapabilityControllerAdapter {
     private final ICapabilityRequestMapper capabilityRequestMapper;
     private final ICapabilityResponseMapper capabilityResponseMapper;
 
+    @Operation(summary = ControllerConstants.OPERATION_SUMMARY_ADD_CAPABILITY, description = ControllerConstants.OPERATION_DESCRIPTION_ADD_CAPABILITY)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = ControllerConstants.RESPONSE_CREATED_DESCRIPTION),
+            @ApiResponse(responseCode = "400", description = ControllerConstants.RESPONSE_BAD_REQUEST_DESCRIPTION_ADD_CAPABILITY)
+    })
     @PostMapping("/add")
     public ResponseEntity<Void> addCapability(@RequestBody AddCapabilityRequest request) {
         request.setTechnologiesNames(new ArrayList<>(new HashSet<>(request.getTechnologiesNames())));
@@ -35,6 +46,11 @@ public class CapabilityControllerAdapter {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @Operation(summary = ControllerConstants.OPERATION_SUMMARY_GET_ELEMENT, description = ControllerConstants.OPERATION_DESCRIPTION_GET_ELEMENT)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = ControllerConstants.RESPONSE_OK_DESCRIPTION),
+            @ApiResponse(responseCode = "404", description = ControllerConstants.RESPONSE_NOT_FOUND_DESCRIPTION, content = @Content(schema = @Schema(hidden = true)))
+    })
     @GetMapping("/search/{capabilityName}")
     public ResponseEntity<CapabilityResponse> getCapability(@PathVariable String capabilityName) {
         return ResponseEntity.ok(
@@ -42,17 +58,22 @@ public class CapabilityControllerAdapter {
                         capabilityServicePort.getCapability(capabilityName)));
     }
 
+    @Operation(summary = ControllerConstants.OPERATION_SUMMARY_GET_LIST, description = ControllerConstants.OPERATION_DESCRIPTION_GET_LIST_CAPABILITY)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = ControllerConstants.RESPONSE_OK_DESCRIPTION)
+    })
     @GetMapping("/")
     public ResponseEntity<List<CapabilityResponse>> getAllCapabilities(@RequestParam(defaultValue = "0") Integer page,
                                                                        @RequestParam(defaultValue = "3") Integer size,
                                                                        @RequestParam(defaultValue = "true") boolean isAscending,
                                                                        @RequestParam(defaultValue = "true") boolean isSortByTechnologiesAmount) {
-        if (page < 0) {
+        if (page == null || page < 0) {
             page = 0;
         }
-        if (size < 1) {
+        if (size == null || size < 1) {
             size = 1;
         }
+
         return ResponseEntity.ok(
                 capabilityResponseMapper.toCapabilityResponseList(
                         capabilityServicePort.getAllCapabilities(page, size, isAscending, isSortByTechnologiesAmount)));
