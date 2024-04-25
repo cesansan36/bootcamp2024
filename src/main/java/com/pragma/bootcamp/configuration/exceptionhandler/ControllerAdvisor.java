@@ -1,5 +1,6 @@
 package com.pragma.bootcamp.configuration.exceptionhandler;
 
+import com.pragma.bootcamp.adapters.driven.user.exception.UserNotValidException;
 import com.pragma.bootcamp.domain.exception.ElementNotFoundException;
 import com.pragma.bootcamp.domain.exception.RegistryAlreadyExistsException;
 import com.pragma.bootcamp.configuration.Constants;
@@ -57,5 +58,11 @@ public class ControllerAdvisor {
     public ResponseEntity<ExceptionResponse> handleDateFinishBeforeStartException(DateFinishBeforeStartException exception) {
         return ResponseEntity.badRequest().body(new ExceptionResponse(
                 exception.getMessage(), HttpStatus.BAD_REQUEST.toString(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(UserNotValidException.class)
+    public ResponseEntity<ExceptionResponse> handleUserNotValidException(UserNotValidException exception) {
+        return ResponseEntity.badRequest().body(new ExceptionResponse(
+                exception.getMessage(), HttpStatus.FORBIDDEN.toString(), LocalDateTime.now()));
     }
 }

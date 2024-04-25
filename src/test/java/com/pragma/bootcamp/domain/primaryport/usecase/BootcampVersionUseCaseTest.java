@@ -7,8 +7,10 @@ import com.pragma.bootcamp.domain.model.Bootcamp;
 import com.pragma.bootcamp.domain.model.BootcampVersion;
 import com.pragma.bootcamp.domain.secondaryport.IBootcampPersistencePort;
 import com.pragma.bootcamp.domain.secondaryport.IBootcampVersionPersistencePort;
+import com.pragma.bootcamp.domain.secondaryport.IUserValidationPort;
 import com.pragma.bootcamp.testdata.TestDataDomain;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -32,12 +34,23 @@ class BootcampVersionUseCaseTest {
     private BootcampVersionUseCase bootcampVersionUseCase;
     private IBootcampVersionPersistencePort bootcampVersionPersistencePort;
     private IBootcampPersistencePort bootcampPersistencePort;
+    IUserValidationPort userValidationPort;
     @BeforeEach
     void setUp() {
         bootcampVersionPersistencePort = mock(IBootcampVersionPersistencePort.class);
         bootcampPersistencePort = mock(IBootcampPersistencePort.class);
-        bootcampVersionUseCase = new BootcampVersionUseCase(bootcampVersionPersistencePort, bootcampPersistencePort);
+        userValidationPort = mock(IUserValidationPort.class);
+        bootcampVersionUseCase = new BootcampVersionUseCase(bootcampVersionPersistencePort, bootcampPersistencePort, userValidationPort);
     }
+
+    @Test
+    @DisplayName("Verify user")
+    void verifyUser() {
+        String token = "token";
+        bootcampVersionUseCase.verifyUser(token);
+        verify(userValidationPort, times(1)).validateRestricted(anyString());
+    }
+
     @Test
     void saveBootcampVersionSuccess() {
         BootcampVersion sentBootcampVersion = TestDataDomain.getBootcampVersion(1L, TestDataDomain.DataCase.VALID, 3, 4, 4);

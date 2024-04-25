@@ -57,6 +57,7 @@ class BootcampControllerAdapterTest {
 
     @Test
     void addBootcamp() throws Exception {
+        String token = "1234";
         Object inputObject = new Object() {
             public final String name = "Bootcamp 1";
             public final String description = "The bootcamp 1";
@@ -69,7 +70,7 @@ class BootcampControllerAdapterTest {
 
         when(bootcampRequestMapper.addRequestToBootcamp(any(AddBootcampRequest.class))).thenReturn(bootcamp);
 
-        MockHttpServletRequestBuilder request = post("/bootcamp/add").contentType(MediaType.APPLICATION_JSON).content(inputJson);
+        MockHttpServletRequestBuilder request = post("/bootcamp/add").contentType(MediaType.APPLICATION_JSON).content(inputJson).header("Authorization", "Bearer " + token);
 
         mockMvc.perform(request)
                 .andDo(print())

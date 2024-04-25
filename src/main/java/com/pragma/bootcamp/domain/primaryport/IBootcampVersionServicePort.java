@@ -6,6 +6,7 @@ import com.pragma.bootcamp.domain.model.BootcampVersion;
 import java.util.List;
 
 public interface IBootcampVersionServicePort {
+    void verifyUser(String token);
     void saveBootcampVersion(BootcampVersion bootcampVer);
 
     List<BootcampVersion> getAllBootcampVersion(Integer page, Integer size, boolean isAscending, Constants.SortingField sortingField);

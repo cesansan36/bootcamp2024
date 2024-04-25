@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,7 +42,8 @@ public class BootcampControllerAdapter {
             @ApiResponse(responseCode = "400", description = ControllerConstants.RESPONSE_BAD_REQUEST_DESCRIPTION_ADD_BOOTCAMP)
     })
     @PostMapping("/add")
-    public ResponseEntity<Void> addBootcamp(@RequestBody AddBootcampRequest request) {
+    public ResponseEntity<Void> addBootcamp(@RequestHeader("Authorization") String token, @RequestBody AddBootcampRequest request) {
+        bootcampServicePort.verifyUser(token);
         request.setCapabilitiesNames(new ArrayList<>(new HashSet<>(request.getCapabilitiesNames())));
         bootcampServicePort.saveBootcamp(bootcampRequestMapper.addRequestToBootcamp(request));
         return ResponseEntity.status(HttpStatus.CREATED).build();

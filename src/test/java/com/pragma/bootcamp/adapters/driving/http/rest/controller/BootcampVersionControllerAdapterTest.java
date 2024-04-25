@@ -58,6 +58,7 @@ class BootcampVersionControllerAdapterTest {
 
     @Test
     void addBootcampVersion() throws Exception {
+        String token = "1234";
         int separationBetweenDates = 5;
         Object inputObject = new Object() {
             public final String name = TestDataController.fieldText(1L, TestDataController.Fields.NAME, TestDataController.Element.BOOTCAMP_VERSION);
@@ -75,7 +76,7 @@ class BootcampVersionControllerAdapterTest {
 
         MockHttpServletRequestBuilder request = post("/bootcamp_version/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(inputJson);
+                .content(inputJson).header("Authorization", "Bearer " + token);
 
         mockMvc.perform(request)
                 .andDo(print())

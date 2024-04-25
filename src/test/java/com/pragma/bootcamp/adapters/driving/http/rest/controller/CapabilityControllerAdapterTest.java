@@ -58,6 +58,7 @@ class CapabilityControllerAdapterTest {
 
     @Test
     void addCapability() throws Exception {
+        String token = "1234";
         Object inputObject = new Object() {
             public final String name = "Cap 1";
             public final String description = "The capability 1";
@@ -70,7 +71,7 @@ class CapabilityControllerAdapterTest {
 
         when(capabilityRequestMapper.addRequestToCapability(any(AddCapabilityRequest.class))).thenReturn(capability);
 
-        MockHttpServletRequestBuilder request = post("/capability/add").contentType(MediaType.APPLICATION_JSON).content(inputJson);
+        MockHttpServletRequestBuilder request = post("/capability/add").contentType(MediaType.APPLICATION_JSON).content(inputJson).header("Authorization", "Bearer " + token);
 
         mockMvc.perform(request)
                 .andDo(print())

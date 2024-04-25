@@ -7,6 +7,7 @@ import com.pragma.bootcamp.domain.model.Technology;
 import com.pragma.bootcamp.domain.primaryport.ICapabilityServicePort;
 import com.pragma.bootcamp.domain.secondaryport.ICapabilityPersistencePort;
 import com.pragma.bootcamp.domain.secondaryport.ITechnologyPersistencePort;
+import com.pragma.bootcamp.domain.secondaryport.IUserValidationPort;
 import com.pragma.bootcamp.domain.util.DomConstants;
 
 import java.util.ArrayList;
@@ -17,10 +18,17 @@ public class CapabilityUseCase implements ICapabilityServicePort {
 
     private final ICapabilityPersistencePort capabilityPersistencePort;
     private final ITechnologyPersistencePort technologyPersistencePort;
+    private final IUserValidationPort userValidationPort;
 
-    public CapabilityUseCase(ICapabilityPersistencePort capabilityPersistencePort, ITechnologyPersistencePort technologyPersistencePort) {
+    public CapabilityUseCase(ICapabilityPersistencePort capabilityPersistencePort, ITechnologyPersistencePort technologyPersistencePort, IUserValidationPort userValidationPort) {
         this.capabilityPersistencePort = capabilityPersistencePort;
         this.technologyPersistencePort = technologyPersistencePort;
+        this.userValidationPort = userValidationPort;
+    }
+
+    @Override
+    public void verifyUser(String token) {
+        userValidationPort.validateRestricted(token);
     }
 
     @Override

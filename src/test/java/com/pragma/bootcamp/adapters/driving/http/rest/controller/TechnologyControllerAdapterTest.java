@@ -60,7 +60,7 @@ class TechnologyControllerAdapterTest {
 
     @Test
     void addTechnology() throws Exception {
-
+        String token = "1234";
         Object inputObject = new Object() {
             public final String name = "java";
             public final String description = "Not python";
@@ -72,7 +72,7 @@ class TechnologyControllerAdapterTest {
 
         when(technologyRequestMapper.addRequestToTechnology(any(AddTechnologyRequest.class))).thenReturn(technology);
 
-        MockHttpServletRequestBuilder request = post("/technology/add").contentType(MediaType.APPLICATION_JSON).content(inputJson);
+        MockHttpServletRequestBuilder request = post("/technology/add").contentType(MediaType.APPLICATION_JSON).content(inputJson).header("Authorization", token);
 
         mockMvc.perform(request)
                 .andDo(print())

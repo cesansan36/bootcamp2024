@@ -5,6 +5,7 @@ import com.pragma.bootcamp.domain.model.Bootcamp;
 import java.util.List;
 
 public interface IBootcampServicePort {
+    void verifyUser(String token);
     void saveBootcamp(Bootcamp bootcamp);
     Bootcamp getBootcamp(String name);
 

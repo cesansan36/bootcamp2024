@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,7 +40,8 @@ public class BootcampVersionControllerAdapter
             @ApiResponse(responseCode = "201", description = ControllerConstants.RESPONSE_CREATED_DESCRIPTION),
             @ApiResponse(responseCode = "400", description = ControllerConstants.RESPONSE_BAD_REQUEST_DESCRIPTION_ADD_BOOTCAMP_VERSION)
     })@PostMapping("/add")
-    public ResponseEntity<Void> addBootcampVersion(@RequestBody AddBootcampVersionRequest request) {
+    public ResponseEntity<Void> addBootcampVersion(@RequestHeader("Authorization") String token, @RequestBody AddBootcampVersionRequest request) {
+        bootcampVersionServicePort.verifyUser(token);
         request.autoNameOnEmpty();
 
         bootcampVersionServicePort.saveBootcampVersion(bootcampVersionRequestMapper.requestToModel(request));

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,7 +41,8 @@ public class CapabilityControllerAdapter {
             @ApiResponse(responseCode = "400", description = ControllerConstants.RESPONSE_BAD_REQUEST_DESCRIPTION_ADD_CAPABILITY)
     })
     @PostMapping("/add")
-    public ResponseEntity<Void> addCapability(@RequestBody AddCapabilityRequest request) {
+    public ResponseEntity<Void> addCapability(@RequestHeader("Authorization") String token, @RequestBody AddCapabilityRequest request) {
+        capabilityServicePort.verifyUser(token);
         request.setTechnologiesNames(new ArrayList<>(new HashSet<>(request.getTechnologiesNames())));
         capabilityServicePort.saveCapability(capabilityRequestMapper.addRequestToCapability(request));
         return ResponseEntity.status(HttpStatus.CREATED).build();

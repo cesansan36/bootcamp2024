@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public interface UserFeignClient {
 
     @PostMapping("/validate/restricted")
-    ResponseEntity<Void> validateRestricted(@RequestHeader("Authorization") String token);
+    ResponseEntity<Boolean> validateRestricted(@RequestHeader("Authorization") String token);
 }

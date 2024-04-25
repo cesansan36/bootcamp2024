@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface ICapabilityServicePort {
 
+    void verifyUser(String token);
     void saveCapability(Capability capability);
     Capability getCapability(String name);
 

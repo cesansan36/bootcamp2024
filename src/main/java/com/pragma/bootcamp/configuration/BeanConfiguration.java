@@ -34,7 +34,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableFeignClients
 public class BeanConfiguration {
     private final ITechnologyRepository technologyRepository;
     private final ITechnologyEntityMapper technologyEntityMapper;
@@ -69,7 +68,7 @@ public class BeanConfiguration {
 
     @Bean
     public ICapabilityServicePort capabilityServicePort() {
-        return new CapabilityUseCase(capabilityPersistencePort(), technologyPersistencePort());
+        return new CapabilityUseCase(capabilityPersistencePort(), technologyPersistencePort(), userValidationPort());
     }
 
     @Bean
@@ -79,7 +78,7 @@ public class BeanConfiguration {
 
     @Bean
     public IBootcampServicePort bootcampServicePort() {
-        return new BootcampUseCase(bootcampPersistencePort(), capabilityPersistencePort());
+        return new BootcampUseCase(bootcampPersistencePort(), capabilityPersistencePort(), userValidationPort());
     }
 
     @Bean
@@ -89,6 +88,6 @@ public class BeanConfiguration {
 
     @Bean
     public IBootcampVersionServicePort bootcampVersionServicePort() {
-        return new BootcampVersionUseCase(bootcampVersionPersistencePort(), bootcampPersistencePort());
+        return new BootcampVersionUseCase(bootcampVersionPersistencePort(), bootcampPersistencePort(), userValidationPort());
     }
 }
