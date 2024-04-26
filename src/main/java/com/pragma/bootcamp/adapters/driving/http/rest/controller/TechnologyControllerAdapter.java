@@ -8,8 +8,6 @@ import com.pragma.bootcamp.adapters.driving.http.rest.mapper.ITechnologyResponse
 import com.pragma.bootcamp.adapters.driving.http.rest.util.ControllerConstants;
 import com.pragma.bootcamp.domain.primaryport.ITechnologyServicePort;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,13 +15,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,9 +46,10 @@ public class TechnologyControllerAdapter {
         @ApiResponse(responseCode = "201", description = ControllerConstants.RESPONSE_CREATED_DESCRIPTION),
         @ApiResponse(responseCode = "400", description = ControllerConstants.RESPONSE_BAD_REQUEST_DESCRIPTION_ADD_TECHNOLOGY)
     })
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/add")
-    public ResponseEntity<Void> addTechnology(@RequestHeader("Authorization") String token, @RequestBody AddTechnologyRequest request) {
-        technologyServicePort.verifyUser(token);
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> addTechnology(@RequestBody AddTechnologyRequest request) {
         technologyServicePort.saveTechnology(technologyRequestMapper.addRequestToTechnology(request));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

@@ -7,7 +7,6 @@ import com.pragma.bootcamp.domain.model.Capability;
 import com.pragma.bootcamp.domain.primaryport.IBootcampServicePort;
 import com.pragma.bootcamp.domain.secondaryport.IBootcampPersistencePort;
 import com.pragma.bootcamp.domain.secondaryport.ICapabilityPersistencePort;
-import com.pragma.bootcamp.domain.secondaryport.IUserValidationPort;
 import com.pragma.bootcamp.domain.util.DomConstants;
 
 import java.util.ArrayList;
@@ -17,17 +16,10 @@ import java.util.Optional;
 public class BootcampUseCase implements IBootcampServicePort {
     private final IBootcampPersistencePort bootcampPersistencePort;
     private final ICapabilityPersistencePort capabilityPersistencePort;
-    private final IUserValidationPort userValidationPort;
 
-    public BootcampUseCase(IBootcampPersistencePort bootcampPersistencePort, ICapabilityPersistencePort capabilityPersistencePort, IUserValidationPort userValidationPort) {
+    public BootcampUseCase(IBootcampPersistencePort bootcampPersistencePort, ICapabilityPersistencePort capabilityPersistencePort) {
         this.bootcampPersistencePort = bootcampPersistencePort;
         this.capabilityPersistencePort = capabilityPersistencePort;
-        this.userValidationPort = userValidationPort;
-    }
-
-    @Override
-    public void verifyUser(String token) {
-        userValidationPort.validateRestricted(token);
     }
 
     @Override

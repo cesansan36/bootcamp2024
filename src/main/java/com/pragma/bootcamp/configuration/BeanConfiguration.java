@@ -12,8 +12,6 @@ import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.IBootcampReposit
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.IBootcampVersionRepository;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ICapabilityRepository;
 import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ITechnologyRepository;
-import com.pragma.bootcamp.adapters.driven.user.adaptrer.UserService;
-import com.pragma.bootcamp.adapters.driven.user.feign.UserFeignClient;
 import com.pragma.bootcamp.domain.primaryport.IBootcampServicePort;
 import com.pragma.bootcamp.domain.primaryport.IBootcampVersionServicePort;
 import com.pragma.bootcamp.domain.primaryport.ICapabilityServicePort;
@@ -26,9 +24,7 @@ import com.pragma.bootcamp.domain.secondaryport.IBootcampPersistencePort;
 import com.pragma.bootcamp.domain.secondaryport.IBootcampVersionPersistencePort;
 import com.pragma.bootcamp.domain.secondaryport.ICapabilityPersistencePort;
 import com.pragma.bootcamp.domain.secondaryport.ITechnologyPersistencePort;
-import com.pragma.bootcamp.domain.secondaryport.IUserValidationPort;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -43,7 +39,6 @@ public class BeanConfiguration {
     private final IBootcampEntityMapper bootcampEntityMapper;
     private final IBootcampVersionRepository bootcampVersionRepository;
     private final IBootcampVersionEntityMapper bootcampVersionEntityMapper;
-    private final UserFeignClient userFeignClient;
 
     @Bean
     public ITechnologyPersistencePort technologyPersistencePort() {
@@ -51,15 +46,9 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IUserValidationPort userValidationPort() {
-        return new UserService(userFeignClient);
-    }
-
-    @Bean
     public ITechnologyServicePort technologyServicePort() {
-        return new TechnologyUseCase(technologyPersistencePort(), userValidationPort());
+        return new TechnologyUseCase(technologyPersistencePort());
     }
-
 
     @Bean
     public ICapabilityPersistencePort capabilityPersistencePort() {
@@ -68,7 +57,7 @@ public class BeanConfiguration {
 
     @Bean
     public ICapabilityServicePort capabilityServicePort() {
-        return new CapabilityUseCase(capabilityPersistencePort(), technologyPersistencePort(), userValidationPort());
+        return new CapabilityUseCase(capabilityPersistencePort(), technologyPersistencePort());
     }
 
     @Bean
@@ -78,7 +67,7 @@ public class BeanConfiguration {
 
     @Bean
     public IBootcampServicePort bootcampServicePort() {
-        return new BootcampUseCase(bootcampPersistencePort(), capabilityPersistencePort(), userValidationPort());
+        return new BootcampUseCase(bootcampPersistencePort(), capabilityPersistencePort());
     }
 
     @Bean
@@ -88,6 +77,6 @@ public class BeanConfiguration {
 
     @Bean
     public IBootcampVersionServicePort bootcampVersionServicePort() {
-        return new BootcampVersionUseCase(bootcampVersionPersistencePort(), bootcampPersistencePort(), userValidationPort());
+        return new BootcampVersionUseCase(bootcampVersionPersistencePort(), bootcampPersistencePort());
     }
 }

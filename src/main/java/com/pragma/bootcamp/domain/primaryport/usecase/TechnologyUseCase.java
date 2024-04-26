@@ -5,7 +5,6 @@ import com.pragma.bootcamp.domain.exception.RegistryAlreadyExistsException;
 import com.pragma.bootcamp.domain.model.Technology;
 import com.pragma.bootcamp.domain.primaryport.ITechnologyServicePort;
 import com.pragma.bootcamp.domain.secondaryport.ITechnologyPersistencePort;
-import com.pragma.bootcamp.domain.secondaryport.IUserValidationPort;
 import com.pragma.bootcamp.domain.util.DomConstants;
 
 import java.util.List;
@@ -14,16 +13,9 @@ import java.util.Optional;
 public class TechnologyUseCase implements ITechnologyServicePort {
 
     private final ITechnologyPersistencePort technologyPersistencePort;
-    private final IUserValidationPort userValidationPort;
 
-    public TechnologyUseCase(ITechnologyPersistencePort technologyPersistencePort, IUserValidationPort userValidationPort) {
+    public TechnologyUseCase(ITechnologyPersistencePort technologyPersistencePort) {
         this.technologyPersistencePort = technologyPersistencePort;
-        this.userValidationPort = userValidationPort;
-    }
-
-    @Override
-    public void verifyUser(String token) {
-        userValidationPort.validateRestricted(token);
     }
 
     @Override

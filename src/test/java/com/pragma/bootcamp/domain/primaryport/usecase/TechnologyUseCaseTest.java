@@ -4,7 +4,6 @@ import com.pragma.bootcamp.domain.exception.ElementNotFoundException;
 import com.pragma.bootcamp.domain.exception.RegistryAlreadyExistsException;
 import com.pragma.bootcamp.domain.model.Technology;
 import com.pragma.bootcamp.domain.secondaryport.ITechnologyPersistencePort;
-import com.pragma.bootcamp.domain.secondaryport.IUserValidationPort;
 import com.pragma.bootcamp.testdata.TestDataDomain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,17 +35,6 @@ class TechnologyUseCaseTest {
 
     @Mock
     ITechnologyPersistencePort technologyPersistencePort;
-
-    @Mock
-    IUserValidationPort userValidationPort;
-
-    @Test
-    @DisplayName("Verify user")
-    void verifyUser() {
-        String token = "token";
-        technologyUseCase.verifyUser(token);
-        verify(userValidationPort, times(1)).validateRestricted(anyString());
-    }
 
     @Test
     @DisplayName("Successfully save")

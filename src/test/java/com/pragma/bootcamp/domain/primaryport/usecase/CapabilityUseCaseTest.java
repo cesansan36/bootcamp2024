@@ -6,7 +6,6 @@ import com.pragma.bootcamp.domain.model.Capability;
 import com.pragma.bootcamp.domain.model.Technology;
 import com.pragma.bootcamp.domain.secondaryport.ICapabilityPersistencePort;
 import com.pragma.bootcamp.domain.secondaryport.ITechnologyPersistencePort;
-import com.pragma.bootcamp.domain.secondaryport.IUserValidationPort;
 import com.pragma.bootcamp.testdata.TestDataDomain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,22 +34,12 @@ class CapabilityUseCaseTest {
 
     ICapabilityPersistencePort capabilityPersistencePort;
     ITechnologyPersistencePort technologyPersistencePort;
-    IUserValidationPort userValidationPort;
 
     @BeforeEach
     void setUp() {
         capabilityPersistencePort = mock(ICapabilityPersistencePort.class);
         technologyPersistencePort = mock(ITechnologyPersistencePort.class);
-        userValidationPort = mock(IUserValidationPort.class);
-        capabilityUseCase = new CapabilityUseCase(capabilityPersistencePort, technologyPersistencePort, userValidationPort);
-    }
-
-    @Test
-    @DisplayName("Verify user")
-    void verifyUser() {
-        String token = "token";
-        capabilityUseCase.verifyUser(token);
-        verify(userValidationPort, times(1)).validateRestricted(anyString());
+        capabilityUseCase = new CapabilityUseCase(capabilityPersistencePort, technologyPersistencePort);
     }
 
     @Test
