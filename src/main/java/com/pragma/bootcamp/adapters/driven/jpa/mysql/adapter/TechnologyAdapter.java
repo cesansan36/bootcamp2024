@@ -1,0 +1,57 @@
+package com.pragma.bootcamp.adapters.driven.jpa.mysql.adapter;
+
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.entity.TechnologyEntity;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.mapper.ITechnologyEntityMapper;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.repository.ITechnologyRepository;
+import com.pragma.bootcamp.adapters.driven.jpa.mysql.util.AdapterConstants;
+import com.pragma.bootcamp.domain.model.Technology;
+import com.pragma.bootcamp.domain.secondaryport.ITechnologyPersistencePort;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+import java.util.List;
+import java.util.Optional;
+
+@RequiredArgsConstructor
+public class TechnologyAdapter implements ITechnologyPersistencePort {
+    private final ITechnologyRepository technologyRepository;
+    private final ITechnologyEntityMapper technologyEntityMapper;
+
+
+    @Override
+    public void saveTechnology(Technology technology) {
+        technologyRepository.save(technologyEntityMapper.toEntity(technology));
+    }
+
+    @Override
+    public Optional<Technology> getTechnology(String name) {
+        return technologyRepository.findByName(name).map(technologyEntityMapper::toModel);
+    }
+
+    @Override
+    public Optional<Technology> getTechnologyById(Long id) {
+        return technologyRepository.findById(id).map(technologyEntityMapper::toModel);
+    }
+
+    @Override
+    public List<Technology> getAllTechnologies(Integer page, Integer size, boolean isAscending) {
+        Sort sort = isAscending ? Sort.by(AdapterConstants.FIELD_NAME_FOR_SORTING_TECHNOLOGIES).ascending() : Sort.by(AdapterConstants.FIELD_NAME_FOR_SORTING_TECHNOLOGIES).descending();
+        Pageable pagination = PageRequest.of(page, size, sort);
+        List<TechnologyEntity> technologies = technologyRepository.findAll(pagination).getContent();
+
+        return technologyEntityMapper.toModelList(technologies);
+    }
+
+    @Override
+    public Technology updateTechnology(Technology technology) {
+        return technologyEntityMapper.toModel(technologyRepository.save(technologyEntityMapper.toEntity(technology)));
+    }
+
+    @Override
+    public void deleteTechnology(Long id) {
+
+        technologyRepository.deleteById(id);
+    }
+}

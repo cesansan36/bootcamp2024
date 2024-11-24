@@ -1,0 +1,13 @@
+package com.pragma.bootcamp.domain.secondaryport;
+
+import com.pragma.bootcamp.domain.model.Bootcamp;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface IBootcampPersistencePort {
+    void saveBootcamp(Bootcamp bootcamp);
+    Optional<Bootcamp> getBootcamp(String name);
+
+    List<Bootcamp> getAllBootcamps(Integer page, Integer size, boolean isAscending, boolean isSortByCapabilitiesAmount);
+}
