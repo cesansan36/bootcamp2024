@@ -5,4 +5,3 @@ bootcamp subject: full stack development
 Year 2024
 
 I'm a participant doing the challenges provided to me
-(status: ongoing)
